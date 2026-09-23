@@ -1,0 +1,42 @@
+{
+  "bot": {
+    "name": "البوت الإداري",
+    "language": "ar",
+    "defaultPrefix": "!",
+    "presence": {
+      "status": "online",
+      "activityType": "Watching",
+      "activityName": "إدارة السيرفر | /panel"
+    }
+  },
+  "colors": {
+    "primary": "#5865F2",
+    "success": "#57F287",
+    "danger": "#ED4245",
+    "warning": "#FEE75C",
+    "neutral": "#2B2D31",
+    "info": "#3498DB"
+  },
+  "emojis": {
+    "success": "✅",
+    "error": "❌",
+    "warning": "⚠️",
+    "lock": "🔒",
+    "unlock": "🔓",
+    "shield": "🛡️",
+    "ticket": "🎫",
+    "staff": "👥",
+    "stats": "📊",
+    "logs": "📜",
+    "settings": "⚙️",
+    "developer": "🧰",
+    "help": "❓",
+    "back": "⬅️"
+  },
+  "limits": {
+    "defaultCooldownMs": 3000,
+    "maxClearMessages": 100,
+    "maxReasonLength": 512,
+    "guildConfigCacheMs": 300000
+  }
+}

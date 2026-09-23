@@ -1,0 +1,43 @@
+name: فحص المشروع
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: تثبيت Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: تثبيت المكتبات
+        run: npm install --omit=optional
+
+      - name: فحص صياغة كل الملفات
+        run: |
+          for f in $(find src index.js -name "*.js"); do
+            node --check "$f" || exit 1
+          done
+          echo "كل ملفات JS سليمة"
+
+      - name: التحقق من ملفات الإعدادات
+        run: |
+          for f in package.json config/bot.json config/guild-defaults.json locales/ar.json; do
+            node -e "JSON.parse(require('fs').readFileSync('$f','utf8'))" || exit 1
+          done
+          echo "كل ملفات JSON سليمة"
+
+      - name: التأكد من عدم تسريب الأسرار
+        run: |
+          if grep -rnE "(BOT_TOKEN|CLIENT_SECRET)\s*=\s*['\"]?[A-Za-z0-9_.-]{20,}" src/ config/ 2>/dev/null; then
+            echo "::error::عُثر على سر مكتوب في الكود"
+            exit 1
+          fi
+          echo "لا توجد أسرار في الكود"

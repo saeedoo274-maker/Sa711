@@ -1,0 +1,230 @@
+{
+  "common": {
+    "success": "تم بنجاح",
+    "error": "حدث خطأ",
+    "cancelled": "تم الإلغاء",
+    "back": "رجوع",
+    "confirm": "تأكيد",
+    "cancel": "إلغاء",
+    "none": "—",
+    "enabled": "مفعّل",
+    "disabled": "معطّل",
+    "unknown": "غير معروف",
+    "by": "بواسطة",
+    "reason": "السبب",
+    "noReason": "لم يُذكر سبب",
+    "duration": "المدة",
+    "target": "العضو",
+    "moderator": "المنفّذ",
+    "caseNumber": "رقم القضية",
+    "date": "التاريخ"
+  },
+  "errors": {
+    "generic": "{emoji} حدث خطأ غير متوقع. تم تسجيله وإبلاغ المطورين.\nرقم الخطأ: `{errorId}`",
+    "noPermission": "{emoji} ما تملك الصلاحية الكافية لتنفيذ هذا الإجراء.",
+    "developerOnly": "{emoji} هذا الأمر مخصص للمطورين فقط.",
+    "guildOnly": "{emoji} هذا الأمر يعمل داخل السيرفرات فقط.",
+    "hierarchy": "{emoji} لا يمكنك تنفيذ هذا الإجراء على عضو رتبته أعلى منك أو مساوية لك.",
+    "botHierarchy": "{emoji} رتبة البوت أقل من رتبة العضو المستهدف. ارفع رتبة البوت في إعدادات السيرفر.",
+    "selfTarget": "{emoji} لا يمكنك تنفيذ هذا الإجراء على نفسك.",
+    "botTarget": "{emoji} لا يمكنك تنفيذ هذا الإجراء على البوت.",
+    "protectedTarget": "{emoji} هذا العضو محمي ولا يمكن تنفيذ الإجراء عليه.",
+    "memberNotFound": "{emoji} لم أجد هذا العضو في السيرفر.",
+    "userNotFound": "{emoji} لم أجد هذا المستخدم.",
+    "roleNotFound": "{emoji} لم أجد هذه الرتبة.",
+    "channelNotFound": "{emoji} لم أجد هذه القناة.",
+    "caseNotFound": "{emoji} لم أجد قضية بهذا الرقم.",
+    "missingBotPermission": "{emoji} البوت يفتقد صلاحية: `{permission}`",
+    "invalidNumber": "{emoji} الرقم المُدخل غير صحيح.",
+    "invalidDuration": "{emoji} صيغة المدة غير صحيحة. أمثلة صحيحة: `10m` `2h` `7d`",
+    "cooldown": "{emoji} انتظر `{seconds}` ثانية قبل استخدام هذا الأمر مرة أخرى.",
+    "commandDisabled": "{emoji} هذا الأمر معطّل في هذا السيرفر.",
+    "systemDisabled": "{emoji} نظام `{system}` معطّل في هذا السيرفر.",
+    "actionFailed": "{emoji} فشل تنفيذ الإجراء: {details}"
+  },
+  "moderation": {
+    "ban": {
+      "success": "تم حظر {target}",
+      "dm": "تم حظرك من سيرفر **{guild}**",
+      "title": "حظر"
+    },
+    "unban": {
+      "success": "تم فك الحظر عن {target}",
+      "title": "فك حظر",
+      "notBanned": "هذا المستخدم غير محظور."
+    },
+    "kick": {
+      "success": "تم طرد {target}",
+      "dm": "تم طردك من سيرفر **{guild}**",
+      "title": "طرد"
+    },
+    "timeout": {
+      "success": "تم إسكات {target} لمدة {duration}",
+      "dm": "تم إسكاتك في سيرفر **{guild}** لمدة {duration}",
+      "title": "إسكات"
+    },
+    "untimeout": {
+      "success": "تم فك الإسكات عن {target}",
+      "title": "فك إسكات"
+    },
+    "warn": {
+      "success": "تم تحذير {target}",
+      "dm": "تلقيت تحذيرًا في سيرفر **{guild}**",
+      "title": "تحذير"
+    },
+    "unwarn": {
+      "success": "تم حذف التحذير رقم `{caseNumber}`",
+      "title": "حذف تحذير"
+    },
+    "warnings": {
+      "title": "تحذيرات {target}",
+      "empty": "لا توجد تحذيرات على هذا العضو."
+    },
+    "clear": {
+      "success": "تم حذف `{count}` رسالة.",
+      "title": "حذف رسائل"
+    },
+    "lock": {
+      "success": "تم قفل القناة {channel}",
+      "title": "قفل قناة",
+      "already": "القناة مقفلة بالفعل."
+    },
+    "unlock": {
+      "success": "تم فتح القناة {channel}",
+      "title": "فتح قناة",
+      "already": "القناة مفتوحة بالفعل."
+    },
+    "slowmode": {
+      "success": "تم ضبط الوضع البطيء على `{seconds}` ثانية.",
+      "off": "تم إيقاف الوضع البطيء.",
+      "title": "وضع بطيء"
+    },
+    "role": {
+      "added": "تمت إضافة رتبة {role} إلى {target}",
+      "removed": "تمت إزالة رتبة {role} من {target}",
+      "title": "تعديل رتبة",
+      "botCannotManage": "لا أستطيع إدارة هذه الرتبة لأنها أعلى من رتبتي."
+    },
+    "nickname": {
+      "success": "تم تغيير اسم {target} إلى `{nickname}`",
+      "reset": "تمت إعادة اسم {target} إلى الأصلي.",
+      "title": "تغيير اسم"
+    },
+    "voice": {
+      "mute": "تم كتم {target} صوتيًا",
+      "unmute": "تم فك الكتم الصوتي عن {target}",
+      "deafen": "تم إصمام {target}",
+      "undeafen": "تم فك الإصمام عن {target}",
+      "move": "تم نقل {target} إلى {channel}",
+      "disconnect": "تم فصل {target} من الصوت",
+      "notInVoice": "هذا العضو غير متصل بأي روم صوتي."
+    },
+    "userinfo": {
+      "title": "معلومات العضو"
+    },
+    "history": {
+      "title": "السجل الإداري لـ {target}",
+      "empty": "لا يوجد سجل إداري لهذا العضو."
+    },
+    "case": {
+      "title": "القضية رقم #{caseNumber}"
+    }
+  },
+  "panel": {
+    "title": "لوحة التحكم المركزية",
+    "description": "اختر القسم الذي تريد إدارته.\nالصلاحيات تُفحص من جديد عند كل ضغطة، ولن يعمل أي زر لا تملك صلاحيته.",
+    "yourLevel": "مستواك الحالي",
+    "sections": {
+      "moderation": "الإدارة",
+      "staff": "السلم الإداري",
+      "logs": "السجلات",
+      "settings": "الإعدادات",
+      "developer": "المطور",
+      "help": "المساعدة"
+    },
+    "moderation": {
+      "title": "لوحة الإدارة",
+      "description": "اختر الإجراء الإداري. سيُطلب منك إدخال بيانات العضو والسبب."
+    },
+    "settings": {
+      "title": "الإعدادات",
+      "description": "اضبط البريفكس، الرتب، وقنوات السجلات."
+    },
+    "logs": {
+      "title": "قنوات السجلات",
+      "description": "حدد قناة لكل نوع من أنواع السجلات."
+    },
+    "staff": {
+      "title": "السلم الإداري",
+      "description": "أضف أو رتّب أو احذف رتب الطاقم الإداري."
+    }
+  },
+  "help": {
+    "title": "مركز المساعدة",
+    "description": "اختر قسمًا من القائمة لعرض أوامره وشرحها بالتفصيل.",
+    "usage": "طريقة الاستخدام",
+    "aliases": "أسماء بديلة",
+    "examples": "أمثلة",
+    "permission": "الصلاحية المطلوبة",
+    "arguments": "المتغيرات",
+    "cooldown": "مدة الانتظار",
+    "noCommands": "لا توجد أوامر في هذا القسم."
+  },
+  "levels": {
+    "0": "عضو",
+    "1": "طاقم إداري",
+    "2": "مشرف",
+    "3": "أدمن",
+    "4": "مالك السيرفر",
+    "5": "مطور"
+  },
+  "developer": {
+    "statusTitle": "حالة النظام",
+    "modulesTitle": "الأنظمة المحمّلة",
+    "errorsTitle": "آخر الأخطاء",
+    "databaseTitle": "قاعدة البيانات",
+    "maintenanceOn": "تم تفعيل وضع الصيانة. البوت لن يستجيب إلا للمطورين.",
+    "maintenanceOff": "تم إيقاف وضع الصيانة.",
+    "maintenanceActive": "{emoji} البوت في وضع الصيانة حاليًا.",
+    "reloaded": "تم إعادة تحميل `{count}` أمر."
+  },
+  "logs": {
+    "moderationTitle": "إجراء إداري",
+    "errorTitle": "خطأ في النظام",
+    "errorId": "رقم الخطأ",
+    "system": "النظام",
+    "command": "الأمر",
+    "user": "المستخدم",
+    "guild": "السيرفر"
+  },
+  "builder": {
+    "editorTitle": "محرّر الإمبيد",
+    "created": "تم إنشاء الإمبيد",
+    "saved": "تم الحفظ",
+    "sent": "تم الإرسال",
+    "synced": "تم تحديث الرسائل المرسلة",
+    "deleted": "تم حذف الإمبيد",
+    "notFound": "لم أجد إمبيدًا بهذا الاسم",
+    "commandCreated": "تم إنشاء الأمر المخصص",
+    "commandDeleted": "تم حذف الأمر المخصص"
+  },
+  "economy": {
+    "insufficient": "رصيدك غير كافٍ",
+    "transferred": "تم التحويل",
+    "deposited": "تم الإيداع",
+    "withdrawn": "تم السحب",
+    "noAccount": "لا يوجد حساب لهذا العضو"
+  },
+  "violations": {
+    "issued": "تم تسجيل المخالفة",
+    "paid": "تم سداد المخالفة",
+    "cancelled": "تم إلغاء المخالفة",
+    "clean": "لا توجد مخالفات"
+  },
+  "flights": {
+    "booked": "تم حجز المقعد",
+    "cancelled": "تم إلغاء الحجز",
+    "full": "لا توجد مقاعد متاحة",
+    "closed": "الحجز مغلق"
+  }
+}

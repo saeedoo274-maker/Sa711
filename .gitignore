@@ -1,0 +1,20 @@
+# الأسرار — لا تُرفع أبدًا
+.env
+.env.local
+.env.*.local
+
+# البيانات والنسخ الاحتياطية
+data/
+*.db
+*.db-wal
+*.db-shm
+
+# المكتبات
+node_modules/
+package-lock.json
+
+# سجلات ومخلفات
+*.log
+npm-debug.log*
+.DS_Store
+*.tmp.js

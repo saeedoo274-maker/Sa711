@@ -1,0 +1,266 @@
+{
+  "prefix": "!",
+  "language": "ar",
+  "commands": {
+    "slashEnabled": true,
+    "prefixEnabled": true,
+    "noPrefix": {
+      "enabled": false,
+      "allowedChannels": [],
+      "minLevel": 3
+    },
+    "disabled": []
+  },
+  "staff": {
+    "baseRoleId": null,
+    "trackMessages": true,
+    "trackVoice": true,
+    "trackTickets": true,
+    "minMessages": 10,
+    "points": {
+      "perMessages": 50,
+      "claim": 1,
+      "close": 1,
+      "voiceHour": 1,
+      "rating": {
+        "1": 0.25,
+        "2": 0.5,
+        "3": 0.75,
+        "4": 1,
+        "5": 1.5
+      }
+    },
+    "panelChannelId": null,
+    "panelMessageId": null,
+    "panelLogo": null,
+    "checkin": {
+      "enabled": false,
+      "warnAfterDays": 2,
+      "warningText": null,
+      "warnChannelId": null,
+      "dmWarning": true
+    },
+    "panelLink": null
+  },
+  "moderation": {
+    "enabled": true,
+    "dmOnPunish": true,
+    "requireReason": false,
+    "protectedRoleIds": []
+  },
+  "logs": {
+    "moderation": null,
+    "messages": null,
+    "roles": null,
+    "channels": null,
+    "members": null,
+    "voice": null,
+    "tickets": null,
+    "security": null,
+    "errors": null,
+    "developer": null,
+    "economy": null,
+    "violations": null,
+    "flights": null,
+    "applications": null,
+    "quiz": null,
+    "leave": null,
+    "resign": null,
+    "reports": null,
+    "evidence": null,
+    "ratings": null,
+    "suggestions": null,
+    "rpJobs": null,
+    "rpInventory": null,
+    "rpSell": null,
+    "rpMarket": null,
+    "rpRobbery": null,
+    "rpJail": null
+  },
+  "tickets": {
+    "enabled": false,
+    "categoryId": null,
+    "transcriptChannelId": null,
+    "attachmentsByDefault": false,
+    "channelNameTemplate": "ticket-{number}",
+    "autoCloseIdleHours": 0,
+    "autoCloseGraceHours": 12,
+    "autoCloseAction": "lock",
+    "maxClaimsPerStaff": 0,
+    "ratingEnabled": false,
+    "ratingChannelId": null
+  },
+  "security": {
+    "enabled": false,
+    "whitelist": [],
+    "rules": {
+      "antiChannelCreate": {
+        "enabled": false,
+        "threshold": 3,
+        "windowMs": 10000,
+        "action": "removeRoles"
+      },
+      "antiChannelDelete": {
+        "enabled": false,
+        "threshold": 2,
+        "windowMs": 10000,
+        "action": "removeRoles"
+      },
+      "antiRoleCreate": {
+        "enabled": false,
+        "threshold": 3,
+        "windowMs": 10000,
+        "action": "removeRoles"
+      },
+      "antiRoleDelete": {
+        "enabled": false,
+        "threshold": 2,
+        "windowMs": 10000,
+        "action": "removeRoles"
+      },
+      "antiHighRoleGrant": {
+        "enabled": false,
+        "action": "revert"
+      },
+      "antiPermissionEscalation": {
+        "enabled": false,
+        "action": "revert"
+      },
+      "antiBotAbuse": {
+        "enabled": false,
+        "threshold": 5,
+        "windowMs": 10000,
+        "action": "removeRoles"
+      }
+    }
+  },
+  "autoRoles": {
+    "enabled": false,
+    "memberRoleIds": [],
+    "botRoleIds": []
+  },
+  "economy": {
+    "enabled": false,
+    "currency": "ريال",
+    "symbol": "﷼",
+    "startingWallet": 1000,
+    "startingBank": 0,
+    "transferFeePercent": 0,
+    "maxTransfer": 0,
+    "taxPercent": 5.26
+  },
+  "invoices": {
+    "enabled": false,
+    "channelId": null
+  },
+  "violations": {
+    "enabled": false,
+    "suspendRoleId": null,
+    "autoSuspendAfter": 3
+  },
+  "flights": {
+    "enabled": false
+  },
+  "quiz": {
+    "enabled": false,
+    "passScore": 0,
+    "passRoleId": null
+  },
+  "applications": {
+    "enabled": true
+  },
+  "elections": {
+    "enabled": true,
+    "reviewChannelId": null
+  },
+  "social": {
+    "enabled": true,
+    "feedChannelId": null,
+    "reportChannelId": null
+  },
+  "military": {
+    "enabled": false,
+    "roleId": null,
+    "dutyRoleId": null,
+    "dutyLogChannelId": null,
+    "reportChannelId": null,
+    "reportPingRoleId": null,
+    "panelChannelId": null,
+    "panelMessageId": null
+  },
+  "leave": {
+    "enabled": false,
+    "requestChannelId": null,
+    "leaveRoleId": null,
+    "rolesToRemove": [],
+    "exemptedRoles": [],
+    "pingRoleId": null,
+    "maxDurationMs": 0
+  },
+  "resign": {
+    "enabled": false,
+    "requestChannelId": null,
+    "resignRoleId": null,
+    "rolesToRemove": [],
+    "exemptedRoles": [],
+    "pingRoleId": null
+  },
+  "reports": {
+    "enabled": false,
+    "channelId": null,
+    "warningRoleIds": [],
+    "upperManagementRoleId": null,
+    "upperChannelId": null,
+    "cooldownMs": 3600000,
+    "pingRoleId": null
+  },
+  "starboard": {
+    "enabled": false,
+    "channelId": null,
+    "emoji": "⭐",
+    "threshold": 3,
+    "ignoredChannels": [],
+    "allowSelfStar": false,
+    "allowBots": false
+  },
+  "autoReply": {
+    "enabled": true
+  },
+  "featured": {
+    "channelId": null
+  },
+  "identity": {
+    "enabled": false,
+    "reviewChannelId": null,
+    "citizenRoleId": null,
+    "validityDays": 0,
+    "templateUrl": null,
+    "layout": {}
+  },
+  "government": {
+    "enabled": false,
+    "councilChannelId": null,
+    "circularsChannelId": null,
+    "retirementsChannelId": null,
+    "councilRoleId": null,
+    "councilPingRoleId": null,
+    "retiredRoleId": null,
+    "retirementExemptRoles": []
+  },
+  "rp": {
+    "enabled": false,
+    "jailRoleId": null,
+    "jailExemptRoles": [],
+    "jobsImageUrl": null,
+    "blackMarketImageUrl": null,
+    "wantedOnRobbery": true,
+    "maxCharacters": 2,
+    "jailVisibleChannels": []
+  },
+  "quests": {
+    "enabled": false,
+    "channelId": null,
+    "logChannelId": null,
+    "defaultTimeoutMs": 3600000
+  }
+}

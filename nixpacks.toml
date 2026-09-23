@@ -1,0 +1,9 @@
+# Node 22 فيه SQLite مدمج، فلا يحتاج البوت بناء أي مكتبة أصلية
+[phases.setup]
+nixPkgs = ["nodejs_22"]
+
+[phases.install]
+cmds = ["npm install --omit=optional"]
+
+[start]
+cmd = "npm start"
