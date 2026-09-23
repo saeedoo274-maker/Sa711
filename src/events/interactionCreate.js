@@ -1,6 +1,7 @@
 module.exports = async function interactionCreate(app, interaction) {
   try {
-    if (interaction.isChatInputCommand()) {
+    // قوائم السياق (الزر الأيمن ← تطبيقات) تُسجَّل في نفس السجل وتمر بنفس خط الفحص
+    if (interaction.isChatInputCommand() || interaction.isContextMenuCommand()) {
       return app.commands.handleInteraction(interaction);
     }
 
