@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8">
+<style>
+@font-face{font-family:Orbitron;font-weight:900;src:url(fonts/Orbitron-900.ttf)}
+@font-face{font-family:Rajdhani;font-weight:500;src:url(fonts/Rajdhani-500.ttf)}
+@font-face{font-family:Rajdhani;font-weight:700;src:url(fonts/Rajdhani-700.ttf)}
+@font-face{font-family:Cairo;font-weight:700;src:url(fonts/Cairo-700.ttf)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{width:960px;height:540px;overflow:hidden;background:#05040a}
+.b{position:relative;width:960px;height:540px;overflow:hidden;
+ background:
+  radial-gradient(ellipse 60% 70% at 50% 55%, #2a0f4d 0%, #120824 45%, #05040a 80%),
+  #05040a;}
+.grid{position:absolute;inset:0;
+ background-image:linear-gradient(rgba(160,90,255,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(160,90,255,.07) 1px,transparent 1px);
+ background-size:40px 40px;
+ -webkit-mask-image:radial-gradient(ellipse 70% 60% at 50% 50%,#000 20%,transparent 75%)}
+.floor{position:absolute;left:-20%;right:-20%;bottom:-40px;height:230px;
+ background-image:linear-gradient(rgba(190,110,255,.5) 1px,transparent 1px),linear-gradient(90deg,rgba(190,110,255,.5) 1px,transparent 1px);
+ background-size:48px 28px;transform:perspective(300px) rotateX(62deg);transform-origin:bottom;
+ -webkit-mask-image:linear-gradient(to top,#000 0%,transparent 85%)}
+.moon{position:absolute;left:50%;top:50%;width:360px;height:360px;margin:-200px 0 0 -180px;border-radius:50%;
+ background:radial-gradient(circle at 35% 35%,#b77dff 0%,#6a2bd8 35%,#2a0d5c 70%,transparent 72%);
+ box-shadow:0 0 120px 30px rgba(140,60,255,.35);opacity:.55}
+.moon::after{content:"";position:absolute;inset:0;border-radius:50%;
+ background:radial-gradient(circle at 62% 42%,#0b0616 0%,#0b0616 58%,transparent 60%)}
+.ring{position:absolute;left:50%;top:50%;border-radius:50%;border:1px solid rgba(190,130,255,.25);transform:translate(-50%,-50%)}
+.beam{position:absolute;top:-40%;width:2px;height:180%;background:linear-gradient(transparent,rgba(200,140,255,.5),transparent);filter:blur(1px)}
+.p{position:absolute;border-radius:50%;background:#d9b8ff;box-shadow:0 0 8px #b57bff}
+.content{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding-top:10px}
+.ar{font-family:Cairo,sans-serif;font-weight:700;font-size:26px;color:#cfa8ff;letter-spacing:2px;margin-bottom:-8px;text-shadow:0 0 14px rgba(170,90,255,.7)}
+.dark{font-family:Orbitron,sans-serif;font-weight:900;font-size:132px;line-height:1.05;letter-spacing:16px;
+ background:linear-gradient(180deg,#ffffff 0%,#e6d3ff 40%,#9d5cff 75%,#5a1fc2 100%);-webkit-background-clip:text;color:transparent;
+ filter:drop-shadow(0 0 18px rgba(157,92,255,.8)) drop-shadow(0 0 50px rgba(120,40,255,.45));padding-left:14px}
+.line{display:flex;align-items:center;gap:18px;margin-top:6px}
+.line i{display:block;width:110px;height:2px;background:linear-gradient(90deg,transparent,#b57bff)}
+.line i:last-child{background:linear-gradient(90deg,#b57bff,transparent)}
+.comm{font-family:Rajdhani,sans-serif;font-weight:700;font-size:34px;letter-spacing:18px;color:#f1e6ff;padding-left:18px;text-shadow:0 0 12px rgba(181,123,255,.8)}
+.tag{margin-top:16px;font-family:Rajdhani,sans-serif;font-weight:500;font-size:17px;letter-spacing:6px;color:#9d86c4;text-transform:uppercase}
+.tag b{color:#c9a2ff;font-weight:700;margin:0 10px}
+.corner{position:absolute;width:40px;height:40px;border-color:rgba(190,130,255,.6);border-style:solid}
+.vig{position:absolute;inset:0;box-shadow:inset 0 0 160px 40px #000}
+</style></head><body>
+<div class="b">
+ <div class="grid"></div>
+ <div class="beam" style="left:18%;transform:rotate(18deg);opacity:.5"></div>
+ <div class="beam" style="left:82%;transform:rotate(-18deg);opacity:.5"></div>
+ <div class="moon"></div>
+ <div class="ring" style="width:520px;height:520px"></div>
+ <div class="ring" style="width:680px;height:680px;border-style:dashed;opacity:.5"></div>
+ <div class="floor"></div>
+ <div id="ps"></div>
+ <div class="content">
+  <div class="ar">مجتمع دارك</div>
+  <div class="dark">DARK</div>
+  <div class="line"><i></i><div class="comm">COMMUNITY</div><i></i></div>
+  <div class="tag">Gaming<b>◆</b>Chill<b>◆</b>Friends</div>
+ </div>
+ <div class="corner" style="left:22px;top:22px;border-width:2px 0 0 2px"></div>
+ <div class="corner" style="right:22px;top:22px;border-width:2px 2px 0 0"></div>
+ <div class="corner" style="left:22px;bottom:22px;border-width:0 0 2px 2px"></div>
+ <div class="corner" style="right:22px;bottom:22px;border-width:0 2px 2px 0"></div>
+ <div class="vig"></div>
+</div>
+<script>
+let s=7,r=()=>(s=(s*9301+49297)%233280)/233280,h='';
+for(let i=0;i<70;i++){const z=r()*2.4+.6;h+=`<div class="p" style="left:${r()*960}px;top:${r()*540}px;width:${z}px;height:${z}px;opacity:${.25+r()*.7}"></div>`}
+document.getElementById('ps').innerHTML=h;
+</script>
+</body></html>
