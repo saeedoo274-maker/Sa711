@@ -87,19 +87,99 @@ class CommandHandler {
     if (!command) return;
     if (command.slashOnly) return;
 
-    const ctx = new CommandContext({ app: this.app, source, message, args, commandName: command.name });
+    const ctx = new CommandContext({ app: this.app, source, message, args, commandName: command.name, invokedAs: commandName });
+    if (!this._routePrefixSubcommand(command, ctx)) return;
     await this._run(command, ctx);
   }
 
   // ---------------- سلسلة التنفيذ ----------------
+  /**
+   * يوجّه أوامر البريفكس ذات الأوامر الفرعية:
+   *   !مستوى top      ← الوسيط الأول اسم أمر فرعي (أو اختصاره في subAliases)
+   *   !rank           ← اختصار مربوط بأمر فرعي عبر aliasRoutes
+   *   !اعداد theme set ← مجموعة ثم أمر فرعي
+   * الأوامر بلا أوامر فرعية تمر كما هي بلا أي تغيير.
+   * يُرجع false إذا عُرض خطأ للمستخدم ويجب التوقف.
+   */
+  _routePrefixSubcommand(command, ctx) {
+    const tree = CommandHandler.subcommandTree(command);
+    if (!tree) return true;
+
+    const route = command.aliasRoutes?.[String(ctx.invokedAs).toLowerCase()];
+    if (route) {
+      ctx._group = route.group || null;
+      ctx._sub = route.sub || null;
+      return true;
+    }
+
+    const aliases = command.subAliases || {};
+    const norm = (t) => {
+      const token = String(t || "").toLowerCase();
+      return aliases[token] || token;
+    };
+    const first = norm(ctx.args[0]);
+    if (tree.groups[first]) {
+      const second = norm(ctx.args[1]);
+      if (tree.groups[first].includes(second)) {
+        ctx._group = first;
+        ctx._sub = second;
+        ctx.args = ctx.args.slice(2);
+        return true;
+      }
+    } else if (tree.subs.includes(first)) {
+      ctx._sub = first;
+      ctx.args = ctx.args.slice(1);
+      return true;
+    }
+
+    if (command.defaultSubcommand) {
+      ctx._sub = command.defaultSubcommand;
+      return true;
+    }
+
+    const list = [...tree.subs, ...Object.entries(tree.groups).map(([g, subs]) => `${g} <${subs.join("|")}>`)];
+    ctx.reply({ content: `${ctx.emoji("warning")} ${ctx.t("common.chooseSubcommand")}\n\`${list.join("` `")}\`` }).catch(() => {});
+    return false;
+  }
+
+  /** شجرة الأوامر الفرعية من تعريف السلاش (تُحسب مرة وتُخزَّن على الأمر). */
+  static subcommandTree(command) {
+    if (command._subTree !== undefined) return command._subTree;
+    let tree = null;
+    try {
+      const json = command.slash ? (typeof command.slash.toJSON === "function" ? command.slash.toJSON() : command.slash) : null;
+      const options = json?.options || [];
+      if (options.some((o) => o.type === 1 || o.type === 2)) {
+        tree = { subs: [], groups: {} };
+        for (const o of options) {
+          if (o.type === 1) tree.subs.push(o.name);
+          if (o.type === 2) tree.groups[o.name] = (o.options || []).map((x) => x.name);
+        }
+      }
+    } catch {
+      tree = null;
+    }
+    Object.defineProperty(command, "_subTree", { value: tree, enumerable: false, configurable: true });
+    return tree;
+  }
+
   async _run(command, ctx) {
     try {
-      // 1) وضع الصيانة: المطورون فقط
-      if (this.app.maintenance && !this.app.permissions.isDeveloper(ctx.user.id)) {
+      // 1) وضع الصيانة (عام / للنظام / للأمر) — المطورون يتجاوزونه
+      const maintenance = this.app.maintenanceService
+        ? this.app.maintenanceService.check({ module: command.module, command: command.name, userId: ctx.user.id })
+        : { blocked: this.app.maintenance && !this.app.permissions.isDeveloper(ctx.user.id) };
+      if (maintenance.blocked) {
         return ctx.reply(
-          { content: ctx.tr("developer.maintenanceActive", "warning") },
+          { content: maintenance.message ? `${ctx.emoji("warning")} ${maintenance.message}` : ctx.tr("developer.maintenanceActive", "warning") },
           { ephemeral: true }
         );
+      }
+
+      // إضافة فشل تحميلها: أوامرها موجودة في السجل لكن خدماتها غير جاهزة
+      if (command.plugin) {
+        const plugin = this.app.plugins?.get(command.plugin);
+        if (!plugin || plugin.status !== "loaded") return ctx.fail("errors.systemDisabled", { system: command.plugin });
       }
 
       // 2) داخل السيرفرات فقط
@@ -120,7 +200,11 @@ class CommandHandler {
         return ctx.fail("errors.commandDisabled");
       }
 
-      // 4) النظام نفسه معطّل
+      // 4) النظام نفسه معطّل — علم الميزة (عام أو للسيرفر) ثم العلم القديم الخاص بالنظام
+      const feature = command.feature || command.module;
+      if (this.app.features && feature && !this.app.features.isEnabled(ctx.guild.id, feature)) {
+        return ctx.fail("errors.systemDisabled", { system: feature });
+      }
       if (command.systemFlag) {
         const enabled = this.app.guildConfig.value(ctx.guild.id, command.systemFlag);
         if (enabled === false) return ctx.fail("errors.systemDisabled", { system: command.module });
@@ -164,7 +248,16 @@ class CommandHandler {
     const now = Date.now();
     if (now - last < ms) return Math.ceil((ms - (now - last)) / 1000);
     this.cooldowns.set(key, now);
+    // الخريطة كانت تنمو بلا حد مع كل عضو وأمر — تنظيف دوري للمنتهي
+    if (this.cooldowns.size > 5000) this._pruneCooldowns(now);
     return 0;
+  }
+
+  _pruneCooldowns(now = Date.now()) {
+    // أطول تبريد معقول دقائق معدودة؛ ما مضى عليه ساعة لم يعد مؤثرًا قطعًا
+    for (const [key, at] of this.cooldowns) {
+      if (now - at > 3_600_000) this.cooldowns.delete(key);
+    }
   }
 }
 

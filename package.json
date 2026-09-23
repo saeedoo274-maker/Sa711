@@ -10,7 +10,12 @@
   "scripts": {
     "start": "node index.js",
     "dev": "node --watch index.js",
-    "deploy": "node src/core/commands/deploy.js"
+    "deploy": "node src/core/commands/deploy.js",
+    "test": "node --test --test-concurrency=4 \"tests/**/*.test.js\"",
+    "check": "node scripts/check.js",
+    "lint": "eslint src tests scripts index.js",
+    "migrate": "node scripts/migrate.js",
+    "build": "npm run check && npm run lint && npm test"
   },
   "dependencies": {
     "discord.js": "^14.16.3",
@@ -20,5 +25,10 @@
     "better-sqlite3": "^11.3.0",
     "canvas": "^3.2.0",
     "canvas-constructor": "^7.0.2"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.11.0",
+    "globals": "^17.12.0"
   }
 }

@@ -1,0 +1,231 @@
+{
+  "common": {
+    "success": "Done successfully",
+    "error": "An error occurred",
+    "cancelled": "Cancelled",
+    "back": "Back",
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "none": "—",
+    "enabled": "Enabled",
+    "disabled": "Disabled",
+    "unknown": "Unknown",
+    "by": "By",
+    "reason": "Reason",
+    "noReason": "No reason provided",
+    "duration": "Duration",
+    "target": "Member",
+    "moderator": "Moderator",
+    "caseNumber": "Case number",
+    "date": "Date",
+    "chooseSubcommand": "Choose a subcommand:"
+  },
+  "errors": {
+    "generic": "{emoji} An unexpected error occurred. It has been logged and reported.\nError ID: `{errorId}`",
+    "noPermission": "{emoji} You don't have permission to do this.",
+    "developerOnly": "{emoji} This command is for developers only.",
+    "guildOnly": "{emoji} This command only works inside servers.",
+    "hierarchy": "{emoji} You can't act on a member whose role is higher than or equal to yours.",
+    "botHierarchy": "{emoji} The bot's role is below the target's role. Move the bot's role higher in server settings.",
+    "selfTarget": "{emoji} You can't do this to yourself.",
+    "botTarget": "{emoji} You can't do this to the bot.",
+    "protectedTarget": "{emoji} This member is protected.",
+    "memberNotFound": "{emoji} Member not found in this server.",
+    "userNotFound": "{emoji} User not found.",
+    "roleNotFound": "{emoji} Role not found.",
+    "channelNotFound": "{emoji} Channel not found.",
+    "caseNotFound": "{emoji} No case with that number.",
+    "missingBotPermission": "{emoji} The bot is missing permission: `{permission}`",
+    "invalidNumber": "{emoji} Invalid number.",
+    "invalidDuration": "{emoji} Invalid duration. Examples: `10m` `2h` `7d`",
+    "cooldown": "{emoji} Wait `{seconds}` seconds before using this again.",
+    "commandDisabled": "{emoji} This command is disabled in this server.",
+    "systemDisabled": "{emoji} The `{system}` system is disabled in this server.",
+    "actionFailed": "{emoji} Action failed: {details}"
+  },
+  "moderation": {
+    "ban": {
+      "success": "{target} has been banned",
+      "dm": "You have been banned from **{guild}**",
+      "title": "Ban"
+    },
+    "unban": {
+      "success": "{target} has been unbanned",
+      "title": "Unban",
+      "notBanned": "This user is not banned."
+    },
+    "kick": {
+      "success": "{target} has been kicked",
+      "dm": "You have been kicked from **{guild}**",
+      "title": "Kick"
+    },
+    "timeout": {
+      "success": "{target} has been timed out for {duration}",
+      "dm": "You have been timed out in **{guild}** for {duration}",
+      "title": "Timeout"
+    },
+    "untimeout": {
+      "success": "Timeout removed from {target}",
+      "title": "Remove timeout"
+    },
+    "warn": {
+      "success": "{target} has been warned",
+      "dm": "You received a warning in **{guild}**",
+      "title": "Warning"
+    },
+    "unwarn": {
+      "success": "Warning `{caseNumber}` removed",
+      "title": "Remove warning"
+    },
+    "warnings": {
+      "title": "Warnings of {target}",
+      "empty": "This member has no warnings."
+    },
+    "clear": {
+      "success": "Deleted `{count}` messages.",
+      "title": "Clear messages"
+    },
+    "lock": {
+      "success": "Channel {channel} locked",
+      "title": "Lock channel",
+      "already": "The channel is already locked."
+    },
+    "unlock": {
+      "success": "Channel {channel} unlocked",
+      "title": "Unlock channel",
+      "already": "The channel is already unlocked."
+    },
+    "slowmode": {
+      "success": "Slowmode set to `{seconds}` seconds.",
+      "off": "Slowmode disabled.",
+      "title": "Slowmode"
+    },
+    "role": {
+      "added": "Added {role} to {target}",
+      "removed": "Removed {role} from {target}",
+      "title": "Role update",
+      "botCannotManage": "I can't manage this role because it's above mine."
+    },
+    "nickname": {
+      "success": "{target}'s nickname changed to `{nickname}`",
+      "reset": "{target}'s nickname was reset.",
+      "title": "Nickname change"
+    },
+    "voice": {
+      "mute": "{target} was server-muted",
+      "unmute": "{target} was unmuted",
+      "deafen": "{target} was deafened",
+      "undeafen": "{target} was undeafened",
+      "move": "Moved {target} to {channel}",
+      "disconnect": "{target} was disconnected from voice",
+      "notInVoice": "This member is not in a voice channel."
+    },
+    "userinfo": {
+      "title": "Member information"
+    },
+    "history": {
+      "title": "Moderation history of {target}",
+      "empty": "No moderation history for this member."
+    },
+    "case": {
+      "title": "Case #{caseNumber}"
+    }
+  },
+  "panel": {
+    "title": "Control panel",
+    "description": "Choose a section to manage.\nPermissions are re-checked on every click.",
+    "yourLevel": "Your level",
+    "sections": {
+      "moderation": "Moderation",
+      "staff": "Staff ranks",
+      "logs": "Logs",
+      "settings": "Settings",
+      "developer": "Developer",
+      "help": "Help"
+    },
+    "moderation": {
+      "title": "Moderation panel",
+      "description": "Choose an action. You'll be asked for the member and reason."
+    },
+    "settings": {
+      "title": "Settings",
+      "description": "Configure prefix, roles and log channels."
+    },
+    "logs": {
+      "title": "Log channels",
+      "description": "Choose a channel for each log type."
+    },
+    "staff": {
+      "title": "Staff ranks",
+      "description": "Add, reorder or remove staff ranks."
+    }
+  },
+  "help": {
+    "title": "Help center",
+    "description": "Pick a category to see its commands.",
+    "usage": "Usage",
+    "aliases": "Aliases",
+    "examples": "Examples",
+    "permission": "Required permission",
+    "arguments": "Arguments",
+    "cooldown": "Cooldown",
+    "noCommands": "No commands in this category."
+  },
+  "levels": {
+    "0": "Member",
+    "1": "Staff",
+    "2": "Moderator",
+    "3": "Admin",
+    "4": "Server owner",
+    "5": "Developer"
+  },
+  "developer": {
+    "statusTitle": "System status",
+    "modulesTitle": "Loaded modules",
+    "errorsTitle": "Latest errors",
+    "databaseTitle": "Database",
+    "maintenanceOn": "Maintenance mode enabled. The bot only responds to developers.",
+    "maintenanceOff": "Maintenance mode disabled.",
+    "maintenanceActive": "{emoji} The bot is currently under maintenance.",
+    "reloaded": "Reloaded `{count}` commands."
+  },
+  "logs": {
+    "moderationTitle": "Moderation action",
+    "errorTitle": "System error",
+    "errorId": "Error ID",
+    "system": "System",
+    "command": "Command",
+    "user": "User",
+    "guild": "Server"
+  },
+  "builder": {
+    "editorTitle": "Embed editor",
+    "created": "Embed created",
+    "saved": "Saved",
+    "sent": "Sent",
+    "synced": "Sent messages updated",
+    "deleted": "Embed deleted",
+    "notFound": "No embed with that name",
+    "commandCreated": "Custom command created",
+    "commandDeleted": "Custom command deleted"
+  },
+  "economy": {
+    "insufficient": "Insufficient balance",
+    "transferred": "Transfer complete",
+    "deposited": "Deposited",
+    "withdrawn": "Withdrawn",
+    "noAccount": "This member has no account"
+  },
+  "violations": {
+    "issued": "Violation issued",
+    "paid": "Violation paid",
+    "cancelled": "Violation cancelled",
+    "clean": "No violations"
+  },
+  "flights": {
+    "booked": "Seat booked",
+    "cancelled": "Booking cancelled",
+    "full": "No seats available",
+    "closed": "Booking is closed"
+  }
+}

@@ -1,0 +1,231 @@
+{
+  "common": {
+    "success": "Başarıyla tamamlandı",
+    "error": "Bir hata oluştu",
+    "cancelled": "İptal edildi",
+    "back": "Geri",
+    "confirm": "Onayla",
+    "cancel": "İptal",
+    "none": "—",
+    "enabled": "Etkin",
+    "disabled": "Devre dışı",
+    "unknown": "Bilinmiyor",
+    "by": "Tarafından",
+    "reason": "Sebep",
+    "noReason": "Sebep belirtilmedi",
+    "duration": "Süre",
+    "target": "Üye",
+    "moderator": "Yetkili",
+    "caseNumber": "Vaka numarası",
+    "date": "Tarih",
+    "chooseSubcommand": "Bir alt komut seçin:"
+  },
+  "errors": {
+    "generic": "{emoji} Beklenmeyen bir hata oluştu. Kaydedildi ve bildirildi.\nHata kimliği: `{errorId}`",
+    "noPermission": "{emoji} Bunu yapmak için yetkiniz yok.",
+    "developerOnly": "{emoji} Bu komut yalnızca geliştiriciler içindir.",
+    "guildOnly": "{emoji} Bu komut yalnızca sunucularda çalışır.",
+    "hierarchy": "{emoji} Rolü sizinkinden yüksek veya eşit olan bir üyeye işlem yapamazsınız.",
+    "botHierarchy": "{emoji} Botun rolü hedefin rolünden düşük. Sunucu ayarlarından botun rolünü yükseltin.",
+    "selfTarget": "{emoji} Bunu kendinize yapamazsınız.",
+    "botTarget": "{emoji} Bunu bota yapamazsınız.",
+    "protectedTarget": "{emoji} Bu üye korumalı.",
+    "memberNotFound": "{emoji} Üye bu sunucuda bulunamadı.",
+    "userNotFound": "{emoji} Kullanıcı bulunamadı.",
+    "roleNotFound": "{emoji} Rol bulunamadı.",
+    "channelNotFound": "{emoji} Kanal bulunamadı.",
+    "caseNotFound": "{emoji} Bu numarada vaka yok.",
+    "missingBotPermission": "{emoji} Botun şu izni eksik: `{permission}`",
+    "invalidNumber": "{emoji} Geçersiz sayı.",
+    "invalidDuration": "{emoji} Geçersiz süre. Örnekler: `10m` `2h` `7d`",
+    "cooldown": "{emoji} Tekrar kullanmadan önce `{seconds}` saniye bekleyin.",
+    "commandDisabled": "{emoji} Bu komut bu sunucuda devre dışı.",
+    "systemDisabled": "{emoji} `{system}` sistemi bu sunucuda devre dışı.",
+    "actionFailed": "{emoji} İşlem başarısız: {details}"
+  },
+  "moderation": {
+    "ban": {
+      "success": "{target} yasaklandı",
+      "dm": "**{guild}** sunucusundan yasaklandınız",
+      "title": "Yasaklama"
+    },
+    "unban": {
+      "success": "{target} yasağı kaldırıldı",
+      "title": "Yasak kaldırma",
+      "notBanned": "Bu kullanıcı yasaklı değil."
+    },
+    "kick": {
+      "success": "{target} atıldı",
+      "dm": "**{guild}** sunucusundan atıldınız",
+      "title": "Atma"
+    },
+    "timeout": {
+      "success": "{target} {duration} süreyle susturuldu",
+      "dm": "**{guild}** sunucusunda {duration} süreyle susturuldunuz",
+      "title": "Susturma"
+    },
+    "untimeout": {
+      "success": "{target} susturması kaldırıldı",
+      "title": "Susturmayı kaldır"
+    },
+    "warn": {
+      "success": "{target} uyarıldı",
+      "dm": "**{guild}** sunucusunda uyarı aldınız",
+      "title": "Uyarı"
+    },
+    "unwarn": {
+      "success": "`{caseNumber}` numaralı uyarı kaldırıldı",
+      "title": "Uyarıyı kaldır"
+    },
+    "warnings": {
+      "title": "{target} uyarıları",
+      "empty": "Bu üyenin uyarısı yok."
+    },
+    "clear": {
+      "success": "`{count}` mesaj silindi.",
+      "title": "Mesaj silme"
+    },
+    "lock": {
+      "success": "{channel} kanalı kilitlendi",
+      "title": "Kanalı kilitle",
+      "already": "Kanal zaten kilitli."
+    },
+    "unlock": {
+      "success": "{channel} kanalının kilidi açıldı",
+      "title": "Kanal kilidini aç",
+      "already": "Kanal zaten açık."
+    },
+    "slowmode": {
+      "success": "Yavaş mod `{seconds}` saniyeye ayarlandı.",
+      "off": "Yavaş mod kapatıldı.",
+      "title": "Yavaş mod"
+    },
+    "role": {
+      "added": "{target} kullanıcısına {role} verildi",
+      "removed": "{target} kullanıcısından {role} alındı",
+      "title": "Rol güncelleme",
+      "botCannotManage": "Bu rol benimkinden yüksek olduğu için yönetemiyorum."
+    },
+    "nickname": {
+      "success": "{target} takma adı `{nickname}` olarak değişti",
+      "reset": "{target} takma adı sıfırlandı.",
+      "title": "Takma ad değişikliği"
+    },
+    "voice": {
+      "mute": "{target} sesli susturuldu",
+      "unmute": "{target} susturması kaldırıldı",
+      "deafen": "{target} sağırlaştırıldı",
+      "undeafen": "{target} sağırlaştırması kaldırıldı",
+      "move": "{target} {channel} kanalına taşındı",
+      "disconnect": "{target} sesten çıkarıldı",
+      "notInVoice": "Bu üye bir ses kanalında değil."
+    },
+    "userinfo": {
+      "title": "Üye bilgileri"
+    },
+    "history": {
+      "title": "{target} moderasyon geçmişi",
+      "empty": "Bu üyenin moderasyon geçmişi yok."
+    },
+    "case": {
+      "title": "Vaka #{caseNumber}"
+    }
+  },
+  "panel": {
+    "title": "Kontrol paneli",
+    "description": "Yönetmek için bir bölüm seçin.\nİzinler her tıklamada yeniden kontrol edilir.",
+    "yourLevel": "Seviyeniz",
+    "sections": {
+      "moderation": "Moderasyon",
+      "staff": "Yetkili rütbeleri",
+      "logs": "Kayıtlar",
+      "settings": "Ayarlar",
+      "developer": "Geliştirici",
+      "help": "Yardım"
+    },
+    "moderation": {
+      "title": "Moderasyon paneli",
+      "description": "Bir işlem seçin. Üye ve sebep sorulacak."
+    },
+    "settings": {
+      "title": "Ayarlar",
+      "description": "Önek, roller ve kayıt kanallarını ayarlayın."
+    },
+    "logs": {
+      "title": "Kayıt kanalları",
+      "description": "Her kayıt türü için bir kanal seçin."
+    },
+    "staff": {
+      "title": "Yetkili rütbeleri",
+      "description": "Rütbe ekleyin, sıralayın veya silin."
+    }
+  },
+  "help": {
+    "title": "Yardım merkezi",
+    "description": "Komutlarını görmek için bir kategori seçin.",
+    "usage": "Kullanım",
+    "aliases": "Takma adlar",
+    "examples": "Örnekler",
+    "permission": "Gerekli yetki",
+    "arguments": "Argümanlar",
+    "cooldown": "Bekleme süresi",
+    "noCommands": "Bu kategoride komut yok."
+  },
+  "levels": {
+    "0": "Üye",
+    "1": "Yetkili",
+    "2": "Moderatör",
+    "3": "Yönetici",
+    "4": "Sunucu sahibi",
+    "5": "Geliştirici"
+  },
+  "developer": {
+    "statusTitle": "Sistem durumu",
+    "modulesTitle": "Yüklü modüller",
+    "errorsTitle": "Son hatalar",
+    "databaseTitle": "Veritabanı",
+    "maintenanceOn": "Bakım modu açık. Bot yalnızca geliştiricilere yanıt verir.",
+    "maintenanceOff": "Bakım modu kapatıldı.",
+    "maintenanceActive": "{emoji} Bot şu anda bakımda.",
+    "reloaded": "`{count}` komut yeniden yüklendi."
+  },
+  "logs": {
+    "moderationTitle": "Moderasyon işlemi",
+    "errorTitle": "Sistem hatası",
+    "errorId": "Hata kimliği",
+    "system": "Sistem",
+    "command": "Komut",
+    "user": "Kullanıcı",
+    "guild": "Sunucu"
+  },
+  "builder": {
+    "editorTitle": "Embed düzenleyici",
+    "created": "Embed oluşturuldu",
+    "saved": "Kaydedildi",
+    "sent": "Gönderildi",
+    "synced": "Gönderilen mesajlar güncellendi",
+    "deleted": "Embed silindi",
+    "notFound": "Bu isimde embed yok",
+    "commandCreated": "Özel komut oluşturuldu",
+    "commandDeleted": "Özel komut silindi"
+  },
+  "economy": {
+    "insufficient": "Yetersiz bakiye",
+    "transferred": "Transfer tamamlandı",
+    "deposited": "Yatırıldı",
+    "withdrawn": "Çekildi",
+    "noAccount": "Bu üyenin hesabı yok"
+  },
+  "violations": {
+    "issued": "İhlal kaydedildi",
+    "paid": "İhlal ödendi",
+    "cancelled": "İhlal iptal edildi",
+    "clean": "İhlal yok"
+  },
+  "flights": {
+    "booked": "Koltuk ayrıldı",
+    "cancelled": "Rezervasyon iptal edildi",
+    "full": "Boş koltuk yok",
+    "closed": "Rezervasyon kapalı"
+  }
+}

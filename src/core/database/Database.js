@@ -70,14 +70,19 @@ class DatabaseService {
     // يمنع أخطاء القفل عند التزامن العالي
     this.db.pragma("busy_timeout = 5000");
 
-    this.runMigrations();
+    this._instrumentTransactions();
+    this.runMigrations(this.extraMigrationSources || []);
     this.logger.info(`قاعدة البيانات جاهزة: ${this.dbPath}`);
     return this.db;
   }
 
-  runMigrations() {
+  /**
+   * يطبّق الهجرات الأساسية ثم هجرات الإضافات.
+   * كل ملف هجرة يُطبَّق مرة واحدة فقط ويُسجَّل في `_migrations`.
+   * الهجرات الجديدة قد تحوي قسم `-- @down` للتراجع؛ القسم لا يُنفَّذ عند التطبيق.
+   */
+  runMigrations(extraSources = []) {
     const dir = path.join(__dirname, "migrations");
-    if (!fs.existsSync(dir)) return;
 
     this.db.exec(`CREATE TABLE IF NOT EXISTS _migrations (
       name TEXT PRIMARY KEY,
@@ -85,24 +90,114 @@ class DatabaseService {
     )`);
 
     const applied = new Set(this.db.prepare("SELECT name FROM _migrations").all().map((r) => r.name));
-    const files = fs.readdirSync(dir).filter((f) => f.endsWith(".sql")).sort();
+    const sources = [];
+    if (fs.existsSync(dir)) {
+      for (const file of fs.readdirSync(dir).filter((f) => f.endsWith(".sql")).sort()) {
+        sources.push({ name: file, file: path.join(dir, file) });
+      }
+    }
+    // هجرات الإضافات تُسجَّل باسم مميّز حتى لا تتصادم مع الأساسية
+    for (const src of extraSources) {
+      if (!fs.existsSync(src.dir)) continue;
+      for (const file of fs.readdirSync(src.dir).filter((f) => f.endsWith(".sql")).sort()) {
+        sources.push({ name: `plugin/${src.plugin}/${file}`, file: path.join(src.dir, file) });
+      }
+    }
 
-    for (const file of files) {
-      if (applied.has(file)) continue;
-      const sql = fs.readFileSync(path.join(dir, file), "utf8");
+    let count = 0;
+    for (const { name, file } of sources) {
+      if (applied.has(name)) continue;
+      const { up } = DatabaseService.splitMigration(fs.readFileSync(file, "utf8"));
       // كل هجرة داخل transaction: إما تُطبَّق كاملة أو لا تُطبَّق إطلاقًا
       const migrate = this.db.transaction(() => {
-        this.db.exec(sql);
-        this.db.prepare("INSERT INTO _migrations (name, applied_at) VALUES (?, ?)").run(file, Date.now());
+        this.db.exec(up);
+        this.db.prepare("INSERT INTO _migrations (name, applied_at) VALUES (?, ?)").run(name, Date.now());
       });
       migrate();
-      this.logger.info(`تم تطبيق الهجرة: ${file}`);
+      count++;
+      this.logger.info(`تم تطبيق الهجرة: ${name}`);
     }
+    this._migrationSources = sources;
+    return count;
+  }
+
+  /** يفصل قسم التطبيق عن قسم التراجع في ملف الهجرة. */
+  static splitMigration(sql) {
+    const marker = sql.search(/^--\s*@down\s*$/m);
+    if (marker === -1) return { up: sql, down: null };
+    return { up: sql.slice(0, marker), down: sql.slice(marker).replace(/^--\s*@down\s*$/m, "").trim() || null };
+  }
+
+  /** قائمة الهجرات مع حالتها وإمكانية التراجع عنها. */
+  migrationStatus() {
+    const applied = new Map(this.db.prepare("SELECT name, applied_at FROM _migrations").all().map((r) => [r.name, r.applied_at]));
+    return (this._migrationSources || []).map(({ name, file }) => {
+      const { down } = DatabaseService.splitMigration(fs.readFileSync(file, "utf8"));
+      return { name, appliedAt: applied.get(name) || null, reversible: !!down };
+    });
+  }
+
+  /**
+   * يتراجع عن آخر هجرة مطبّقة (أو هجرة محددة) إن كان لها قسم `@down`.
+   * الهجرات القديمة بلا قسم تراجع ترفض بوضوح بدل حذف بيانات بشكل غير مضمون.
+   */
+  rollback(name = null) {
+    const status = this.migrationStatus().filter((m) => m.appliedAt);
+    const target = name ? status.find((m) => m.name === name) : status.sort((a, b) => b.appliedAt - a.appliedAt || b.name.localeCompare(a.name))[0];
+    if (!target) return { ok: false, reason: "notFound" };
+    const src = this._migrationSources.find((s) => s.name === target.name);
+    const { down } = DatabaseService.splitMigration(fs.readFileSync(src.file, "utf8"));
+    if (!down) return { ok: false, reason: "irreversible", name: target.name };
+    this.db.transaction(() => {
+      this.db.exec(down);
+      this.db.prepare("DELETE FROM _migrations WHERE name = ?").run(target.name);
+    })();
+    this.logger.warn(`تم التراجع عن الهجرة: ${target.name}`);
+    return { ok: true, name: target.name };
+  }
+
+  /** فحص سلامة قاعدة البيانات والمفاتيح الأجنبية. */
+  integrityCheck() {
+    const integrity = this.db.prepare("PRAGMA integrity_check").all().map((r) => Object.values(r)[0]);
+    let foreignKeys = [];
+    try {
+      foreignKeys = this.db.prepare("PRAGMA foreign_key_check").all();
+    } catch (error) {
+      this.logger.warn(`تعذّر فحص المفاتيح الأجنبية: ${error.message}`);
+    }
+    return { ok: integrity.length === 1 && integrity[0] === "ok" && foreignKeys.length === 0, integrity, foreignKeys: foreignKeys.slice(0, 20) };
   }
 
   /** ينفذ دالة داخل معاملة ذرية. أي استثناء يُرجع كل التغييرات. */
   transaction(fn) {
     return this.db.transaction(fn);
+  }
+
+  /**
+   * يغلّف دالة المعاملات في المحرك لقياس عددها ومدتها وفشلها،
+   * دون تغيير سلوكها — كل المستودعات تستفيد تلقائيًا.
+   */
+  _instrumentTransactions() {
+    const stats = (this.txStats = { total: 0, failed: 0, totalMs: 0, slowest: 0, lastError: null });
+    const original = this.db.transaction.bind(this.db);
+    this.db.transaction = (fn) => {
+      const wrapped = original(fn);
+      return (...args) => {
+        const started = process.hrtime.bigint();
+        try {
+          return wrapped(...args);
+        } catch (error) {
+          stats.failed++;
+          stats.lastError = error.message;
+          throw error;
+        } finally {
+          const ms = Number(process.hrtime.bigint() - started) / 1e6;
+          stats.total++;
+          stats.totalMs += ms;
+          if (ms > stats.slowest) stats.slowest = ms;
+        }
+      };
+    };
   }
 
   stats() {

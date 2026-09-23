@@ -1,0 +1,231 @@
+{
+  "common": {
+    "success": "Effectué avec succès",
+    "error": "Une erreur est survenue",
+    "cancelled": "Annulé",
+    "back": "Retour",
+    "confirm": "Confirmer",
+    "cancel": "Annuler",
+    "none": "—",
+    "enabled": "Activé",
+    "disabled": "Désactivé",
+    "unknown": "Inconnu",
+    "by": "Par",
+    "reason": "Raison",
+    "noReason": "Aucune raison fournie",
+    "duration": "Durée",
+    "target": "Membre",
+    "moderator": "Modérateur",
+    "caseNumber": "Numéro de dossier",
+    "date": "Date",
+    "chooseSubcommand": "Choisissez une sous-commande :"
+  },
+  "errors": {
+    "generic": "{emoji} Une erreur inattendue s'est produite. Elle a été enregistrée et signalée.\nID d'erreur : `{errorId}`",
+    "noPermission": "{emoji} Vous n'avez pas la permission de faire cela.",
+    "developerOnly": "{emoji} Cette commande est réservée aux développeurs.",
+    "guildOnly": "{emoji} Cette commande ne fonctionne que dans les serveurs.",
+    "hierarchy": "{emoji} Vous ne pouvez pas agir sur un membre dont le rôle est supérieur ou égal au vôtre.",
+    "botHierarchy": "{emoji} Le rôle du bot est inférieur à celui de la cible. Montez le rôle du bot dans les paramètres.",
+    "selfTarget": "{emoji} Vous ne pouvez pas faire cela sur vous-même.",
+    "botTarget": "{emoji} Vous ne pouvez pas faire cela sur le bot.",
+    "protectedTarget": "{emoji} Ce membre est protégé.",
+    "memberNotFound": "{emoji} Membre introuvable sur ce serveur.",
+    "userNotFound": "{emoji} Utilisateur introuvable.",
+    "roleNotFound": "{emoji} Rôle introuvable.",
+    "channelNotFound": "{emoji} Salon introuvable.",
+    "caseNotFound": "{emoji} Aucun dossier avec ce numéro.",
+    "missingBotPermission": "{emoji} Il manque au bot la permission : `{permission}`",
+    "invalidNumber": "{emoji} Nombre invalide.",
+    "invalidDuration": "{emoji} Durée invalide. Exemples : `10m` `2h` `7d`",
+    "cooldown": "{emoji} Attendez `{seconds}` secondes avant de réessayer.",
+    "commandDisabled": "{emoji} Cette commande est désactivée sur ce serveur.",
+    "systemDisabled": "{emoji} Le système `{system}` est désactivé sur ce serveur.",
+    "actionFailed": "{emoji} Échec de l'action : {details}"
+  },
+  "moderation": {
+    "ban": {
+      "success": "{target} a été banni",
+      "dm": "Vous avez été banni de **{guild}**",
+      "title": "Bannissement"
+    },
+    "unban": {
+      "success": "{target} a été débanni",
+      "title": "Débannissement",
+      "notBanned": "Cet utilisateur n'est pas banni."
+    },
+    "kick": {
+      "success": "{target} a été expulsé",
+      "dm": "Vous avez été expulsé de **{guild}**",
+      "title": "Expulsion"
+    },
+    "timeout": {
+      "success": "{target} a été rendu muet pour {duration}",
+      "dm": "Vous avez été rendu muet sur **{guild}** pour {duration}",
+      "title": "Exclusion temporaire"
+    },
+    "untimeout": {
+      "success": "Exclusion retirée pour {target}",
+      "title": "Retirer l'exclusion"
+    },
+    "warn": {
+      "success": "{target} a reçu un avertissement",
+      "dm": "Vous avez reçu un avertissement sur **{guild}**",
+      "title": "Avertissement"
+    },
+    "unwarn": {
+      "success": "Avertissement `{caseNumber}` supprimé",
+      "title": "Supprimer l'avertissement"
+    },
+    "warnings": {
+      "title": "Avertissements de {target}",
+      "empty": "Ce membre n'a aucun avertissement."
+    },
+    "clear": {
+      "success": "`{count}` messages supprimés.",
+      "title": "Suppression de messages"
+    },
+    "lock": {
+      "success": "Salon {channel} verrouillé",
+      "title": "Verrouiller le salon",
+      "already": "Le salon est déjà verrouillé."
+    },
+    "unlock": {
+      "success": "Salon {channel} déverrouillé",
+      "title": "Déverrouiller le salon",
+      "already": "Le salon est déjà déverrouillé."
+    },
+    "slowmode": {
+      "success": "Mode lent réglé à `{seconds}` secondes.",
+      "off": "Mode lent désactivé.",
+      "title": "Mode lent"
+    },
+    "role": {
+      "added": "{role} ajouté à {target}",
+      "removed": "{role} retiré de {target}",
+      "title": "Modification de rôle",
+      "botCannotManage": "Je ne peux pas gérer ce rôle car il est au-dessus du mien."
+    },
+    "nickname": {
+      "success": "Le pseudo de {target} est maintenant `{nickname}`",
+      "reset": "Le pseudo de {target} a été réinitialisé.",
+      "title": "Changement de pseudo"
+    },
+    "voice": {
+      "mute": "{target} a été rendu muet",
+      "unmute": "{target} n'est plus muet",
+      "deafen": "{target} a été rendu sourd",
+      "undeafen": "{target} n'est plus sourd",
+      "move": "{target} déplacé vers {channel}",
+      "disconnect": "{target} a été déconnecté du vocal",
+      "notInVoice": "Ce membre n'est dans aucun salon vocal."
+    },
+    "userinfo": {
+      "title": "Informations du membre"
+    },
+    "history": {
+      "title": "Historique de modération de {target}",
+      "empty": "Aucun historique pour ce membre."
+    },
+    "case": {
+      "title": "Dossier #{caseNumber}"
+    }
+  },
+  "panel": {
+    "title": "Panneau de contrôle",
+    "description": "Choisissez une section à gérer.\nLes permissions sont revérifiées à chaque clic.",
+    "yourLevel": "Votre niveau",
+    "sections": {
+      "moderation": "Modération",
+      "staff": "Rangs du staff",
+      "logs": "Journaux",
+      "settings": "Paramètres",
+      "developer": "Développeur",
+      "help": "Aide"
+    },
+    "moderation": {
+      "title": "Panneau de modération",
+      "description": "Choisissez une action. Le membre et la raison vous seront demandés."
+    },
+    "settings": {
+      "title": "Paramètres",
+      "description": "Configurez le préfixe, les rôles et les journaux."
+    },
+    "logs": {
+      "title": "Salons de journaux",
+      "description": "Choisissez un salon pour chaque type de journal."
+    },
+    "staff": {
+      "title": "Rangs du staff",
+      "description": "Ajoutez, réordonnez ou supprimez des rangs."
+    }
+  },
+  "help": {
+    "title": "Centre d'aide",
+    "description": "Choisissez une catégorie pour voir ses commandes.",
+    "usage": "Utilisation",
+    "aliases": "Alias",
+    "examples": "Exemples",
+    "permission": "Permission requise",
+    "arguments": "Arguments",
+    "cooldown": "Délai",
+    "noCommands": "Aucune commande dans cette catégorie."
+  },
+  "levels": {
+    "0": "Membre",
+    "1": "Staff",
+    "2": "Modérateur",
+    "3": "Admin",
+    "4": "Propriétaire",
+    "5": "Développeur"
+  },
+  "developer": {
+    "statusTitle": "État du système",
+    "modulesTitle": "Modules chargés",
+    "errorsTitle": "Dernières erreurs",
+    "databaseTitle": "Base de données",
+    "maintenanceOn": "Mode maintenance activé. Le bot ne répond qu'aux développeurs.",
+    "maintenanceOff": "Mode maintenance désactivé.",
+    "maintenanceActive": "{emoji} Le bot est actuellement en maintenance.",
+    "reloaded": "`{count}` commandes rechargées."
+  },
+  "logs": {
+    "moderationTitle": "Action de modération",
+    "errorTitle": "Erreur système",
+    "errorId": "ID d'erreur",
+    "system": "Système",
+    "command": "Commande",
+    "user": "Utilisateur",
+    "guild": "Serveur"
+  },
+  "builder": {
+    "editorTitle": "Éditeur d'embed",
+    "created": "Embed créé",
+    "saved": "Enregistré",
+    "sent": "Envoyé",
+    "synced": "Messages envoyés mis à jour",
+    "deleted": "Embed supprimé",
+    "notFound": "Aucun embed avec ce nom",
+    "commandCreated": "Commande personnalisée créée",
+    "commandDeleted": "Commande personnalisée supprimée"
+  },
+  "economy": {
+    "insufficient": "Solde insuffisant",
+    "transferred": "Transfert effectué",
+    "deposited": "Déposé",
+    "withdrawn": "Retiré",
+    "noAccount": "Ce membre n'a pas de compte"
+  },
+  "violations": {
+    "issued": "Infraction enregistrée",
+    "paid": "Infraction payée",
+    "cancelled": "Infraction annulée",
+    "clean": "Aucune infraction"
+  },
+  "flights": {
+    "booked": "Place réservée",
+    "cancelled": "Réservation annulée",
+    "full": "Aucune place disponible",
+    "closed": "Réservations fermées"
+  }
+}

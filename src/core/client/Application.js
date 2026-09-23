@@ -37,6 +37,7 @@ const ReactionReplyRepository = require("../database/repositories/ReactionReplyR
 const FeaturedRepository = require("../database/repositories/FeaturedRepository");
 const ChangelogRepository = require("../database/repositories/ChangelogRepository");
 const GithubWebhookRepository = require("../database/repositories/GithubWebhookRepository");
+const PlatformRepository = require("../database/repositories/PlatformRepository");
 
 const Logger = require("../logger/Logger");
 const LogService = require("../logger/LogService");
@@ -47,6 +48,13 @@ const ErrorHandler = require("../errors/ErrorHandler");
 const CommandRegistry = require("../commands/CommandRegistry");
 const CommandHandler = require("../commands/CommandHandler");
 const InteractionRouter = require("../interactions/InteractionRouter");
+const PluginManager = require("../plugins/PluginManager");
+const FeatureFlagService = require("../features/FeatureFlagService");
+const MaintenanceService = require("../maintenance/MaintenanceService");
+const ThemeService = require("../theme/ThemeService");
+const SchedulerService = require("../scheduler/SchedulerService");
+const QueueService = require("../queue/QueueService");
+const NotificationService = require("../notifications/NotificationService");
 
 const ModerationService = require("../../modules/moderation/ModerationService");
 const TicketService = require("../../modules/tickets/TicketService");
@@ -94,7 +102,20 @@ class Application {
     this.logger = new Logger(this.config.env.logLevel);
     this.i18n = new I18n(this.config.bot.language);
     this.bus = new EventBus(this.logger);
-    this.maintenance = false;
+    this._maintenanceFallback = false;
+  }
+
+  /**
+   * وضع الصيانة العام — واجهة متوافقة مع الكود القديم (`app.maintenance = true`).
+   * صار محفوظًا في قاعدة البيانات عبر MaintenanceService فينجو من إعادة التشغيل.
+   */
+  get maintenance() {
+    return this.maintenanceService ? this.maintenanceService.globalActive : this._maintenanceFallback;
+  }
+
+  set maintenance(value) {
+    if (this.maintenanceService) this.maintenanceService.set("global", null, { enabled: !!value });
+    else this._maintenanceFallback = !!value;
   }
 
   async init() {
@@ -105,9 +126,15 @@ class Application {
       process.exit(1);
     }
 
+    // ---- الإضافات: قراءة البيانات فقط (الهجرات، الترجمات، الإعدادات الافتراضية) ----
+    this.plugins = new PluginManager(this);
+    this.plugins.discover();
+
     // ---- قاعدة البيانات ----
     this.database = new DatabaseService(this.logger, this.config.env.databasePath);
+    this.database.extraMigrationSources = this.plugins.migrationSources();
     const db = this.database.connect();
+    this.db = db;
 
     this.guilds = new GuildRepository(db);
     this.cases = new CaseRepository(db);
@@ -143,12 +170,15 @@ class Application {
     this.featured = new FeaturedRepository(db);
     this.changelogs = new ChangelogRepository(db);
     this.githubWebhooks = new GithubWebhookRepository(db);
+    this.platform = new PlatformRepository(db);
 
     this.guildConfig = new GuildConfigService(
       this.guilds,
       this.config.guildDefaults,
       this.config.bot.limits.guildConfigCacheMs
     );
+    // لغة كل سيرفر من إعداداته — الترجمة تسقط على العربية لأي مفتاح ناقص
+    this.i18n.guildLocaleResolver = (guildId) => this.guildConfig.value(guildId, "language");
 
     // ---- العميل ----
     this.client = new Client({
@@ -183,11 +213,24 @@ class Application {
     });
     this.errors.installGlobalHandlers();
 
+    // ---- خدمات المنصة المشتركة (تسبق الأنظمة حتى تستخدمها) ----
+    this.features = new FeatureFlagService(this);
+    this.maintenanceService = new MaintenanceService(this);
+    this.theme = new ThemeService(this);
+    this.scheduler = new SchedulerService(this);
+    this.queue = new QueueService(this);
+    this.notifications = new NotificationService(this);
+    this.scheduler.define("maintenance:expire", (job) => {
+      this.maintenanceService.expire(job.payload.scope, job.payload.target);
+    }, { description: "تسجيل انتهاء صيانة مجدولة" });
+
     this.registry = new CommandRegistry(this.logger);
+    this.registry.setExtraSources(() => this.plugins.commandSources());
     this.registry.load();
 
     this.commands = new CommandHandler(this);
     this.interactions = new InteractionRouter(this);
+    this.interactions.setExtraSources(() => this.plugins.interactionSources());
     this.interactions.load();
 
     // ---- أنظمة الوحدات ----
@@ -233,23 +276,37 @@ class Application {
     this.logs = new LogService(this);
     this.logs.register();
 
+    // الأنظمة القديمة تُسجَّل كأعلام ميزات مفعّلة افتراضيًا — لا يتغير سلوك أي سيرفر
+    for (const moduleName of this.registry.modules.keys()) {
+      if (!this.registry.byModule(moduleName).some((c) => c.plugin)) this.features.register(moduleName, { defaultEnabled: true });
+    }
+
+    // ---- الإضافات: تنفيذ التسجيل بعد جاهزية كل الخدمات ----
+    this.plugins.register();
+
     return this;
   }
 
   registerEvents() {
     const events = require("../../events");
-    for (const [name, handler] of Object.entries(events)) {
+    const pluginEvents = this.plugins ? this.plugins.eventHandlers() : {};
+    const names = new Set([...Object.keys(events), ...Object.keys(pluginEvents)]);
+
+    for (const name of names) {
+      const core = events[name];
       const once = name === "ready" || name === "clientReady";
       const wrapped = (...args) => {
-        Promise.resolve(handler(this, ...args)).catch((err) =>
-          this.errors.capture(err, { system: `events/${name}` })
-        );
+        // المعالج الأساسي أولًا، ثم الإضافات — فشل أي منها لا يمنع البقية
+        Promise.resolve(core ? core(this, ...args) : null)
+          .catch((err) => this.errors.capture(err, { system: `events/${name}` }))
+          .then(() => (pluginEvents[name] ? this.plugins.dispatch(name, args) : null))
+          .catch((err) => this.errors.capture(err, { system: `plugins/events/${name}` }));
       };
       if (once) this.client.once(name, wrapped);
       else this.client.on(name, wrapped);
     }
     this.security.register();
-    this.logger.info(`تم ربط ${Object.keys(events).length} حدث ديسكورد.`);
+    this.logger.info(`تم ربط ${names.size} حدث ديسكورد.`);
   }
 
   async start() {
@@ -291,6 +348,9 @@ class Application {
     this.rpService?.stop();
     this.staffCheckin?.stop();
     this.questService?.stop();
+    this.scheduler?.stop();
+    this.queue?.stop();
+    this.plugins?.stop();
     try {
       this.database?.close();
     } catch { /* الإغلاق أثناء الإطفاء لا يجب أن يرمي */ }

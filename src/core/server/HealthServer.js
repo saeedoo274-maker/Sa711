@@ -115,7 +115,7 @@ class HealthServer {
 
     const { buildEmbed } = require("../utils/helpers");
     const repo = payload.repository?.full_name || "؟";
-    let embed = null;
+    let embed;
 
     if (event === "push") {
       const commits = payload.commits || [];

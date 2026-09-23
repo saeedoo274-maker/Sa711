@@ -14,6 +14,12 @@ class CommandRegistry {
     this.commands = new Map(); // name -> command
     this.aliases = new Map(); // alias -> name
     this.modules = new Map(); // moduleName -> [commandNames]
+    /** دالة تُرجع مصادر أوامر إضافية (الإضافات) — تُقرأ عند كل load() فتنجو من إعادة التحميل. */
+    this.extraSources = () => [];
+  }
+
+  setExtraSources(fn) {
+    this.extraSources = typeof fn === "function" ? fn : () => [];
   }
 
   load() {
@@ -21,10 +27,17 @@ class CommandRegistry {
     this.aliases.clear();
     this.modules.clear();
 
-    if (!fs.existsSync(MODULES_DIR)) return 0;
+    const sources = [];
+    if (fs.existsSync(MODULES_DIR)) {
+      for (const moduleName of fs.readdirSync(MODULES_DIR)) {
+        sources.push({ name: moduleName, dir: path.join(MODULES_DIR, moduleName, "commands") });
+      }
+    }
+    for (const extra of this.extraSources() || []) sources.push(extra);
 
-    for (const moduleName of fs.readdirSync(MODULES_DIR)) {
-      const commandsDir = path.join(MODULES_DIR, moduleName, "commands");
+    for (const source of sources) {
+      const moduleName = source.name;
+      const commandsDir = source.dir;
       if (!fs.existsSync(commandsDir)) continue;
 
       const names = [];
@@ -41,8 +54,12 @@ class CommandRegistry {
           for (const command of list) {
             if (!this._validate(command, file)) continue;
             command.module = moduleName;
+            if (source.plugin) {
+              command.plugin = source.plugin;
+              command.feature = command.feature || source.feature;
+            }
             this.commands.set(command.name, command);
-            for (const alias of command.aliases || []) this.aliases.set(alias, command.name);
+            for (const alias of command.aliases || []) this.aliases.set(String(alias).toLowerCase(), command.name);
             names.push(command.name);
           }
         } catch (err) {

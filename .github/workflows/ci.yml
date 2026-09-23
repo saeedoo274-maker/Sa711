@@ -34,6 +34,15 @@ jobs:
           done
           echo "كل ملفات JSON سليمة"
 
+      - name: فحص البناء الشامل (الأوامر، حدود ديسكورد، الإضافات)
+        run: npm run check
+
+      - name: فحص جودة الكود (ESLint)
+        run: npm run lint
+
+      - name: الاختبارات
+        run: npm test
+
       - name: التأكد من عدم تسريب الأسرار
         run: |
           if grep -rnE "(BOT_TOKEN|CLIENT_SECRET)\s*=\s*['\"]?[A-Za-z0-9_.-]{20,}" src/ config/ 2>/dev/null; then

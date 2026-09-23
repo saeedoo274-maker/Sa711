@@ -1,0 +1,231 @@
+{
+  "common": {
+    "success": "Hecho con éxito",
+    "error": "Ocurrió un error",
+    "cancelled": "Cancelado",
+    "back": "Atrás",
+    "confirm": "Confirmar",
+    "cancel": "Cancelar",
+    "none": "—",
+    "enabled": "Activado",
+    "disabled": "Desactivado",
+    "unknown": "Desconocido",
+    "by": "Por",
+    "reason": "Motivo",
+    "noReason": "Sin motivo",
+    "duration": "Duración",
+    "target": "Miembro",
+    "moderator": "Moderador",
+    "caseNumber": "Número de caso",
+    "date": "Fecha",
+    "chooseSubcommand": "Elige un subcomando:"
+  },
+  "errors": {
+    "generic": "{emoji} Ocurrió un error inesperado. Se registró y se informó.\nID de error: `{errorId}`",
+    "noPermission": "{emoji} No tienes permiso para hacer esto.",
+    "developerOnly": "{emoji} Este comando es solo para desarrolladores.",
+    "guildOnly": "{emoji} Este comando solo funciona en servidores.",
+    "hierarchy": "{emoji} No puedes actuar sobre un miembro con un rol mayor o igual al tuyo.",
+    "botHierarchy": "{emoji} El rol del bot está por debajo del objetivo. Sube el rol del bot en los ajustes.",
+    "selfTarget": "{emoji} No puedes hacer esto contigo mismo.",
+    "botTarget": "{emoji} No puedes hacer esto al bot.",
+    "protectedTarget": "{emoji} Este miembro está protegido.",
+    "memberNotFound": "{emoji} Miembro no encontrado en este servidor.",
+    "userNotFound": "{emoji} Usuario no encontrado.",
+    "roleNotFound": "{emoji} Rol no encontrado.",
+    "channelNotFound": "{emoji} Canal no encontrado.",
+    "caseNotFound": "{emoji} No hay un caso con ese número.",
+    "missingBotPermission": "{emoji} Al bot le falta el permiso: `{permission}`",
+    "invalidNumber": "{emoji} Número no válido.",
+    "invalidDuration": "{emoji} Duración no válida. Ejemplos: `10m` `2h` `7d`",
+    "cooldown": "{emoji} Espera `{seconds}` segundos antes de volver a usarlo.",
+    "commandDisabled": "{emoji} Este comando está desactivado en este servidor.",
+    "systemDisabled": "{emoji} El sistema `{system}` está desactivado en este servidor.",
+    "actionFailed": "{emoji} La acción falló: {details}"
+  },
+  "moderation": {
+    "ban": {
+      "success": "{target} ha sido baneado",
+      "dm": "Has sido baneado de **{guild}**",
+      "title": "Baneo"
+    },
+    "unban": {
+      "success": "{target} ha sido desbaneado",
+      "title": "Desbaneo",
+      "notBanned": "Este usuario no está baneado."
+    },
+    "kick": {
+      "success": "{target} ha sido expulsado",
+      "dm": "Has sido expulsado de **{guild}**",
+      "title": "Expulsión"
+    },
+    "timeout": {
+      "success": "{target} ha sido silenciado durante {duration}",
+      "dm": "Has sido silenciado en **{guild}** durante {duration}",
+      "title": "Aislamiento"
+    },
+    "untimeout": {
+      "success": "Aislamiento retirado a {target}",
+      "title": "Quitar aislamiento"
+    },
+    "warn": {
+      "success": "{target} ha sido advertido",
+      "dm": "Recibiste una advertencia en **{guild}**",
+      "title": "Advertencia"
+    },
+    "unwarn": {
+      "success": "Advertencia `{caseNumber}` eliminada",
+      "title": "Eliminar advertencia"
+    },
+    "warnings": {
+      "title": "Advertencias de {target}",
+      "empty": "Este miembro no tiene advertencias."
+    },
+    "clear": {
+      "success": "Se eliminaron `{count}` mensajes.",
+      "title": "Borrar mensajes"
+    },
+    "lock": {
+      "success": "Canal {channel} bloqueado",
+      "title": "Bloquear canal",
+      "already": "El canal ya está bloqueado."
+    },
+    "unlock": {
+      "success": "Canal {channel} desbloqueado",
+      "title": "Desbloquear canal",
+      "already": "El canal ya está desbloqueado."
+    },
+    "slowmode": {
+      "success": "Modo lento en `{seconds}` segundos.",
+      "off": "Modo lento desactivado.",
+      "title": "Modo lento"
+    },
+    "role": {
+      "added": "Se añadió {role} a {target}",
+      "removed": "Se quitó {role} a {target}",
+      "title": "Cambio de rol",
+      "botCannotManage": "No puedo gestionar este rol porque está por encima del mío."
+    },
+    "nickname": {
+      "success": "El apodo de {target} ahora es `{nickname}`",
+      "reset": "Se restableció el apodo de {target}.",
+      "title": "Cambio de apodo"
+    },
+    "voice": {
+      "mute": "{target} fue silenciado en voz",
+      "unmute": "{target} ya no está silenciado",
+      "deafen": "{target} fue ensordecido",
+      "undeafen": "{target} ya no está ensordecido",
+      "move": "{target} movido a {channel}",
+      "disconnect": "{target} fue desconectado de voz",
+      "notInVoice": "Este miembro no está en un canal de voz."
+    },
+    "userinfo": {
+      "title": "Información del miembro"
+    },
+    "history": {
+      "title": "Historial de moderación de {target}",
+      "empty": "Este miembro no tiene historial."
+    },
+    "case": {
+      "title": "Caso #{caseNumber}"
+    }
+  },
+  "panel": {
+    "title": "Panel de control",
+    "description": "Elige una sección para administrar.\nLos permisos se verifican en cada clic.",
+    "yourLevel": "Tu nivel",
+    "sections": {
+      "moderation": "Moderación",
+      "staff": "Rangos del staff",
+      "logs": "Registros",
+      "settings": "Ajustes",
+      "developer": "Desarrollador",
+      "help": "Ayuda"
+    },
+    "moderation": {
+      "title": "Panel de moderación",
+      "description": "Elige una acción. Se te pedirá el miembro y el motivo."
+    },
+    "settings": {
+      "title": "Ajustes",
+      "description": "Configura prefijo, roles y registros."
+    },
+    "logs": {
+      "title": "Canales de registro",
+      "description": "Elige un canal para cada tipo de registro."
+    },
+    "staff": {
+      "title": "Rangos del staff",
+      "description": "Añade, ordena o elimina rangos."
+    }
+  },
+  "help": {
+    "title": "Centro de ayuda",
+    "description": "Elige una categoría para ver sus comandos.",
+    "usage": "Uso",
+    "aliases": "Alias",
+    "examples": "Ejemplos",
+    "permission": "Permiso requerido",
+    "arguments": "Argumentos",
+    "cooldown": "Enfriamiento",
+    "noCommands": "No hay comandos en esta categoría."
+  },
+  "levels": {
+    "0": "Miembro",
+    "1": "Staff",
+    "2": "Moderador",
+    "3": "Administrador",
+    "4": "Dueño del servidor",
+    "5": "Desarrollador"
+  },
+  "developer": {
+    "statusTitle": "Estado del sistema",
+    "modulesTitle": "Módulos cargados",
+    "errorsTitle": "Últimos errores",
+    "databaseTitle": "Base de datos",
+    "maintenanceOn": "Modo mantenimiento activado. Solo responde a desarrolladores.",
+    "maintenanceOff": "Modo mantenimiento desactivado.",
+    "maintenanceActive": "{emoji} El bot está en mantenimiento.",
+    "reloaded": "Se recargaron `{count}` comandos."
+  },
+  "logs": {
+    "moderationTitle": "Acción de moderación",
+    "errorTitle": "Error del sistema",
+    "errorId": "ID de error",
+    "system": "Sistema",
+    "command": "Comando",
+    "user": "Usuario",
+    "guild": "Servidor"
+  },
+  "builder": {
+    "editorTitle": "Editor de embeds",
+    "created": "Embed creado",
+    "saved": "Guardado",
+    "sent": "Enviado",
+    "synced": "Mensajes enviados actualizados",
+    "deleted": "Embed eliminado",
+    "notFound": "No hay un embed con ese nombre",
+    "commandCreated": "Comando personalizado creado",
+    "commandDeleted": "Comando personalizado eliminado"
+  },
+  "economy": {
+    "insufficient": "Saldo insuficiente",
+    "transferred": "Transferencia realizada",
+    "deposited": "Depositado",
+    "withdrawn": "Retirado",
+    "noAccount": "Este miembro no tiene cuenta"
+  },
+  "violations": {
+    "issued": "Infracción registrada",
+    "paid": "Infracción pagada",
+    "cancelled": "Infracción cancelada",
+    "clean": "Sin infracciones"
+  },
+  "flights": {
+    "booked": "Asiento reservado",
+    "cancelled": "Reserva cancelada",
+    "full": "No hay asientos disponibles",
+    "closed": "Reservas cerradas"
+  }
+}

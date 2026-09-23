@@ -63,6 +63,11 @@ module.exports = async function ready(app) {
   app.questService.start();
   app.backups.start();
   app.health.start();
+  // المجدول والطابور المركزيان: يستأنفان أي مهمة محفوظة من قبل إعادة التشغيل
+  app.scheduler.start();
+  app.queue.start();
+  await app.plugins.start();
+  await app.scheduler.tick().catch((err) => app.errors.capture(err, { system: "scheduler" }));
 
   // معالجة أي سحوبات أو استطلاعات انتهت وقت توقف البوت
   await app.giveawayService.tick().catch(() => {});

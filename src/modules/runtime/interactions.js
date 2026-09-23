@@ -1,5 +1,6 @@
+const { safeReply } = require("../../core/interactions/interactionSafe");
+
 /**
-const { safeUpdate, safeReply, safeModal, ackComponent } = require("../../core/interactions/interactionSafe");
  * تشغيل مكوّنات الإمبيدات المنشورة.
  *
  * `customId` يحمل معرّف الإمبيد ورقم المكوّن فقط — لا يحمل الإجراء نفسه.

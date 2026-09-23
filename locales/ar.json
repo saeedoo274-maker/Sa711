@@ -17,7 +17,8 @@
     "target": "العضو",
     "moderator": "المنفّذ",
     "caseNumber": "رقم القضية",
-    "date": "التاريخ"
+    "date": "التاريخ",
+    "chooseSubcommand": "اختر أمرًا فرعيًا:"
   },
   "errors": {
     "generic": "{emoji} حدث خطأ غير متوقع. تم تسجيله وإبلاغ المطورين.\nرقم الخطأ: `{errorId}`",
