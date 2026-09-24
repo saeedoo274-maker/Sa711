@@ -119,6 +119,67 @@ class EconomyRepository {
     return !!this.db.prepare("SELECT 1 FROM accounts WHERE guild_id = ? AND user_id = ?").get(guildId, userId);
   }
 
+  /**
+   * تعديل الجيب فقط بمقدار موجب أو سالب، ذرّيًا وبسجل حركة.
+   * الخصم يشترط `wallet >= المبلغ` والحساب غير مجمّد داخل نفس جملة UPDATE.
+   * يُستخدم للألعاب والعمل والسرقة والمكافآت النقدية.
+   */
+  adjustWallet({ guildId, userId, delta, type, reason = null, refType = null, refId = null, counterpartyId = null, actorId = null }) {
+    const apply = this.db.transaction(() => {
+      this.ensure(guildId, userId);
+      const amount = Math.trunc(delta);
+      if (!amount) return { ok: true, account: this.get(guildId, userId) };
+      const res = amount < 0
+        ? this.db.prepare("UPDATE accounts SET wallet = wallet + ? WHERE guild_id = ? AND user_id = ? AND wallet >= ? AND frozen = 0").run(amount, guildId, userId, -amount)
+        : this.db.prepare("UPDATE accounts SET wallet = wallet + ? WHERE guild_id = ? AND user_id = ? AND frozen = 0").run(amount, guildId, userId);
+      const account = this.get(guildId, userId);
+      if (res.changes !== 1) return { ok: false, reason: account?.frozen ? "frozen" : "insufficient", account };
+      this._log({ guildId, userId, type, amount: Math.abs(amount), account, counterpartyId, actorId, reason, refType, refId });
+      return { ok: true, account };
+    });
+    return apply();
+  }
+
+  /** إيداع في البنك بنوع حركة محدد (أرباح استثمار، بيع في السوق، قرض...). */
+  adjustBank({ guildId, userId, delta, type, reason = null, refType = null, refId = null, counterpartyId = null, actorId = null }) {
+    const apply = this.db.transaction(() => {
+      this.ensure(guildId, userId);
+      const amount = Math.trunc(delta);
+      if (!amount) return { ok: true, account: this.get(guildId, userId) };
+      const res = amount < 0
+        ? this.db.prepare("UPDATE accounts SET bank = bank + ? WHERE guild_id = ? AND user_id = ? AND bank >= ?").run(amount, guildId, userId, -amount)
+        : this.db.prepare("UPDATE accounts SET bank = bank + ? WHERE guild_id = ? AND user_id = ?").run(amount, guildId, userId);
+      const account = this.get(guildId, userId);
+      if (res.changes !== 1) return { ok: false, reason: "insufficient", account };
+      this._log({ guildId, userId, type, amount: Math.abs(amount), account, counterpartyId, actorId, reason, refType, refId });
+      return { ok: true, account };
+    });
+    return apply();
+  }
+
+  /**
+   * دفع مبلغ من البنك ثم الجيب (مثل charge) لكن بنوع حركة محدد ويرفض الحساب المجمّد.
+   * الشرط ذرّي داخل UPDATE فلا يدفع أحد أكثر مما يملك حتى مع التزامن.
+   */
+  spend({ guildId, userId, amount, type, reason = null, refType = null, refId = null, counterpartyId = null }) {
+    const apply = this.db.transaction(() => {
+      const account = this.get(guildId, userId);
+      if (!account) return { ok: false, reason: "insufficient", account: null };
+      if (account.frozen) return { ok: false, reason: "frozen", account };
+      if (account.bank + account.wallet < amount) return { ok: false, reason: "insufficient", account };
+      const fromBank = Math.min(account.bank, amount);
+      const fromWallet = amount - fromBank;
+      const res = this.db
+        .prepare("UPDATE accounts SET bank = bank - ?, wallet = wallet - ? WHERE guild_id = ? AND user_id = ? AND bank >= ? AND wallet >= ? AND frozen = 0")
+        .run(fromBank, fromWallet, guildId, userId, fromBank, fromWallet);
+      if (res.changes !== 1) return { ok: false, reason: "insufficient", account };
+      const updated = this.get(guildId, userId);
+      this._log({ guildId, userId, type, amount, account: updated, counterpartyId, reason, refType, refId });
+      return { ok: true, account: updated, fromBank, fromWallet };
+    });
+    return apply();
+  }
+
   transfer(args) { return this._transfer(args); }
   move(args) { return this._move(args); }
   charge(args) { return this._charge(args); }

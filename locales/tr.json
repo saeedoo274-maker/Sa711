@@ -308,7 +308,8 @@
   "member": {
     "queryShort": "En az 2 karakter yazın.",
     "lookupTitle": "Arama sonuçları: {query}",
-    "section": "Bir bölüm seçin"
+    "section": "Bir bölüm seçin",
+    "badgesTitle": "{user} rozetleri"
   },
   "hist": {
     "overview": "Genel bakış",
@@ -361,5 +362,56 @@
     "suggestions": "Öneriler",
     "giveaways": "Çekilişler",
     "economy": "Ekonomi"
+  },
+  "adm": {
+    "unknownBadge": "Bilinmeyen rozet: {key}",
+    "rewardGranted": "{user}: {reward} verildi",
+    "badKey": "Anahtar: küçük harf, rakam, _ -.",
+    "badgeSaved": "{badge} rozeti kaydedildi.",
+    "achievementSaved": "{name} başarımı kaydedildi.",
+    "achievementToggled": "{name}: {state}",
+    "achievementRemoved": "Başarım silindi.",
+    "unknownAchievement": "Bilinmeyen başarım.",
+    "saved": "Kaydedildi."
+  },
+  "ach": {
+    "unlocked": "{user} {name} başarımını açtı!",
+    "hidden": "Gizli başarım",
+    "title": "{user} başarımları",
+    "cat": {
+      "messages": "💬 Mesajlar",
+      "voice": "🔊 Ses",
+      "activity": "📅 Etkinlik",
+      "xp": "✨ XP",
+      "economy": "💰 Ekonomi",
+      "tickets": "🎫 Talepler",
+      "staff": "👥 Yetkili",
+      "games": "🎮 Oyunlar",
+      "suggestions": "💡 Öneriler"
+    }
+  },
+  "lb": {
+    "yourPosition": "Sıranız: #{position} ({score})",
+    "type": {
+      "xp": "XP sıralaması",
+      "level": "Seviye sıralaması",
+      "messages": "Mesaj sıralaması",
+      "voice": "Ses sıralaması",
+      "activity": "En aktifler (gün)",
+      "economy": "En zenginler",
+      "tickets": "En çok talep kapatan",
+      "staff": "Yetkili puanları",
+      "achievements": "En çok başarım",
+      "reputation": "En yüksek itibar",
+      "games": "Oyun kazançları"
+    },
+    "period": {
+      "all": "Tüm zamanlar",
+      "today": "Bugün",
+      "7d": "7 gün",
+      "30d": "30 gün",
+      "90d": "90 gün",
+      "year": "Yıl"
+    }
   }
 }

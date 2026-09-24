@@ -308,7 +308,8 @@
   "member": {
     "queryShort": "Type at least 2 characters.",
     "lookupTitle": "Search results: {query}",
-    "section": "Choose a section"
+    "section": "Choose a section",
+    "badgesTitle": "{user}'s badges"
   },
   "hist": {
     "overview": "Overview",
@@ -361,5 +362,56 @@
     "suggestions": "Suggestions",
     "giveaways": "Giveaways",
     "economy": "Economy"
+  },
+  "adm": {
+    "unknownBadge": "Unknown badge: {key} — create it with /ادارة badge",
+    "rewardGranted": "Granted {user}: {reward}",
+    "badKey": "Key: lowercase letters, digits, _ - (2-32).",
+    "badgeSaved": "Badge {badge} saved.",
+    "achievementSaved": "Achievement {name} saved.",
+    "achievementToggled": "{name}: {state}",
+    "achievementRemoved": "Achievement removed.",
+    "unknownAchievement": "Unknown achievement.",
+    "saved": "Saved."
+  },
+  "ach": {
+    "unlocked": "{user} unlocked {name}!",
+    "hidden": "Hidden achievement",
+    "title": "{user}'s achievements",
+    "cat": {
+      "messages": "💬 Messages",
+      "voice": "🔊 Voice",
+      "activity": "📅 Activity",
+      "xp": "✨ XP",
+      "economy": "💰 Economy",
+      "tickets": "🎫 Tickets",
+      "staff": "👥 Staff",
+      "games": "🎮 Games",
+      "suggestions": "💡 Suggestions"
+    }
+  },
+  "lb": {
+    "yourPosition": "Your position: #{position} ({score})",
+    "type": {
+      "xp": "XP leaderboard",
+      "level": "Level leaderboard",
+      "messages": "Messages leaderboard",
+      "voice": "Voice leaderboard",
+      "activity": "Most active (days)",
+      "economy": "Richest",
+      "tickets": "Most tickets closed",
+      "staff": "Staff points",
+      "achievements": "Most achievements",
+      "reputation": "Top reputation",
+      "games": "Game profits"
+    },
+    "period": {
+      "all": "All time",
+      "today": "Today",
+      "7d": "7 days",
+      "30d": "30 days",
+      "90d": "90 days",
+      "year": "Year"
+    }
   }
 }

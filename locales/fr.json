@@ -308,7 +308,8 @@
   "member": {
     "queryShort": "Tapez au moins 2 caractères.",
     "lookupTitle": "Résultats : {query}",
-    "section": "Choisissez une section"
+    "section": "Choisissez une section",
+    "badgesTitle": "Badges de {user}"
   },
   "hist": {
     "overview": "Vue d'ensemble",
@@ -361,5 +362,56 @@
     "suggestions": "Suggestions",
     "giveaways": "Concours",
     "economy": "Économie"
+  },
+  "adm": {
+    "unknownBadge": "Badge inconnu : {key}",
+    "rewardGranted": "Accordé à {user} : {reward}",
+    "badKey": "Clé : minuscules, chiffres, _ -.",
+    "badgeSaved": "Badge {badge} enregistré.",
+    "achievementSaved": "Succès {name} enregistré.",
+    "achievementToggled": "{name} : {state}",
+    "achievementRemoved": "Succès supprimé.",
+    "unknownAchievement": "Succès inconnu.",
+    "saved": "Enregistré."
+  },
+  "ach": {
+    "unlocked": "{user} a débloqué {name} !",
+    "hidden": "Succès caché",
+    "title": "Succès de {user}",
+    "cat": {
+      "messages": "💬 Messages",
+      "voice": "🔊 Vocal",
+      "activity": "📅 Activité",
+      "xp": "✨ XP",
+      "economy": "💰 Économie",
+      "tickets": "🎫 Tickets",
+      "staff": "👥 Staff",
+      "games": "🎮 Jeux",
+      "suggestions": "💡 Suggestions"
+    }
+  },
+  "lb": {
+    "yourPosition": "Votre place : #{position} ({score})",
+    "type": {
+      "xp": "Classement XP",
+      "level": "Classement des niveaux",
+      "messages": "Classement des messages",
+      "voice": "Classement vocal",
+      "activity": "Les plus actifs (jours)",
+      "economy": "Les plus riches",
+      "tickets": "Tickets fermés",
+      "staff": "Points du staff",
+      "achievements": "Plus de succès",
+      "reputation": "Meilleure réputation",
+      "games": "Gains aux jeux"
+    },
+    "period": {
+      "all": "Tout",
+      "today": "Aujourd'hui",
+      "7d": "7 jours",
+      "30d": "30 jours",
+      "90d": "90 jours",
+      "year": "Année"
+    }
   }
 }

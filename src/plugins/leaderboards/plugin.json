@@ -1,0 +1,10 @@
+{
+  "name": "leaderboards",
+  "version": "1.0.0",
+  "label": "لوحات المتصدرين",
+  "description": "لوحات متصدرين مركزية: XP، المستوى، الرسائل، الصوت، الثروة، النشاط، التذاكر، الطاقم، الإنجازات، السمعة، الألعاب.",
+  "feature": "leaderboards",
+  "defaultEnabled": true,
+  "dependencies": [],
+  "permissions": {}
+}

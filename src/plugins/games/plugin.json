@@ -1,0 +1,12 @@
+{
+  "name": "games",
+  "version": "1.0.0",
+  "label": "الألعاب",
+  "description": "إطار ألعاب موحّد فوق الاقتصاد الموجود: عملة، نرد، سلوتس، بلاك جاك، حجر ورقة مقص، أسئلة، مبارزة، سباق، ألغام، وسرقة جماعية — رهانات محجوزة ذرّيًا ومستردّة عند إعادة التشغيل.",
+  "feature": "games",
+  "defaultEnabled": true,
+  "dependencies": ["economy-plus"],
+  "configKey": "games",
+  "config": { "minBet": 10, "maxBet": 100000, "lobbyMs": 30000, "sessionMs": 120000 },
+  "permissions": {}
+}

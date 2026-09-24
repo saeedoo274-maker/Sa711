@@ -1,0 +1,23 @@
+{
+  "name": "economy-plus",
+  "version": "1.0.0",
+  "label": "الاقتصاد الموسّع",
+  "description": "يومي/أسبوعي/شهري بسلاسل، عمل ووظائف، سرقة، متجر (عناصر/رتب/تجميلات/شارات، خصومات، عروض محدودة، مخزون، استرجاع)، سوق، مزادات، تداول، استثمار، وقروض بفائدة — فوق الاقتصاد الموجود.",
+  "feature": "economy",
+  "defaultEnabled": true,
+  "dependencies": ["rewards"],
+  "configKey": "economy",
+  "config": {
+    "daily": { "amount": 500, "streakBonus": 50, "maxStreakBonus": 1000 },
+    "weekly": { "amount": 3000 },
+    "monthly": { "amount": 10000 },
+    "work": { "enabled": true, "cooldownMs": 3600000, "min": 100, "max": 400 },
+    "rob": { "enabled": false, "cooldownMs": 7200000, "successChance": 0.45, "maxPercent": 0.3, "finePercent": 0.15, "minTargetWallet": 500, "protectionMs": 3600000 },
+    "investments": { "enabled": true, "earlyPenaltyPercent": 10, "maxActive": 3, "minAmount": 100 },
+    "market": { "enabled": true, "taxPercent": 5, "maxListings": 10 },
+    "auction": { "enabled": true, "feePercent": 5, "minDurationMs": 600000, "maxDurationMs": 604800000, "minIncrementPercent": 5 },
+    "trade": { "enabled": true, "expiresMs": 300000 },
+    "loans": { "enabled": false, "maxAmount": 50000, "interestPercent": 10, "termDays": 14, "maxActive": 1, "autoCollect": true }
+  },
+  "permissions": { "admin": 3 }
+}

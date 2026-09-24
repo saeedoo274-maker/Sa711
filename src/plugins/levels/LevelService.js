@@ -339,7 +339,8 @@ class LevelService {
       username: member?.displayName || user.username,
       avatarUrl: user.displayAvatarURL?.({ extension: "png", size: 256 }),
       level: p.level, rank: p.rank || "-", xpInLevel: p.xpInLevel, xpForNext: p.xpForNext, totalXp: p.xp,
-      color, backgroundUrl: this.config(guild.id).cardBackgroundUrl
+      // خلفية تجميلية اشتراها العضو من المتجر تتقدّم على خلفية السيرفر
+      color, backgroundUrl: this.app.shop?.cosmetic(guild.id, user.id, "rankBackground") || this.config(guild.id).cardBackgroundUrl
     });
     const embed = this.app.theme.embed(guild.id, {
       author: { name: member?.displayName || user.username, iconURL: user.displayAvatarURL?.() },

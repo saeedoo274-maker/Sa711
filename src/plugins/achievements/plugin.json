@@ -1,0 +1,12 @@
+{
+  "name": "achievements",
+  "version": "1.0.0",
+  "label": "الإنجازات",
+  "description": "إنجازات (نشاط، رسائل، صوت، XP، اقتصاد، تذاكر، طاقم، ألعاب، اقتراحات) بتتبع التقدّم، إنجازات مخفية، تاريخ الإكمال، مكافآت، ولوحة متصدرين.",
+  "feature": "achievements",
+  "defaultEnabled": true,
+  "dependencies": ["rewards"],
+  "configKey": "achievements",
+  "config": { "announceChannelId": null, "dm": true, "builtins": true },
+  "permissions": { "manage": 3 }
+}

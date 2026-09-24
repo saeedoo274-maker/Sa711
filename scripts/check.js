@@ -125,8 +125,39 @@ for (const c of body) {
   const n = chars(c);
   if (n > 4000) errors.push(`الأمر ${c.name} يتجاوز 4000 حرف (${n})`);
 }
+const aliasOwners = new Map();
+const sizes = [];
 for (const cmd of registry.all()) {
   if (typeof cmd.execute !== "function") errors.push(`أمر بلا منفّذ: ${cmd.name}`);
+  // اختصار بريفكس مكرر بين أمرين يجعل أحدهما يبتلع الآخر بصمت
+  for (const name of [cmd.name, ...(cmd.aliases || [])].map((a) => String(a).toLowerCase())) {
+    if (aliasOwners.has(name) && aliasOwners.get(name) !== cmd.name) errors.push(`اسم/اختصار مكرر "${name}" بين ${aliasOwners.get(name)} و ${cmd.name}`);
+    aliasOwners.set(name, cmd.name);
+  }
+  if (cmd.slash) sizes.push([cmd.name, chars(typeof cmd.slash.toJSON === "function" ? cmd.slash.toJSON() : cmd.slash)]);
+}
+if (process.argv.includes("--sizes")) {
+  for (const [name, n] of sizes.sort((a, b) => b[1] - a[1]).slice(0, 10)) console.log(`  ${name}: ${n}/4000`);
+}
+
+// ---- 3ب) مفاتيح الترجمة المستخدمة موجودة بالعربية ----
+{
+  const i18n = new I18n("ar");
+  for (const name of plugins.order) {
+    const dir = path.join(plugins.get(name).dir, "locales");
+    if (fs.existsSync(dir)) i18n.addDirectory(dir);
+  }
+  i18n.load();
+  const KEY_RE = /(?:\bt|\.t|\.tr|\.tg|\.fail|forGuild\([^)]*\))\(\s*(?:[\w.]+\s*,\s*)?["']([a-zA-Z][\w]*(?:\.[\w]+)+)["']/g;
+  const missing = new Set();
+  for (const file of walk(path.join(ROOT, "src"), ".js")) {
+    const code = fs.readFileSync(file, "utf8");
+    for (const m of code.matchAll(KEY_RE)) {
+      const key = m[1];
+      if (i18n.t(key) === key) missing.add(`${key} (${path.relative(ROOT, file)})`);
+    }
+  }
+  for (const k of missing) errors.push(`مفتاح ترجمة مفقود: ${k}`);
 }
 
 // ---- 4) الأسرار ----

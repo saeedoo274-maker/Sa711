@@ -308,7 +308,8 @@
   "member": {
     "queryShort": "اكتب حرفين على الأقل.",
     "lookupTitle": "نتائج البحث: {query}",
-    "section": "اختر القسم"
+    "section": "اختر القسم",
+    "badgesTitle": "شارات {user}"
   },
   "hist": {
     "overview": "نظرة عامة",
@@ -361,5 +362,56 @@
     "suggestions": "الاقتراحات",
     "giveaways": "السحوبات",
     "economy": "الاقتصاد"
+  },
+  "adm": {
+    "unknownBadge": "شارة غير معروفة: {key} — أنشئها بـ /ادارة badge",
+    "rewardGranted": "تم منح {user}: {reward}",
+    "badKey": "المفتاح: أحرف إنجليزية صغيرة وأرقام و _ - (2-32).",
+    "badgeSaved": "تم حفظ الشارة {badge}.",
+    "achievementSaved": "تم حفظ الإنجاز {name}.",
+    "achievementToggled": "{name}: {state}",
+    "achievementRemoved": "تم حذف الإنجاز.",
+    "unknownAchievement": "إنجاز غير معروف.",
+    "saved": "تم الحفظ."
+  },
+  "ach": {
+    "unlocked": "{user} فتح إنجاز {name}!",
+    "hidden": "إنجاز مخفي",
+    "title": "إنجازات {user}",
+    "cat": {
+      "messages": "💬 الرسائل",
+      "voice": "🔊 الصوت",
+      "activity": "📅 النشاط",
+      "xp": "✨ الخبرة",
+      "economy": "💰 الاقتصاد",
+      "tickets": "🎫 التذاكر",
+      "staff": "👥 الطاقم",
+      "games": "🎮 الألعاب",
+      "suggestions": "💡 الاقتراحات"
+    }
+  },
+  "lb": {
+    "yourPosition": "ترتيبك: #{position} ({score})",
+    "type": {
+      "xp": "متصدرو الخبرة",
+      "level": "متصدرو المستوى",
+      "messages": "متصدرو الرسائل",
+      "voice": "متصدرو الصوت",
+      "activity": "الأكثر نشاطًا (أيام)",
+      "economy": "الأغنى",
+      "tickets": "أكثر من أغلق تذاكر",
+      "staff": "نقاط الطاقم",
+      "achievements": "أكثر الإنجازات",
+      "reputation": "الأعلى سمعة",
+      "games": "أرباح الألعاب"
+    },
+    "period": {
+      "all": "كل الأوقات",
+      "today": "اليوم",
+      "7d": "7 أيام",
+      "30d": "30 يومًا",
+      "90d": "90 يومًا",
+      "year": "سنة"
+    }
   }
 }
