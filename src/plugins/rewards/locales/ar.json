@@ -1,0 +1,8 @@
+{
+  "rewards": {
+    "weeklyTitle": "🏆 مكافآت أنشط أعضاء الأسبوع",
+    "staffWeeklyTitle": "🏅 مكافآت أنشط الطاقم هذا الأسبوع",
+    "granted": "{emoji} تم منح {user}: {reward}",
+    "nothing": "{emoji} لم يُمنح شيء: {details}"
+  }
+}

@@ -227,5 +227,13 @@
     "cancelled": "Booking cancelled",
     "full": "No seats available",
     "closed": "Booking is closed"
+  },
+  "ui": {
+    "expired": "{emoji} These buttons have expired. Run the command again.",
+    "notYours": "{emoji} This panel isn't yours.",
+    "page": "Page {page} of {pages}",
+    "empty": "No data yet.",
+    "saved": "{emoji} Saved.",
+    "confirmTitle": "Confirm action"
   }
 }

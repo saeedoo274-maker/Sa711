@@ -1,0 +1,16 @@
+{
+  "name": "rewards",
+  "version": "1.0.0",
+  "label": "المكافآت",
+  "description": "محرك مكافآت مركزي: مال، XP، رتب، عناصر، وشارات — مع سجل تدقيق ومطالبات لا تتكرر.",
+  "feature": "rewards",
+  "defaultEnabled": true,
+  "dependencies": [],
+  "configKey": "rewards",
+  "config": {
+    "dailyLogin": { "enabled": false, "money": 0, "xp": 0 },
+    "weeklyActivity": { "enabled": false, "topN": 3, "money": [3000, 2000, 1000], "xp": [500, 300, 150], "roleId": null, "announceChannelId": null },
+    "staffWeekly": { "enabled": false, "topN": 3, "money": [5000, 3000, 1500], "announceChannelId": null }
+  },
+  "permissions": { "grant": 3 }
+}

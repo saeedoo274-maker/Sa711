@@ -202,7 +202,9 @@ class CommandHandler {
 
       // 4) النظام نفسه معطّل — علم الميزة (عام أو للسيرفر) ثم العلم القديم الخاص بالنظام
       const feature = command.feature || command.module;
-      if (this.app.features && feature && !this.app.features.isEnabled(ctx.guild.id, feature)) {
+      // featureExempt: يسمح لأوامر الإعداد نفسها بالعمل وهي معطّلة (لتفعيلها)
+      const exempt = typeof command.featureExempt === "function" && command.featureExempt(ctx);
+      if (this.app.features && feature && !exempt && !this.app.features.isEnabled(ctx.guild.id, feature)) {
         return ctx.fail("errors.systemDisabled", { system: feature });
       }
       if (command.systemFlag) {

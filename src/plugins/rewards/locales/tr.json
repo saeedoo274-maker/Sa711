@@ -1,0 +1,8 @@
+{
+  "rewards": {
+    "weeklyTitle": "🏆 Haftanın en aktif üyeleri",
+    "staffWeeklyTitle": "🏅 Haftanın en iyi yetkilileri",
+    "granted": "{emoji} {user} kullanıcısına verildi: {reward}",
+    "nothing": "{emoji} Hiçbir şey verilmedi: {details}"
+  }
+}

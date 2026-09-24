@@ -227,5 +227,13 @@
     "cancelled": "Reserva cancelada",
     "full": "No hay asientos disponibles",
     "closed": "Reservas cerradas"
+  },
+  "ui": {
+    "expired": "{emoji} Estos botones han caducado. Vuelve a ejecutar el comando.",
+    "notYours": "{emoji} Este panel no es tuyo.",
+    "page": "Página {page} de {pages}",
+    "empty": "Aún no hay datos.",
+    "saved": "{emoji} Guardado.",
+    "confirmTitle": "Confirmar acción"
   }
 }

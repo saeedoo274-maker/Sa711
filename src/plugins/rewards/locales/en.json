@@ -1,0 +1,8 @@
+{
+  "rewards": {
+    "weeklyTitle": "🏆 Most active members of the week",
+    "staffWeeklyTitle": "🏅 Top staff of the week",
+    "granted": "{emoji} Granted {user}: {reward}",
+    "nothing": "{emoji} Nothing granted: {details}"
+  }
+}

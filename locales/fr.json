@@ -227,5 +227,13 @@
     "cancelled": "Réservation annulée",
     "full": "Aucune place disponible",
     "closed": "Réservations fermées"
+  },
+  "ui": {
+    "expired": "{emoji} Ces boutons ont expiré. Relancez la commande.",
+    "notYours": "{emoji} Ce panneau ne vous appartient pas.",
+    "page": "Page {page} sur {pages}",
+    "empty": "Aucune donnée pour le moment.",
+    "saved": "{emoji} Enregistré.",
+    "confirmTitle": "Confirmer l'action"
   }
 }

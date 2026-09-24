@@ -227,5 +227,13 @@
     "cancelled": "Rezervasyon iptal edildi",
     "full": "Boş koltuk yok",
     "closed": "Rezervasyon kapalı"
+  },
+  "ui": {
+    "expired": "{emoji} Bu butonların süresi doldu. Komutu tekrar çalıştırın.",
+    "notYours": "{emoji} Bu panel size ait değil.",
+    "page": "Sayfa {page}/{pages}",
+    "empty": "Henüz veri yok.",
+    "saved": "{emoji} Kaydedildi.",
+    "confirmTitle": "İşlemi onayla"
   }
 }

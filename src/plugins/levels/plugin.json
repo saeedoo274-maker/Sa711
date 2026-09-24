@@ -1,0 +1,28 @@
+{
+  "name": "levels",
+  "version": "1.0.0",
+  "label": "المستويات والخبرة",
+  "description": "XP للرسائل والصوت، مستويات، بطاقة رتبة، لوحة متصدرين، مكافآت رتب ومال، مضاعفات، وقوائم تجاهل.",
+  "feature": "levels",
+  "defaultEnabled": false,
+  "dependencies": ["rewards"],
+  "configKey": "levels",
+  "config": {
+    "messageXpMin": 15,
+    "messageXpMax": 25,
+    "cooldownMs": 60000,
+    "minMessageLength": 3,
+    "voiceXpPerMinute": 10,
+    "voiceRequireOthers": true,
+    "voiceIgnoreMuted": true,
+    "dailyCap": 0,
+    "ignoredChannels": [],
+    "ignoredRoles": [],
+    "xpChannels": [],
+    "multiplierMax": 5,
+    "stackRewards": true,
+    "levelUp": { "mode": "current", "channelId": null, "message": "🎉 {USER} وصل إلى المستوى **{LEVEL}**!" },
+    "cardBackgroundUrl": null
+  },
+  "permissions": { "manage": 3 }
+}

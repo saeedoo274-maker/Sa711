@@ -102,14 +102,47 @@ const RESOLVERS = {
   DURATION: (c) => c.duration || "",
   CASE_ID: (c) => (c.caseId != null ? String(c.caseId) : ""),
   AMOUNT: (c) => (c.amount != null ? String(c.amount) : ""),
-  POINTS: (c) => (c.points != null ? String(c.points) : "")
+  POINTS: (c) => (c.points != null ? String(c.points) : ""),
+
+  // ---- الإصدار الموسّع (أسماء صريحة مطلوبة من المنشئين) ----
+  USER_MENTION: (c) => mentionOf(c.member || c.user),
+  USER_NAME: (c) => c.user?.username || c.member?.user?.username || "",
+  USER_BANNER: (c) => {
+    const u = c.user || c.member?.user;
+    return u?.bannerURL ? u.bannerURL({ size: 1024 }) || "" : "";
+  },
+  ACCOUNT_AGE: (c) => {
+    const u = c.user || c.member?.user;
+    return u?.createdTimestamp ? String(Math.floor((Date.now() - u.createdTimestamp) / 86_400_000)) : "";
+  },
+  JOIN_DATE: (c) => (c.member?.joinedTimestamp ? `<t:${Math.floor(c.member.joinedTimestamp / 1000)}:D>` : ""),
+  CATEGORY_NAME: (c) => c.channel?.parent?.name || "",
+  ROLE_COLOR: (c) => (typeof c.role === "object" && c.role?.hexColor) || "",
+  SERVER_NAME: (c) => c.guild?.name || "",
+  SERVER_OWNER: (c) => (c.guild?.ownerId ? `<@${c.guild.ownerId}>` : ""),
+  SERVER_MEMBER_COUNT: (c) => (c.guild?.memberCount != null ? String(c.guild.memberCount) : ""),
+  SERVER_BOOSTS: (c) => (c.guild?.premiumSubscriptionCount != null ? String(c.guild.premiumSubscriptionCount) : ""),
+  SERVER_LEVEL: (c) => (c.guild?.premiumTier != null ? String(c.guild.premiumTier) : ""),
+  TICKET_ID: (c) => (c.ticket?.number != null ? String(c.ticket.number) : c.ticket?.id ? String(c.ticket.id) : ""),
+  TICKET_TYPE: (c) => c.ticket?.typeName || c.ticket?.type || "",
+  TICKET_OWNER: (c) => (c.ticket?.ownerId ? `<@${c.ticket.ownerId}>` : c.ticket?.user_id ? `<@${c.ticket.user_id}>` : ""),
+  TICKET_STAFF: (c) => (c.ticket?.claimedBy ? `<@${c.ticket.claimedBy}>` : c.ticket?.claimed_by ? `<@${c.ticket.claimed_by}>` : ""),
+  CASE_TYPE: (c) => c.caseType || "",
+  XP: (c) => (c.xp != null ? String(c.xp) : ""),
+  LEVEL: (c) => (c.level != null ? String(c.level) : ""),
+  RANK: (c) => (c.rank != null ? String(c.rank) : ""),
+  BALANCE: (c) => (c.balance != null ? String(c.balance) : ""),
+  BANK: (c) => (c.bank != null ? String(c.bank) : ""),
+  REPUTATION: (c) => (c.reputation != null ? String(c.reputation) : "")
 };
 
 /** المتغيرات التي لا معنى لها بلا سياق خاص — تُستبدل بفراغ لا بنصها. */
 const CONTEXTUAL = new Set([
   "MODERATOR", "MODERATOR_NAME", "MODERATOR_ID",
   "REASON", "DURATION", "CASE_ID", "AMOUNT", "POINTS",
-  "ROLE", "ROLE_NAME", "ROLE_ID", "TICKET"
+  "ROLE", "ROLE_NAME", "ROLE_ID", "TICKET", "ROLE_COLOR", "CATEGORY_NAME", "USER_BANNER",
+  "TICKET_ID", "TICKET_TYPE", "TICKET_OWNER", "TICKET_STAFF", "CASE_TYPE",
+  "XP", "LEVEL", "RANK", "BALANCE", "BANK", "REPUTATION"
 ]);
 
 const PLACEHOLDER_RE = /\{([A-Za-z_]+)\}/g;
@@ -125,7 +158,10 @@ const VARIABLE_GROUPS = {
   "🎭 الرتبة": ["ROLE", "ROLE_NAME", "ROLE_ID"],
   "🤖 البوت": ["BOT", "BOT_NAME", "BOT_ID", "PREFIX"],
   "🕐 الوقت": ["DATE", "TIME", "DATETIME", "YEAR", "TIMESTAMP", "RELATIVE"],
-  "⚖️ الإجراءات": ["MODERATOR", "MODERATOR_NAME", "MODERATOR_ID", "REASON", "DURATION", "CASE_ID", "AMOUNT", "POINTS"]
+  "⚖️ الإجراءات": ["MODERATOR", "MODERATOR_NAME", "MODERATOR_ID", "REASON", "DURATION", "CASE_ID", "CASE_TYPE", "AMOUNT", "POINTS"],
+  "🧾 موسّعة": ["USER_MENTION", "USER_NAME", "USER_BANNER", "ACCOUNT_AGE", "JOIN_DATE", "CATEGORY_NAME", "ROLE_COLOR", "SERVER_NAME", "SERVER_OWNER", "SERVER_MEMBER_COUNT", "SERVER_BOOSTS", "SERVER_LEVEL"],
+  "🎫 التذاكر": ["TICKET", "TICKET_ID", "TICKET_TYPE", "TICKET_OWNER", "TICKET_STAFF"],
+  "📈 الإحصاءات": ["XP", "LEVEL", "RANK", "BALANCE", "BANK", "REPUTATION"]
 };
 
 /**
@@ -178,6 +214,28 @@ function apply(text, ctx = {}) {
   });
 }
 
+/** أسماء المتغيرات المستخدمة فعلًا في نص (بالأحرف الكبيرة). */
+function usedVariables(text) {
+  const out = new Set();
+  if (typeof text !== "string") return out;
+  for (const m of text.matchAll(PLACEHOLDER_RE)) out.add(m[1].toUpperCase());
+  return out;
+}
+
+/**
+ * اقتراحات الإكمال التلقائي للمنشئين: حين ينتهي النص بـ `{جزء` تُقترح المتغيرات المطابقة.
+ * تُرجع قائمة نصوص كاملة (النص الحالي + المتغير) جاهزة كخيارات autocomplete.
+ */
+function suggest(typed = "", limit = 25) {
+  const text = String(typed || "");
+  const open = text.lastIndexOf("{");
+  const closed = text.lastIndexOf("}");
+  const partial = open > closed ? text.slice(open + 1).toUpperCase() : null;
+  const base = open > closed ? text.slice(0, open) : text;
+  const names = VARIABLE_NAMES.filter((n) => partial === null || n.startsWith(partial) || n.includes(partial));
+  return names.slice(0, limit).map((n) => `${base}{${n}}`.slice(-100));
+}
+
 /** يطبّق المتغيرات على كل نصوص كائن الإمبيد دفعةً واحدة. */
 function applyToEmbedData(data, ctx) {
   if (!data || typeof data !== "object") return data;
@@ -203,5 +261,7 @@ module.exports = {
   VARIABLE_NAMES,
   VARIABLE_GROUPS,
   RESOLVERS,
-  CONTEXTUAL
+  CONTEXTUAL,
+  usedVariables,
+  suggest
 };

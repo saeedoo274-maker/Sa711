@@ -49,6 +49,18 @@ class SchedulerService {
     return this.repo.createJob({ type, guildId, payload, runAt: at, repeat, uniqueKey, maxAttempts, createdBy });
   }
 
+  /**
+   * يضمن وجود مهمة نظام متكررة واحدة بمفتاح ثابت (تُستدعى عند كل إقلاع).
+   * المهمة السليمة تُترك كما هي؛ الملغاة أو الفاشلة أو المنتهية تُعاد جدولتها.
+   */
+  ensureRecurring(type, uniqueKey, repeat, payload = {}) {
+    const existing = this.repo.jobByKey(uniqueKey);
+    if (existing && (existing.status === "pending" || existing.status === "running") && JSON.stringify(existing.repeat) === JSON.stringify(repeat)) {
+      return existing;
+    }
+    return this.schedule({ type, uniqueKey, repeat, payload });
+  }
+
   cancel(id) {
     return this.repo.cancelJob(id);
   }
