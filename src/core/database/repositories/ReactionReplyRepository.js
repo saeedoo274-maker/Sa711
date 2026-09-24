@@ -9,7 +9,29 @@ class ReactionReplyRepository {
   }
 
   _hydrate(row) {
-    return row ? { ...row, channels: JSON.parse(row.channels || "[]") } : null;
+    if (!row) return null;
+    const list = (v) => {
+      try {
+        const x = JSON.parse(v || "[]");
+        return Array.isArray(x) ? x : [];
+      } catch {
+        return [];
+      }
+    };
+    return { ...row, channels: list(row.channels), required_roles: list(row.required_roles), blocked_roles: list(row.blocked_roles) };
+  }
+
+  /** تحديث أعمدة الأتمتة دفعة واحدة (قائمة بيضاء ثابتة). */
+  updateMany(id, fields) {
+    const allowed = [
+      "message_id", "role_mode", "remove_role_id", "required_roles", "blocked_roles", "min_account_days", "min_level",
+      "cooldown_ms", "log_channel_id", "open_ticket", "target_channel_id", "channel_action", "button_label", "button_url", "remove_reaction"
+    ];
+    const cols = Object.keys(fields).filter((k) => allowed.includes(k));
+    if (!cols.length) return this.getById(id);
+    const values = Object.fromEntries(cols.map((c) => [c, Array.isArray(fields[c]) ? JSON.stringify(fields[c]) : fields[c]]));
+    this.db.prepare(`UPDATE reaction_replies SET ${cols.map((c) => `${c} = @${c}`).join(", ")} WHERE id = @id`).run({ ...values, id });
+    return this.getById(id);
   }
 
   create(d) {
