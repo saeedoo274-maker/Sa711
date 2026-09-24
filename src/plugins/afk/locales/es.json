@@ -1,0 +1,19 @@
+{
+  "afk": {
+    "set": "{user} ahora está AFK.",
+    "reasonLabel": "Motivo",
+    "durationLabel": "Duración",
+    "tooLong": "Duración máxima: 30 días.",
+    "welcomeBack": "¡Bienvenido {user}! Estuviste AFK {duration} y recibiste `{count}` menciones.",
+    "jump": "mensaje",
+    "isAfk": "💤 **{user}** está AFK {since}{until}",
+    "isAfkReason": "💤 **{user}** está AFK {since}{until}: {reason}",
+    "until": "vuelve {time}",
+    "listTitle": "AFK ahora",
+    "cleared": "Se quitó el AFK de {user}.",
+    "notAfk": "Ese miembro no está AFK.",
+    "settingsTitle": "Ajustes AFK",
+    "nickLabel": "Prefijo del apodo",
+    "ignoredLabel": "Canales sin avisos"
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "suggest": {
+    "thread": "Suggestion discussion",
+    "author": "Author",
+    "anonymous": "Anonymous",
+    "statusLabel": "Status",
+    "status": {
+      "pending": "Pending",
+      "review": "Under review",
+      "accepted": "Accepted",
+      "rejected": "Rejected"
+    },
+    "votes": "Votes",
+    "staffResponse": "Staff response",
+    "title": "Suggestion",
+    "footer": "Vote with the buttons — click again to remove your vote",
+    "dmDecision": "Your suggestion #{number} in **{guild}** is now: **{status}**",
+    "err": {
+      "notConfigured": "Suggestions aren't configured (no channel).",
+      "missingRole": "You need one of these roles: {roles}",
+      "wrongChannel": "Use this command in: {channels}",
+      "cooldown": "Wait {seconds}s before another suggestion.",
+      "tooShort": "Too short (minimum {min} characters).",
+      "noAnonymous": "Anonymous suggestions aren't allowed here.",
+      "sendFailed": "Couldn't post in the suggestions channel.",
+      "notFound": "Suggestion not found.",
+      "same": "The suggestion already has that status.",
+      "invalidStatus": "Invalid status.",
+      "staffOnly": "Staff only.",
+      "vote": {
+        "missingRole": "You don't have the role required to vote.",
+        "notFound": "Suggestion not found.",
+        "closed": "Voting is closed.",
+        "noChange": "You can't change your vote."
+      }
+    },
+    "voted": {
+      "added": "Vote recorded",
+      "removed": "Vote removed",
+      "changed": "Vote changed"
+    },
+    "manage": "Manage suggestion #{number}",
+    "confirmDelete": "Delete suggestion #{number} permanently?",
+    "deleted": "Suggestion #{number} deleted.",
+    "decided": "Suggestion #{number} → {status}",
+    "created": "Your suggestion #{number} was posted: {url}",
+    "history": "Status history",
+    "topTitle": "Top suggestions",
+    "statsTitle": "Suggestion statistics",
+    "total": "Total",
+    "last30": "last 30 days",
+    "acceptRate": "Acceptance rate",
+    "settingsTitle": "Suggestion settings",
+    "set": {
+      "channel": "Channel",
+      "archive": "Archive",
+      "enabled": "Enabled",
+      "requiredRoles": "Roles to suggest",
+      "voteRoles": "Roles to vote",
+      "allowedChannels": "Command channels",
+      "anonymous": "Anonymous",
+      "threads": "Threads",
+      "cooldown": "Cooldown"
+    }
+  }
+}

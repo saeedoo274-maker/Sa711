@@ -1,0 +1,17 @@
+{
+  "name": "reminders",
+  "version": "1.0.0",
+  "label": "التذكيرات",
+  "description": "تذكيرات بعد مدة أو بتاريخ، يومية/أسبوعية/شهرية، للخاص أو قناة، تذكيرات طاقم، ومناطق زمنية — محفوظة عبر إعادة التشغيل.",
+  "feature": "reminders",
+  "defaultEnabled": true,
+  "dependencies": [],
+  "configKey": "reminders",
+  "config": {
+    "maxPerUser": 25,
+    "allowChannelTarget": true,
+    "defaultTimezone": "UTC",
+    "staffLevel": 1
+  },
+  "permissions": { "staff": 1 }
+}

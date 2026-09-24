@@ -1,0 +1,35 @@
+{
+  "remind": {
+    "header": "Hatırlatma",
+    "staffHeader": "Yetkili hatırlatması",
+    "created": "Hatırlatma ayarlandı:",
+    "edited": "Hatırlatma güncellendi:",
+    "deleted": "#{id} hatırlatması silindi.",
+    "listTitle": "Hatırlatmalarınız",
+    "tzLabel": "Saat dilimi",
+    "tzSet": "Saat diliminiz `{zone}` (yerel saat: {local}).",
+    "kind": {
+      "daily": "günlük",
+      "weekly": "haftalık",
+      "monthly": "aylık",
+      "interval": "aralıklı"
+    },
+    "err": {
+      "empty": "Metin boş.",
+      "limit": "Hatırlatma sınırına ulaştınız ({max}).",
+      "invalidDuration": "Geçersiz süre (en az 1 dakika).",
+      "invalidDate": "Geçersiz tarih. Biçim: 2026-10-01 18:30",
+      "past": "Bu zaman geçti.",
+      "noTime": "Bir zaman belirtin.",
+      "invalidRepeat": "Geçersiz tekrar (HH:MM).",
+      "tooFar": "Çok ileri (en fazla 2 yıl).",
+      "channelDisabled": "Kanal hatırlatmaları kapalı.",
+      "noChannel": "Geçersiz kanal.",
+      "noAccess": "Bu kanala yazamazsınız.",
+      "notFound": "Bu numarada aktif hatırlatma yok.",
+      "repeatTime": "Tekrarlayan hatırlatmayı silip yeniden oluşturun.",
+      "invalidTimezone": "Geçersiz saat dilimi. Örnek: Europe/Istanbul",
+      "slashOnly": "Bu alt komut yalnızca slash ile."
+    }
+  }
+}

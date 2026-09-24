@@ -1,0 +1,66 @@
+{
+  "suggest": {
+    "thread": "Öneri tartışması",
+    "author": "Yazar",
+    "anonymous": "Anonim",
+    "statusLabel": "Durum",
+    "status": {
+      "pending": "Beklemede",
+      "review": "İnceleniyor",
+      "accepted": "Kabul edildi",
+      "rejected": "Reddedildi"
+    },
+    "votes": "Oylar",
+    "staffResponse": "Yetkili yanıtı",
+    "title": "Öneri",
+    "footer": "Butonlarla oy verin — tekrar tıklayınca geri alınır",
+    "dmDecision": "**{guild}** sunucusundaki #{number} öneriniz: **{status}**",
+    "err": {
+      "notConfigured": "Öneriler ayarlanmamış (kanal yok).",
+      "missingRole": "Şu rollerden biri gerekli: {roles}",
+      "wrongChannel": "Komutu şurada kullanın: {channels}",
+      "cooldown": "Yeni öneri için {seconds} sn bekleyin.",
+      "tooShort": "Çok kısa (en az {min} karakter).",
+      "noAnonymous": "Anonim öneriye izin verilmiyor.",
+      "sendFailed": "Öneri kanalına gönderilemedi.",
+      "notFound": "Öneri bulunamadı.",
+      "same": "Öneri zaten bu durumda.",
+      "invalidStatus": "Geçersiz durum.",
+      "staffOnly": "Yalnızca yetkililer.",
+      "vote": {
+        "missingRole": "Oy vermek için gerekli rol sizde yok.",
+        "notFound": "Öneri bulunamadı.",
+        "closed": "Oylama kapalı.",
+        "noChange": "Oyunuzu değiştiremezsiniz."
+      }
+    },
+    "voted": {
+      "added": "Oyunuz kaydedildi",
+      "removed": "Oyunuz geri alındı",
+      "changed": "Oyunuz değiştirildi"
+    },
+    "manage": "#{number} önerisini yönet",
+    "confirmDelete": "#{number} kalıcı olarak silinsin mi?",
+    "deleted": "#{number} silindi.",
+    "decided": "Öneri #{number} → {status}",
+    "created": "#{number} öneriniz yayınlandı: {url}",
+    "history": "Durum geçmişi",
+    "topTitle": "En iyi öneriler",
+    "statsTitle": "Öneri istatistikleri",
+    "total": "Toplam",
+    "last30": "son 30 gün",
+    "acceptRate": "Kabul oranı",
+    "settingsTitle": "Öneri ayarları",
+    "set": {
+      "channel": "Kanal",
+      "archive": "Arşiv",
+      "enabled": "Etkin",
+      "requiredRoles": "Öneri rolleri",
+      "voteRoles": "Oy rolleri",
+      "allowedChannels": "Komut kanalları",
+      "anonymous": "Anonim",
+      "threads": "Konular",
+      "cooldown": "Bekleme"
+    }
+  }
+}

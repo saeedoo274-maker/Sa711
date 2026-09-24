@@ -1,0 +1,35 @@
+{
+  "remind": {
+    "header": "Recordatorio",
+    "staffHeader": "Recordatorio del staff",
+    "created": "Recordatorio creado:",
+    "edited": "Recordatorio actualizado:",
+    "deleted": "Recordatorio #{id} eliminado.",
+    "listTitle": "Tus recordatorios",
+    "tzLabel": "Zona horaria",
+    "tzSet": "Tu zona horaria es `{zone}` (hora local: {local}).",
+    "kind": {
+      "daily": "diario",
+      "weekly": "semanal",
+      "monthly": "mensual",
+      "interval": "intervalo"
+    },
+    "err": {
+      "empty": "El texto está vacío.",
+      "limit": "Alcanzaste el límite ({max}).",
+      "invalidDuration": "Duración no válida (mínimo 1 minuto).",
+      "invalidDate": "Fecha no válida. Formato: 2026-10-01 18:30",
+      "past": "Esa fecha ya pasó.",
+      "noTime": "Indica una hora.",
+      "invalidRepeat": "Repetición no válida (HH:MM).",
+      "tooFar": "Demasiado lejos (máx. 2 años).",
+      "channelDisabled": "Los recordatorios en canal están desactivados.",
+      "noChannel": "Canal no válido.",
+      "noAccess": "No puedes escribir en ese canal.",
+      "notFound": "No hay un recordatorio activo con ese ID.",
+      "repeatTime": "Elimina y crea de nuevo el recordatorio repetitivo.",
+      "invalidTimezone": "Zona horaria no válida. Ejemplo: Europe/Madrid",
+      "slashOnly": "Este subcomando es solo slash."
+    }
+  }
+}

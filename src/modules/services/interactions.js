@@ -101,6 +101,19 @@ async function submitRating(interaction, app) {
 
 async function submitSuggestion(interaction, app) {
   const text = interaction.fields.getTextInputValue("text");
+
+  // نظام الاقتراحات الكامل (تصويت وحالات) إن كان مضبوطًا — وإلا السلوك القديم كما هو
+  if (app.suggestions?.isReady(interaction.guild.id)) {
+    const res = await app.suggestions.create(interaction.member, text, { channelId: null });
+    const t = app.i18n.forGuild(interaction.guild.id);
+    return safeReply(interaction, {
+      content: res.ok
+        ? `${app.config.emoji("success")} ${t("suggest.created", { number: res.suggestion.number, url: res.url })}`
+        : `${app.config.emoji("error")} ${t(`suggest.err.${res.reason}`, { seconds: res.seconds, min: res.min, roles: (res.roles || []).map((r) => `<@&${r}>`).join(" ") })}`,
+      flags: 64
+    });
+  }
+
   const delivered = await deliver(interaction, app, {
     configKey: "logs.suggestions",
     title: "💡 اقتراح جديد",

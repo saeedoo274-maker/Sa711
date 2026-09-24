@@ -1,0 +1,19 @@
+{
+  "name": "afk",
+  "version": "1.0.0",
+  "label": "الغياب (AFK)",
+  "description": "حالة غياب بسبب ومدة، إزالة تلقائية عند الكتابة، تنبيه من يمنشنك، وعدّ المنشنات أثناء الغياب.",
+  "feature": "afk",
+  "defaultEnabled": true,
+  "dependencies": [],
+  "configKey": "afk",
+  "config": {
+    "setNickname": true,
+    "nickPrefix": "[AFK] ",
+    "ignoredChannels": [],
+    "mentionCooldownMs": 30000,
+    "maxReasonLength": 200,
+    "welcomeBackDeleteAfterMs": 15000
+  },
+  "permissions": { "manage": 2 }
+}

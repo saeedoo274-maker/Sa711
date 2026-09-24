@@ -1,0 +1,25 @@
+{
+  "name": "suggestions",
+  "version": "1.0.0",
+  "label": "الاقتراحات",
+  "description": "اقتراحات بتصويت بالأزرار، نسب مئوية، حالات (معلّق/قيد المراجعة/مقبول/مرفوض)، رد الطاقم، أرشفة، إحصاءات، واقتراحات مجهولة.",
+  "feature": "suggestions",
+  "defaultEnabled": true,
+  "dependencies": [],
+  "configKey": "suggestions",
+  "config": {
+    "channelId": null,
+    "archiveChannelId": null,
+    "requiredRoleIds": [],
+    "voteRoleIds": [],
+    "allowedChannelIds": [],
+    "anonymousAllowed": true,
+    "cooldownMs": 300000,
+    "minLength": 10,
+    "threads": true,
+    "allowVoteChange": true,
+    "dmAuthor": true,
+    "staffLevel": 2
+  },
+  "permissions": { "review": 2, "settings": 3 }
+}

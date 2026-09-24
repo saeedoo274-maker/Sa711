@@ -1,0 +1,66 @@
+{
+  "suggest": {
+    "thread": "Discusión de la sugerencia",
+    "author": "Autor",
+    "anonymous": "Anónimo",
+    "statusLabel": "Estado",
+    "status": {
+      "pending": "Pendiente",
+      "review": "En revisión",
+      "accepted": "Aceptada",
+      "rejected": "Rechazada"
+    },
+    "votes": "Votos",
+    "staffResponse": "Respuesta del staff",
+    "title": "Sugerencia",
+    "footer": "Vota con los botones — vuelve a pulsar para quitarlo",
+    "dmDecision": "Tu sugerencia #{number} en **{guild}** ahora está: **{status}**",
+    "err": {
+      "notConfigured": "Las sugerencias no están configuradas.",
+      "missingRole": "Necesitas uno de estos roles: {roles}",
+      "wrongChannel": "Usa el comando en: {channels}",
+      "cooldown": "Espera {seconds}s antes de otra sugerencia.",
+      "tooShort": "Demasiado corta (mínimo {min} caracteres).",
+      "noAnonymous": "No se permiten sugerencias anónimas.",
+      "sendFailed": "No se pudo publicar en el canal.",
+      "notFound": "Sugerencia no encontrada.",
+      "same": "La sugerencia ya tiene ese estado.",
+      "invalidStatus": "Estado no válido.",
+      "staffOnly": "Solo para el staff.",
+      "vote": {
+        "missingRole": "No tienes el rol necesario para votar.",
+        "notFound": "Sugerencia no encontrada.",
+        "closed": "La votación está cerrada.",
+        "noChange": "No puedes cambiar tu voto."
+      }
+    },
+    "voted": {
+      "added": "Voto registrado",
+      "removed": "Voto retirado",
+      "changed": "Voto cambiado"
+    },
+    "manage": "Gestionar la sugerencia #{number}",
+    "confirmDelete": "¿Eliminar #{number} para siempre?",
+    "deleted": "Sugerencia #{number} eliminada.",
+    "decided": "Sugerencia #{number} → {status}",
+    "created": "Tu sugerencia #{number} fue publicada: {url}",
+    "history": "Historial",
+    "topTitle": "Mejores sugerencias",
+    "statsTitle": "Estadísticas de sugerencias",
+    "total": "Total",
+    "last30": "últimos 30 días",
+    "acceptRate": "Tasa de aceptación",
+    "settingsTitle": "Ajustes de sugerencias",
+    "set": {
+      "channel": "Canal",
+      "archive": "Archivo",
+      "enabled": "Activado",
+      "requiredRoles": "Roles para sugerir",
+      "voteRoles": "Roles para votar",
+      "allowedChannels": "Canales del comando",
+      "anonymous": "Anónimo",
+      "threads": "Hilos",
+      "cooldown": "Enfriamiento"
+    }
+  }
+}

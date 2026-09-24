@@ -1,0 +1,35 @@
+{
+  "remind": {
+    "header": "Rappel",
+    "staffHeader": "Rappel du staff",
+    "created": "Rappel programmé :",
+    "edited": "Rappel modifié :",
+    "deleted": "Rappel #{id} supprimé.",
+    "listTitle": "Vos rappels",
+    "tzLabel": "Fuseau horaire",
+    "tzSet": "Votre fuseau est `{zone}` (heure locale : {local}).",
+    "kind": {
+      "daily": "quotidien",
+      "weekly": "hebdomadaire",
+      "monthly": "mensuel",
+      "interval": "intervalle"
+    },
+    "err": {
+      "empty": "Le texte est vide.",
+      "limit": "Limite de rappels atteinte ({max}).",
+      "invalidDuration": "Durée invalide (min. 1 minute).",
+      "invalidDate": "Date invalide. Format : 2026-10-01 18:30",
+      "past": "Cette date est passée.",
+      "noTime": "Indiquez une date.",
+      "invalidRepeat": "Répétition invalide (HH:MM).",
+      "tooFar": "Trop lointain (max 2 ans).",
+      "channelDisabled": "Les rappels en salon sont désactivés.",
+      "noChannel": "Salon invalide.",
+      "noAccess": "Vous ne pouvez pas écrire dans ce salon.",
+      "notFound": "Aucun rappel actif avec cet ID.",
+      "repeatTime": "Supprimez et recréez un rappel répétitif pour changer l'heure.",
+      "invalidTimezone": "Fuseau invalide. Exemple : Europe/Paris",
+      "slashOnly": "Sous-commande slash uniquement."
+    }
+  }
+}

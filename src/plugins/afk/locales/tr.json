@@ -1,0 +1,19 @@
+{
+  "afk": {
+    "set": "{user} artık AFK.",
+    "reasonLabel": "Sebep",
+    "durationLabel": "Süre",
+    "tooLong": "En fazla 30 gün.",
+    "welcomeBack": "Tekrar hoş geldin {user}! {duration} AFK kaldın, `{count}` bahsetme aldın.",
+    "jump": "mesaj",
+    "isAfk": "💤 **{user}** AFK {since}{until}",
+    "isAfkReason": "💤 **{user}** AFK {since}{until}: {reason}",
+    "until": "dönüş {time}",
+    "listTitle": "Şu an AFK olanlar",
+    "cleared": "{user} AFK kaldırıldı.",
+    "notAfk": "Bu üye AFK değil.",
+    "settingsTitle": "AFK ayarları",
+    "nickLabel": "Takma ad öneki",
+    "ignoredLabel": "Bildirimsiz kanallar"
+  }
+}

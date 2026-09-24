@@ -1,0 +1,19 @@
+{
+  "afk": {
+    "set": "{user} صار في وضع الغياب.",
+    "reasonLabel": "السبب",
+    "durationLabel": "المدة",
+    "tooLong": "أقصى مدة 30 يومًا.",
+    "welcomeBack": "أهلًا بعودتك {user}! كنت غائبًا {duration}، ووصلك `{count}` منشن.",
+    "jump": "الرسالة",
+    "isAfk": "💤 **{user}** غائب {since}{until}",
+    "isAfkReason": "💤 **{user}** غائب {since}{until}: {reason}",
+    "until": "يعود {time}",
+    "listTitle": "الغائبون الآن",
+    "cleared": "تمت إزالة غياب {user}.",
+    "notAfk": "العضو ليس في وضع الغياب.",
+    "settingsTitle": "إعدادات الغياب",
+    "nickLabel": "بادئة الاسم",
+    "ignoredLabel": "قنوات بلا تنبيه"
+  }
+}

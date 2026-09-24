@@ -1,0 +1,66 @@
+{
+  "suggest": {
+    "thread": "نقاش الاقتراح",
+    "author": "صاحب الاقتراح",
+    "anonymous": "مجهول",
+    "statusLabel": "الحالة",
+    "status": {
+      "pending": "معلّق",
+      "review": "قيد المراجعة",
+      "accepted": "مقبول",
+      "rejected": "مرفوض"
+    },
+    "votes": "الأصوات",
+    "staffResponse": "رد الطاقم",
+    "title": "اقتراح",
+    "footer": "صوّت بالأزرار — الضغط مرة ثانية يسحب صوتك",
+    "dmDecision": "اقتراحك رقم #{number} في **{guild}** أصبح: **{status}**",
+    "err": {
+      "notConfigured": "نظام الاقتراحات غير مضبوط (لا توجد قناة).",
+      "missingRole": "تحتاج إحدى الرتب: {roles}",
+      "wrongChannel": "استخدم الأمر في: {channels}",
+      "cooldown": "انتظر {seconds} ثانية قبل اقتراح جديد.",
+      "tooShort": "الاقتراح قصير جدًا (الحد الأدنى {min} حرف).",
+      "noAnonymous": "الاقتراحات المجهولة غير مسموحة هنا.",
+      "sendFailed": "تعذّر النشر في قناة الاقتراحات.",
+      "notFound": "الاقتراح غير موجود.",
+      "same": "الاقتراح بهذه الحالة أصلًا.",
+      "invalidStatus": "حالة غير صالحة.",
+      "staffOnly": "هذا للطاقم فقط.",
+      "vote": {
+        "missingRole": "لا تملك الرتبة المطلوبة للتصويت.",
+        "notFound": "الاقتراح غير موجود.",
+        "closed": "التصويت مغلق على هذا الاقتراح.",
+        "noChange": "لا يمكن تغيير صوتك."
+      }
+    },
+    "voted": {
+      "added": "تم تسجيل صوتك",
+      "removed": "تم سحب صوتك",
+      "changed": "تم تغيير صوتك"
+    },
+    "manage": "إدارة الاقتراح #{number}",
+    "confirmDelete": "حذف الاقتراح #{number} نهائيًا؟",
+    "deleted": "تم حذف الاقتراح #{number}.",
+    "decided": "الاقتراح #{number} ← {status}",
+    "created": "تم نشر اقتراحك #{number}: {url}",
+    "history": "سجل الحالة",
+    "topTitle": "أفضل الاقتراحات",
+    "statsTitle": "إحصاءات الاقتراحات",
+    "total": "الإجمالي",
+    "last30": "آخر 30 يومًا",
+    "acceptRate": "نسبة القبول",
+    "settingsTitle": "إعدادات الاقتراحات",
+    "set": {
+      "channel": "القناة",
+      "archive": "الأرشيف",
+      "enabled": "مفعّل",
+      "requiredRoles": "رتب الاقتراح",
+      "voteRoles": "رتب التصويت",
+      "allowedChannels": "قنوات الأمر",
+      "anonymous": "المجهول",
+      "threads": "سلاسل نقاش",
+      "cooldown": "التبريد"
+    }
+  }
+}

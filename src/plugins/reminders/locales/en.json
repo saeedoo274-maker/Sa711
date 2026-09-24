@@ -1,0 +1,35 @@
+{
+  "remind": {
+    "header": "Reminder",
+    "staffHeader": "Staff reminder",
+    "created": "Reminder set:",
+    "edited": "Reminder updated:",
+    "deleted": "Reminder #{id} deleted.",
+    "listTitle": "Your reminders",
+    "tzLabel": "Timezone",
+    "tzSet": "Your timezone is now `{zone}` (local time: {local}).",
+    "kind": {
+      "daily": "daily",
+      "weekly": "weekly",
+      "monthly": "monthly",
+      "interval": "interval"
+    },
+    "err": {
+      "empty": "The reminder text is empty.",
+      "limit": "You reached the limit ({max}) of reminders.",
+      "invalidDuration": "Invalid duration (minimum 1 minute). Examples: 10m 2h 1d",
+      "invalidDate": "Invalid date. Format: 2026-10-01 18:30 or 18:30",
+      "past": "That time is in the past.",
+      "noTime": "Specify a time.",
+      "invalidRepeat": "Invalid repeat. Time must be HH:MM.",
+      "tooFar": "Too far ahead (max 2 years).",
+      "channelDisabled": "Channel reminders are disabled here.",
+      "noChannel": "Invalid channel.",
+      "noAccess": "You can't send messages in that channel.",
+      "notFound": "No active reminder with that ID for you.",
+      "repeatTime": "Delete and recreate a repeating reminder to change its time.",
+      "invalidTimezone": "Invalid timezone. Example: Asia/Riyadh",
+      "slashOnly": "This subcommand is slash-only."
+    }
+  }
+}

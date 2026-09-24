@@ -1,0 +1,66 @@
+{
+  "suggest": {
+    "thread": "Discussion de la suggestion",
+    "author": "Auteur",
+    "anonymous": "Anonyme",
+    "statusLabel": "Statut",
+    "status": {
+      "pending": "En attente",
+      "review": "En cours d'examen",
+      "accepted": "Accepté",
+      "rejected": "Refusé"
+    },
+    "votes": "Votes",
+    "staffResponse": "Réponse du staff",
+    "title": "Suggestion",
+    "footer": "Votez avec les boutons — recliquez pour retirer",
+    "dmDecision": "Votre suggestion #{number} sur **{guild}** est maintenant : **{status}**",
+    "err": {
+      "notConfigured": "Les suggestions ne sont pas configurées.",
+      "missingRole": "Il vous faut un de ces rôles : {roles}",
+      "wrongChannel": "Utilisez la commande dans : {channels}",
+      "cooldown": "Attendez {seconds}s avant une nouvelle suggestion.",
+      "tooShort": "Trop court (minimum {min} caractères).",
+      "noAnonymous": "Les suggestions anonymes ne sont pas autorisées.",
+      "sendFailed": "Impossible de publier dans le salon.",
+      "notFound": "Suggestion introuvable.",
+      "same": "La suggestion a déjà ce statut.",
+      "invalidStatus": "Statut invalide.",
+      "staffOnly": "Réservé au staff.",
+      "vote": {
+        "missingRole": "Vous n'avez pas le rôle requis pour voter.",
+        "notFound": "Suggestion introuvable.",
+        "closed": "Le vote est fermé.",
+        "noChange": "Vous ne pouvez pas changer de vote."
+      }
+    },
+    "voted": {
+      "added": "Vote enregistré",
+      "removed": "Vote retiré",
+      "changed": "Vote modifié"
+    },
+    "manage": "Gérer la suggestion #{number}",
+    "confirmDelete": "Supprimer définitivement #{number} ?",
+    "deleted": "Suggestion #{number} supprimée.",
+    "decided": "Suggestion #{number} → {status}",
+    "created": "Votre suggestion #{number} est publiée : {url}",
+    "history": "Historique",
+    "topTitle": "Meilleures suggestions",
+    "statsTitle": "Statistiques des suggestions",
+    "total": "Total",
+    "last30": "30 derniers jours",
+    "acceptRate": "Taux d'acceptation",
+    "settingsTitle": "Paramètres des suggestions",
+    "set": {
+      "channel": "Salon",
+      "archive": "Archive",
+      "enabled": "Activé",
+      "requiredRoles": "Rôles pour suggérer",
+      "voteRoles": "Rôles pour voter",
+      "allowedChannels": "Salons de commande",
+      "anonymous": "Anonyme",
+      "threads": "Fils",
+      "cooldown": "Délai"
+    }
+  }
+}
