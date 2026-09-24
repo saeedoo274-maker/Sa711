@@ -235,5 +235,131 @@
     "empty": "Aucune donnée pour le moment.",
     "saved": "{emoji} Enregistré.",
     "confirmTitle": "Confirmer l'action"
+  },
+  "cfg": {
+    "unknownFeature": "Système inconnu : {name}",
+    "globallyDisabled": "{name} est désactivé globalement.",
+    "colorPair": "Indiquez le nom et la valeur de la couleur.",
+    "unknownLog": "Type de journal inconnu : {name}",
+    "preview": "Aperçu :",
+    "badUrl": "URL invalide — doit commencer par https://",
+    "maxButtons": "Maximum 4 boutons.",
+    "verifyNeedsRole": "Définissez d'abord le rôle vérifié.",
+    "notifTitle": "Salons de notification",
+    "staffChannel": "Staff",
+    "adminChannel": "Admins",
+    "languageTitle": "Langue du bot",
+    "languageFooter": "Le texte non traduit s'affiche en arabe.",
+    "featuresTitle": "Systèmes",
+    "featuresFooter": "🟢 activé • ⚪ désactivé • ⛔ désactivé globalement • 🧩 plugin",
+    "default": "par défaut",
+    "themeTitle": "Thème du serveur",
+    "colors": "Couleurs",
+    "footer": "Pied de page",
+    "logo": "Logo",
+    "banner": "Bannière",
+    "logsTitle": "Journaux",
+    "logsFooter": "🟢 = activé avec salon. Réglez avec category + channel.",
+    "welcomeTitle": "Bienvenue et au revoir",
+    "welcomeChannel": "Salon de bienvenue",
+    "embedImageDm": "Embed / image / MP",
+    "rules": "Règles",
+    "message": "Message",
+    "buttons": "Boutons",
+    "autoRoles": "Rôles automatiques",
+    "goodbyeChannel": "Salon d'au revoir",
+    "goodbyeEmbedImage": "Embed / image d'au revoir",
+    "variablesHint": "Les textes acceptent des variables : {USER} {SERVER} ...",
+    "verifyTitle": "Vérification",
+    "verifyRole": "Rôle vérifié",
+    "unverifiedRole": "Rôle non vérifié",
+    "panel": "Panneau",
+    "verifiedCount": "Membres vérifiés",
+    "modal": {
+      "welcome": "Message de bienvenue",
+      "dm": "Message privé",
+      "image": "Image de bienvenue",
+      "goodbye": "Message d'au revoir"
+    },
+    "f": {
+      "message": "Texte du message",
+      "embedTitle": "Titre de l'embed",
+      "embedDescription": "Description de l'embed",
+      "embedImage": "URL de l'image",
+      "thumbnail": "Miniature (ou {USER_AVATAR})",
+      "dm": "Texte du MP",
+      "imageTitle": "Titre de l'image",
+      "imageSubtitle": "Sous-titre",
+      "background": "URL d'arrière-plan https://",
+      "button": "Libellé du bouton"
+    }
+  },
+  "welcome": {
+    "rulesButton": "Règles"
+  },
+  "verify": {
+    "done": "Vous êtes vérifié ! Bienvenue.",
+    "err": {
+      "already": "Vous êtes déjà vérifié.",
+      "notConfigured": "La vérification n'est pas configurée.",
+      "roleUnmanageable": "Je ne peux pas attribuer ce rôle."
+    }
+  },
+  "member": {
+    "queryShort": "Tapez au moins 2 caractères.",
+    "lookupTitle": "Résultats : {query}",
+    "section": "Choisissez une section"
+  },
+  "hist": {
+    "overview": "Vue d'ensemble",
+    "names": "Historique des noms",
+    "roles": "Historique des rôles",
+    "presence": "Arrivées et départs",
+    "moderation": "Historique de modération",
+    "kind": {
+      "username": "nom d'utilisateur",
+      "globalname": "nom affiché",
+      "nickname": "pseudo"
+    },
+    "joined": "arrivé",
+    "left": "parti",
+    "accountCreated": "Compte créé",
+    "joinedServer": "Arrivée",
+    "notMember": "pas membre",
+    "joinsLeaves": "Arrivées/départs",
+    "lastSeen": "Vu pour la dernière fois",
+    "activity": "Activité",
+    "economy": "Économie",
+    "tickets": "Tickets",
+    "open": "ouverts",
+    "handled": "pris/fermés",
+    "applications": "Candidatures",
+    "roleCount": "Rôles"
+  },
+  "an": {
+    "serverTitle": "Analyses du serveur",
+    "staffTitle": "Analyses du staff",
+    "staffLegend": "💬 messages • 🔊 heures vocales • 🎫 pris/fermés • 📝 examens • ⏱️ réponse moy.",
+    "period": {
+      "today": "Aujourd'hui",
+      "7d": "7 jours",
+      "30d": "30 jours",
+      "90d": "90 jours",
+      "year": "Année"
+    },
+    "joins": "Arrivées",
+    "leaves": "Départs",
+    "messages": "Messages",
+    "active": "Actifs",
+    "voice": "Vocal",
+    "tickets": "Tickets",
+    "opened": "ouverts",
+    "closed": "fermés",
+    "response": "Réponse moy.",
+    "closeTime": "Fermeture moy.",
+    "applications": "Candidatures",
+    "suggestions": "Suggestions",
+    "giveaways": "Concours",
+    "economy": "Économie"
   }
 }

@@ -1,0 +1,10 @@
+{
+  "name": "member",
+  "version": "1.0.0",
+  "label": "ملف العضو",
+  "description": "أمر /عضو الموحّد: السجل التاريخي، البحث بالأسماء القديمة، وما تضيفه الأنظمة الأخرى (الإنجازات، الشارات، المتصدرين، الاستئناف).",
+  "feature": "member",
+  "defaultEnabled": true,
+  "dependencies": ["history"],
+  "permissions": { "history": 1 }
+}

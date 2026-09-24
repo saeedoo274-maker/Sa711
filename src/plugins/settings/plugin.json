@@ -1,0 +1,15 @@
+{
+  "name": "settings",
+  "version": "1.0.0",
+  "label": "إعدادات السيرفر",
+  "description": "مركز إعدادات موحّد (/اعداد): اللغة، الأنظمة، الثيم، السجلات، الترحيب والوداع، التحقق، قنوات الإشعارات.",
+  "feature": "settings",
+  "defaultEnabled": true,
+  "dependencies": [
+    "welcome",
+    "verification"
+  ],
+  "permissions": {
+    "manage": 3
+  }
+}

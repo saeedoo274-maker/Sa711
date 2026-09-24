@@ -5,6 +5,8 @@ module.exports = async function voiceStateUpdate(app, oldState, newState) {
   const guild = newState.guild || oldState.guild;
   if (!guild) return;
 
+  await app.logs.voiceState(oldState, newState).catch((err) => app.errors.capture(err, { system: "logs/voice", guildId: guild.id }));
+
   const cfg = app.guildConfig.get(guild.id);
   if (!cfg.staff.trackVoice || !cfg.staff.baseRoleId) return;
 

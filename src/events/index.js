@@ -2,6 +2,7 @@
  *  ملاحظة: نستخدم clientReady لا ready — الاسم القديم أصبح مهملًا في discord.js
  *  الحديثة وإطلاقه يصدر تحذيرًا في السجلّات رغم أنه يعمل، فتفادينا التحذير بالاسم الجديد. */
 module.exports = {
+  ...require("./logEvents"),
   clientReady: require("./ready"),
   interactionCreate: require("./interactionCreate"),
   messageCreate: require("./messageCreate"),

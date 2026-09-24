@@ -1,0 +1,12 @@
+{
+  "name": "history",
+  "version": "1.0.0",
+  "label": "سجل الأعضاء",
+  "description": "تاريخ أسماء المستخدم والألقاب، الرتب، الدخول والخروج، النشاط اليومي (رسائل/صوت)، وآخر ظهور — قابل للبحث.",
+  "feature": "history",
+  "defaultEnabled": true,
+  "dependencies": [],
+  "configKey": "history",
+  "config": { "retentionDays": 365, "trackMessages": true, "trackVoice": true },
+  "permissions": { "view": 1 }
+}

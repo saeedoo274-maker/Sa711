@@ -1,0 +1,21 @@
+{
+  "name": "verification",
+  "version": "1.0.0",
+  "label": "التحقق (وظيفي)",
+  "description": "زر تحقق بسيط: رتبة متحقق، رتبة غير متحقق للأعضاء الجدد، قناة ورسالة تحقق، وسجل. بلا CAPTCHA ولا أي فحص أمني.",
+  "feature": "verification",
+  "defaultEnabled": true,
+  "dependencies": [],
+  "configKey": "verification",
+  "config": {
+    "channelId": null,
+    "messageId": null,
+    "roleId": null,
+    "unverifiedRoleId": null,
+    "title": "التحقق",
+    "description": "اضغط الزر بالأسفل لتحصل على صلاحية الوصول لبقية السيرفر.",
+    "buttonLabel": "تحقق ✅",
+    "dmOnVerify": false
+  },
+  "permissions": { "manage": 3 }
+}

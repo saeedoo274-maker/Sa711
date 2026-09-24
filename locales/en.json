@@ -235,5 +235,131 @@
     "empty": "No data yet.",
     "saved": "{emoji} Saved.",
     "confirmTitle": "Confirm action"
+  },
+  "cfg": {
+    "unknownFeature": "Unknown system: {name}",
+    "globallyDisabled": "{name} is disabled globally by the developer.",
+    "colorPair": "Provide both the color name and value.",
+    "unknownLog": "Unknown log type: {name}",
+    "preview": "Preview:",
+    "badUrl": "Invalid URL — must start with https://",
+    "maxButtons": "Maximum 4 buttons.",
+    "verifyNeedsRole": "Set the verified role first.",
+    "notifTitle": "Notification channels",
+    "staffChannel": "Staff",
+    "adminChannel": "Admins",
+    "languageTitle": "Bot language",
+    "languageFooter": "Untranslated text falls back to Arabic.",
+    "featuresTitle": "Systems",
+    "featuresFooter": "🟢 on • ⚪ off • ⛔ globally off • 🧩 plugin",
+    "default": "default",
+    "themeTitle": "Server theme",
+    "colors": "Colors",
+    "footer": "Footer",
+    "logo": "Logo",
+    "banner": "Banner",
+    "logsTitle": "Logs",
+    "logsFooter": "🟢 = enabled with a channel. Set channels with category + channel.",
+    "welcomeTitle": "Welcome & goodbye",
+    "welcomeChannel": "Welcome channel",
+    "embedImageDm": "Embed / image / DM",
+    "rules": "Rules",
+    "message": "Message",
+    "buttons": "Buttons",
+    "autoRoles": "Auto roles",
+    "goodbyeChannel": "Goodbye channel",
+    "goodbyeEmbedImage": "Goodbye embed / image",
+    "variablesHint": "Texts support variables: {USER} {SERVER} {MEMBER_COUNT} {USER_AVATAR} ...",
+    "verifyTitle": "Verification",
+    "verifyRole": "Verified role",
+    "unverifiedRole": "Unverified role",
+    "panel": "Panel",
+    "verifiedCount": "Verified members",
+    "modal": {
+      "welcome": "Welcome message",
+      "dm": "DM message",
+      "image": "Welcome image",
+      "goodbye": "Goodbye message"
+    },
+    "f": {
+      "message": "Message text",
+      "embedTitle": "Embed title",
+      "embedDescription": "Embed description",
+      "embedImage": "Embed image URL",
+      "thumbnail": "Thumbnail (or {USER_AVATAR})",
+      "dm": "DM text",
+      "imageTitle": "Image title",
+      "imageSubtitle": "Subtitle",
+      "background": "Background URL https://",
+      "button": "Button label"
+    }
+  },
+  "welcome": {
+    "rulesButton": "Rules"
+  },
+  "verify": {
+    "done": "You're verified! Welcome.",
+    "err": {
+      "already": "You're already verified.",
+      "notConfigured": "Verification isn't configured here.",
+      "roleUnmanageable": "I can't assign the verified role (it's above mine)."
+    }
+  },
+  "member": {
+    "queryShort": "Type at least 2 characters.",
+    "lookupTitle": "Search results: {query}",
+    "section": "Choose a section"
+  },
+  "hist": {
+    "overview": "Overview",
+    "names": "Name history",
+    "roles": "Role history",
+    "presence": "Joins & leaves",
+    "moderation": "Moderation history",
+    "kind": {
+      "username": "username",
+      "globalname": "display name",
+      "nickname": "nickname"
+    },
+    "joined": "joined",
+    "left": "left",
+    "accountCreated": "Account created",
+    "joinedServer": "Joined",
+    "notMember": "not a member",
+    "joinsLeaves": "Joins/leaves",
+    "lastSeen": "Last seen",
+    "activity": "Activity",
+    "economy": "Economy",
+    "tickets": "Tickets",
+    "open": "open",
+    "handled": "claimed/closed",
+    "applications": "Applications",
+    "roleCount": "Roles"
+  },
+  "an": {
+    "serverTitle": "Server analytics",
+    "staffTitle": "Staff analytics",
+    "staffLegend": "💬 messages • 🔊 voice hours • 🎫 claimed/closed • 📝 reviews • ⏱️ avg response",
+    "period": {
+      "today": "Today",
+      "7d": "7 days",
+      "30d": "30 days",
+      "90d": "90 days",
+      "year": "Year"
+    },
+    "joins": "Joins",
+    "leaves": "Leaves",
+    "messages": "Messages",
+    "active": "Active",
+    "voice": "Voice",
+    "tickets": "Tickets",
+    "opened": "opened",
+    "closed": "closed",
+    "response": "Avg response",
+    "closeTime": "Avg close time",
+    "applications": "Applications",
+    "suggestions": "Suggestions",
+    "giveaways": "Giveaways",
+    "economy": "Economy"
   }
 }

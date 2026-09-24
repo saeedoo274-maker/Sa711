@@ -235,5 +235,131 @@
     "empty": "لا توجد بيانات بعد.",
     "saved": "{emoji} تم الحفظ.",
     "confirmTitle": "تأكيد الإجراء"
+  },
+  "cfg": {
+    "unknownFeature": "نظام غير معروف: {name}",
+    "globallyDisabled": "النظام {name} معطّل عالميًا من المطور.",
+    "colorPair": "حدد اسم اللون وقيمته معًا.",
+    "unknownLog": "نوع سجل غير معروف: {name}",
+    "preview": "معاينة:",
+    "badUrl": "رابط غير صالح — يجب أن يبدأ بـ https://",
+    "maxButtons": "الحد الأقصى 4 أزرار.",
+    "verifyNeedsRole": "حدد رتبة المتحقق أولًا.",
+    "notifTitle": "قنوات الإشعارات",
+    "staffChannel": "الطاقم",
+    "adminChannel": "الإدارة",
+    "languageTitle": "لغة البوت",
+    "languageFooter": "النص غير المترجم يظهر بالعربية تلقائيًا.",
+    "featuresTitle": "الأنظمة",
+    "featuresFooter": "🟢 مفعّل • ⚪ معطّل • ⛔ معطّل عالميًا • 🧩 إضافة",
+    "default": "افتراضي",
+    "themeTitle": "ثيم السيرفر",
+    "colors": "الألوان",
+    "footer": "التذييل",
+    "logo": "الشعار",
+    "banner": "البانر",
+    "logsTitle": "السجلات",
+    "logsFooter": "🟢 = مفعّل وله قناة. غيّر القناة بـ category + channel.",
+    "welcomeTitle": "الترحيب والوداع",
+    "welcomeChannel": "قناة الترحيب",
+    "embedImageDm": "إمبيد / صورة / خاص",
+    "rules": "القوانين",
+    "message": "الرسالة",
+    "buttons": "الأزرار",
+    "autoRoles": "الرتب التلقائية",
+    "goodbyeChannel": "قناة الوداع",
+    "goodbyeEmbedImage": "إمبيد / صورة الوداع",
+    "variablesHint": "النصوص تدعم المتغيرات: {USER} {SERVER} {MEMBER_COUNT} {USER_AVATAR} ...",
+    "verifyTitle": "التحقق",
+    "verifyRole": "رتبة المتحقق",
+    "unverifiedRole": "رتبة غير المتحقق",
+    "panel": "اللوحة",
+    "verifiedCount": "عدد المتحققين",
+    "modal": {
+      "welcome": "رسالة الترحيب",
+      "dm": "رسالة الخاص",
+      "image": "صورة الترحيب",
+      "goodbye": "رسالة الوداع"
+    },
+    "f": {
+      "message": "نص الرسالة",
+      "embedTitle": "عنوان الإمبيد",
+      "embedDescription": "وصف الإمبيد",
+      "embedImage": "رابط صورة الإمبيد",
+      "thumbnail": "الصورة المصغّرة (أو {USER_AVATAR})",
+      "dm": "رسالة الخاص",
+      "imageTitle": "عنوان الصورة",
+      "imageSubtitle": "النص الثانوي",
+      "background": "رابط الخلفية https://",
+      "button": "نص الزر"
+    }
+  },
+  "welcome": {
+    "rulesButton": "القوانين"
+  },
+  "verify": {
+    "done": "تم التحقق! أهلًا بك.",
+    "err": {
+      "already": "أنت متحقق مسبقًا.",
+      "notConfigured": "التحقق غير مضبوط في هذا السيرفر.",
+      "roleUnmanageable": "لا أستطيع منح رتبة التحقق (رتبتها أعلى من رتبتي)."
+    }
+  },
+  "member": {
+    "queryShort": "اكتب حرفين على الأقل.",
+    "lookupTitle": "نتائج البحث: {query}",
+    "section": "اختر القسم"
+  },
+  "hist": {
+    "overview": "نظرة عامة",
+    "names": "سجل الأسماء",
+    "roles": "سجل الرتب",
+    "presence": "الدخول والخروج",
+    "moderation": "السجل الإداري",
+    "kind": {
+      "username": "اسم المستخدم",
+      "globalname": "الاسم الظاهر",
+      "nickname": "اللقب"
+    },
+    "joined": "دخل",
+    "left": "خرج",
+    "accountCreated": "إنشاء الحساب",
+    "joinedServer": "الانضمام",
+    "notMember": "ليس عضوًا حاليًا",
+    "joinsLeaves": "دخول/خروج",
+    "lastSeen": "آخر ظهور",
+    "activity": "النشاط",
+    "economy": "الاقتصاد",
+    "tickets": "التذاكر",
+    "open": "مفتوحة",
+    "handled": "استلم/أغلق",
+    "applications": "التقديمات",
+    "roleCount": "عدد الرتب"
+  },
+  "an": {
+    "serverTitle": "تحليلات السيرفر",
+    "staffTitle": "تحليلات الطاقم",
+    "staffLegend": "💬 رسائل • 🔊 ساعات صوت • 🎫 استلم/أغلق • 📝 تقديمات راجعها • ⏱️ متوسط زمن الاستجابة",
+    "period": {
+      "today": "اليوم",
+      "7d": "7 أيام",
+      "30d": "30 يومًا",
+      "90d": "90 يومًا",
+      "year": "سنة"
+    },
+    "joins": "دخول",
+    "leaves": "خروج",
+    "messages": "الرسائل",
+    "active": "النشطون",
+    "voice": "الصوت",
+    "tickets": "التذاكر",
+    "opened": "فُتحت",
+    "closed": "أُغلقت",
+    "response": "متوسط الاستجابة",
+    "closeTime": "متوسط الإغلاق",
+    "applications": "التقديمات",
+    "suggestions": "الاقتراحات",
+    "giveaways": "السحوبات",
+    "economy": "الاقتصاد"
   }
 }

@@ -1,0 +1,27 @@
+{
+  "name": "welcome",
+  "version": "1.0.0",
+  "label": "الترحيب والوداع",
+  "description": "رسالة/إمبيد/صورة ترحيب ووداع بالمتغيرات، رسالة خاصة، زر القوانين وأزرار مخصصة. الرتب التلقائية تبقى عبر /رتبة_تلقائية الموجود.",
+  "feature": "welcome",
+  "defaultEnabled": true,
+  "dependencies": [],
+  "configKey": "welcome",
+  "config": {
+    "channelId": null,
+    "message": "أهلًا {USER} في **{SERVER}**! 🎉",
+    "embed": { "enabled": true, "title": "مرحبًا {USERNAME}", "description": "أنت العضو رقم **{MEMBER_COUNT}**.\nعمر حسابك: {ACCOUNT_AGE} يوم", "image": null, "thumbnail": "{USER_AVATAR}", "color": null },
+    "image": { "enabled": false, "backgroundUrl": null, "title": "مرحبًا {USERNAME}", "subtitle": "العضو رقم {MEMBER_COUNT}" },
+    "dm": { "enabled": false, "message": "أهلًا بك في **{SERVER}**! اقرأ القوانين قبل المشاركة." },
+    "rulesChannelId": null,
+    "buttons": [],
+    "ignoreBots": true,
+    "goodbye": {
+      "channelId": null,
+      "message": "وداعًا **{USERNAME}** 👋",
+      "embed": { "enabled": true, "title": "غادرنا {USERNAME}", "description": "أصبحنا **{MEMBER_COUNT}** عضوًا.", "image": null, "thumbnail": "{USER_AVATAR}", "color": null },
+      "image": { "enabled": false, "backgroundUrl": null, "title": "وداعًا {USERNAME}", "subtitle": "أصبحنا {MEMBER_COUNT}" }
+    }
+  },
+  "permissions": { "manage": 3 }
+}

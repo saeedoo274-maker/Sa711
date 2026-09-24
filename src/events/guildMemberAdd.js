@@ -1,6 +1,8 @@
 const { PermissionFlagsBits } = require("discord.js");
 
 module.exports = async function guildMemberAdd(app, member) {
+  await app.logs.memberJoin(member).catch((err) => app.errors.capture(err, { system: "logs/memberJoin", guildId: member.guild.id }));
+
   const cfg = app.guildConfig.get(member.guild.id);
   if (!cfg.autoRoles?.enabled) return;
 

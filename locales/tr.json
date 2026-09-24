@@ -235,5 +235,131 @@
     "empty": "Henüz veri yok.",
     "saved": "{emoji} Kaydedildi.",
     "confirmTitle": "İşlemi onayla"
+  },
+  "cfg": {
+    "unknownFeature": "Bilinmeyen sistem: {name}",
+    "globallyDisabled": "{name} geliştirici tarafından kapatıldı.",
+    "colorPair": "Renk adı ve değerini birlikte verin.",
+    "unknownLog": "Bilinmeyen kayıt türü: {name}",
+    "preview": "Önizleme:",
+    "badUrl": "Geçersiz URL — https:// ile başlamalı",
+    "maxButtons": "En fazla 4 buton.",
+    "verifyNeedsRole": "Önce doğrulanmış rolünü ayarlayın.",
+    "notifTitle": "Bildirim kanalları",
+    "staffChannel": "Yetkililer",
+    "adminChannel": "Yöneticiler",
+    "languageTitle": "Bot dili",
+    "languageFooter": "Çevrilmemiş metin Arapça görünür.",
+    "featuresTitle": "Sistemler",
+    "featuresFooter": "🟢 açık • ⚪ kapalı • ⛔ genel kapalı • 🧩 eklenti",
+    "default": "varsayılan",
+    "themeTitle": "Sunucu teması",
+    "colors": "Renkler",
+    "footer": "Alt bilgi",
+    "logo": "Logo",
+    "banner": "Afiş",
+    "logsTitle": "Kayıtlar",
+    "logsFooter": "🟢 = açık ve kanalı var. category + channel ile ayarlayın.",
+    "welcomeTitle": "Karşılama ve veda",
+    "welcomeChannel": "Karşılama kanalı",
+    "embedImageDm": "Embed / resim / DM",
+    "rules": "Kurallar",
+    "message": "Mesaj",
+    "buttons": "Butonlar",
+    "autoRoles": "Otomatik roller",
+    "goodbyeChannel": "Veda kanalı",
+    "goodbyeEmbedImage": "Veda embed / resim",
+    "variablesHint": "Metinler değişken destekler: {USER} {SERVER} ...",
+    "verifyTitle": "Doğrulama",
+    "verifyRole": "Doğrulanmış rolü",
+    "unverifiedRole": "Doğrulanmamış rolü",
+    "panel": "Panel",
+    "verifiedCount": "Doğrulanan üyeler",
+    "modal": {
+      "welcome": "Karşılama mesajı",
+      "dm": "DM mesajı",
+      "image": "Karşılama resmi",
+      "goodbye": "Veda mesajı"
+    },
+    "f": {
+      "message": "Mesaj metni",
+      "embedTitle": "Embed başlığı",
+      "embedDescription": "Embed açıklaması",
+      "embedImage": "Embed resim URL",
+      "thumbnail": "Küçük resim (veya {USER_AVATAR})",
+      "dm": "DM metni",
+      "imageTitle": "Resim başlığı",
+      "imageSubtitle": "Alt başlık",
+      "background": "Arka plan URL https://",
+      "button": "Buton metni"
+    }
+  },
+  "welcome": {
+    "rulesButton": "Kurallar"
+  },
+  "verify": {
+    "done": "Doğrulandınız! Hoş geldiniz.",
+    "err": {
+      "already": "Zaten doğrulandınız.",
+      "notConfigured": "Doğrulama ayarlanmamış.",
+      "roleUnmanageable": "Doğrulama rolünü veremiyorum."
+    }
+  },
+  "member": {
+    "queryShort": "En az 2 karakter yazın.",
+    "lookupTitle": "Arama sonuçları: {query}",
+    "section": "Bir bölüm seçin"
+  },
+  "hist": {
+    "overview": "Genel bakış",
+    "names": "İsim geçmişi",
+    "roles": "Rol geçmişi",
+    "presence": "Giriş ve çıkışlar",
+    "moderation": "Moderasyon geçmişi",
+    "kind": {
+      "username": "kullanıcı adı",
+      "globalname": "görünen ad",
+      "nickname": "takma ad"
+    },
+    "joined": "katıldı",
+    "left": "ayrıldı",
+    "accountCreated": "Hesap oluşturma",
+    "joinedServer": "Katılım",
+    "notMember": "üye değil",
+    "joinsLeaves": "Giriş/çıkış",
+    "lastSeen": "Son görülme",
+    "activity": "Etkinlik",
+    "economy": "Ekonomi",
+    "tickets": "Talepler",
+    "open": "açık",
+    "handled": "üstlendi/kapattı",
+    "applications": "Başvurular",
+    "roleCount": "Roller"
+  },
+  "an": {
+    "serverTitle": "Sunucu analizi",
+    "staffTitle": "Yetkili analizi",
+    "staffLegend": "💬 mesaj • 🔊 ses saati • 🎫 üstlendi/kapattı • 📝 inceleme • ⏱️ ort. yanıt",
+    "period": {
+      "today": "Bugün",
+      "7d": "7 gün",
+      "30d": "30 gün",
+      "90d": "90 gün",
+      "year": "Yıl"
+    },
+    "joins": "Girişler",
+    "leaves": "Çıkışlar",
+    "messages": "Mesajlar",
+    "active": "Aktif",
+    "voice": "Ses",
+    "tickets": "Talepler",
+    "opened": "açıldı",
+    "closed": "kapandı",
+    "response": "Ort. yanıt",
+    "closeTime": "Ort. kapanış",
+    "applications": "Başvurular",
+    "suggestions": "Öneriler",
+    "giveaways": "Çekilişler",
+    "economy": "Ekonomi"
   }
 }

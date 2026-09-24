@@ -75,7 +75,12 @@
     "rpSell": null,
     "rpMarket": null,
     "rpRobbery": null,
-    "rpJail": null
+    "rpJail": null,
+    "server": null,
+    "threads": null,
+    "giveaways": null,
+    "staff": null,
+    "verification": null
   },
   "tickets": {
     "enabled": false,
@@ -262,5 +267,12 @@
     "channelId": null,
     "logChannelId": null,
     "defaultTimeoutMs": 3600000
-  }
+  },
+  "logEvents": {},
+  "notifications": {
+    "staffChannelId": null,
+    "adminChannelId": null
+  },
+  "theme": {},
+  "features": {}
 }

@@ -1,0 +1,10 @@
+{
+  "name": "admin",
+  "version": "1.0.0",
+  "label": "أدوات الإدارة",
+  "description": "أمر /ادارة الموحّد لأدوات الإدارة المتقدمة: التحليلات، البحث الشامل، الإعلانات، الأتمتة، النماذج، الاستئنافات، والقضايا.",
+  "feature": "admin",
+  "defaultEnabled": true,
+  "dependencies": ["analytics"],
+  "permissions": { "use": 3 }
+}

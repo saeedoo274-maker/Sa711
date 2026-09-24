@@ -175,6 +175,9 @@ class EconomyService {
 
   /** يرسل نسخة من الحركة إلى قناة سجل الاقتصاد إن كانت معرّفة. */
   async _log(guildId, { type, userId, amount, account, counterpartyId, actorId, reason, fee }) {
+    // الحدث يصل للتحليلات والإنجازات دائمًا، والرسالة في قناة السجل حسب تفعيل النوع
+    this.app.bus.emitSafe("economy:transaction", { guildId, type, userId, amount, counterpartyId, actorId, reason, fee });
+    if (this.app.logs && !this.app.logs.isEnabled(guildId, "economy")) return;
     const channelId = this.app.guildConfig.value(guildId, "logs.economy");
     if (!channelId) return;
 

@@ -1,0 +1,12 @@
+{
+  "name": "analytics",
+  "version": "1.0.0",
+  "label": "التحليلات",
+  "description": "تحليلات السيرفر والطاقم (اليوم/7/30/90 يومًا/سنة) من بيانات الأنظمة الموجودة مباشرة — بلا نسخ مكررة للبيانات.",
+  "feature": "analytics",
+  "defaultEnabled": true,
+  "dependencies": ["history"],
+  "configKey": "analytics",
+  "config": {},
+  "permissions": { "view": 3 }
+}

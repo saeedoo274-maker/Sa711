@@ -235,5 +235,131 @@
     "empty": "Aún no hay datos.",
     "saved": "{emoji} Guardado.",
     "confirmTitle": "Confirmar acción"
+  },
+  "cfg": {
+    "unknownFeature": "Sistema desconocido: {name}",
+    "globallyDisabled": "{name} está desactivado globalmente.",
+    "colorPair": "Indica el nombre y el valor del color.",
+    "unknownLog": "Tipo de registro desconocido: {name}",
+    "preview": "Vista previa:",
+    "badUrl": "URL no válida — debe empezar con https://",
+    "maxButtons": "Máximo 4 botones.",
+    "verifyNeedsRole": "Primero define el rol verificado.",
+    "notifTitle": "Canales de notificación",
+    "staffChannel": "Staff",
+    "adminChannel": "Administración",
+    "languageTitle": "Idioma del bot",
+    "languageFooter": "El texto sin traducir se muestra en árabe.",
+    "featuresTitle": "Sistemas",
+    "featuresFooter": "🟢 activo • ⚪ inactivo • ⛔ desactivado global • 🧩 plugin",
+    "default": "predeterminado",
+    "themeTitle": "Tema del servidor",
+    "colors": "Colores",
+    "footer": "Pie",
+    "logo": "Logo",
+    "banner": "Banner",
+    "logsTitle": "Registros",
+    "logsFooter": "🟢 = activo con canal. Configura con category + channel.",
+    "welcomeTitle": "Bienvenida y despedida",
+    "welcomeChannel": "Canal de bienvenida",
+    "embedImageDm": "Embed / imagen / MD",
+    "rules": "Reglas",
+    "message": "Mensaje",
+    "buttons": "Botones",
+    "autoRoles": "Roles automáticos",
+    "goodbyeChannel": "Canal de despedida",
+    "goodbyeEmbedImage": "Embed / imagen de despedida",
+    "variablesHint": "Los textos admiten variables: {USER} {SERVER} ...",
+    "verifyTitle": "Verificación",
+    "verifyRole": "Rol verificado",
+    "unverifiedRole": "Rol no verificado",
+    "panel": "Panel",
+    "verifiedCount": "Miembros verificados",
+    "modal": {
+      "welcome": "Mensaje de bienvenida",
+      "dm": "Mensaje directo",
+      "image": "Imagen de bienvenida",
+      "goodbye": "Mensaje de despedida"
+    },
+    "f": {
+      "message": "Texto del mensaje",
+      "embedTitle": "Título del embed",
+      "embedDescription": "Descripción del embed",
+      "embedImage": "URL de la imagen",
+      "thumbnail": "Miniatura (o {USER_AVATAR})",
+      "dm": "Texto del MD",
+      "imageTitle": "Título de la imagen",
+      "imageSubtitle": "Subtítulo",
+      "background": "URL del fondo https://",
+      "button": "Texto del botón"
+    }
+  },
+  "welcome": {
+    "rulesButton": "Reglas"
+  },
+  "verify": {
+    "done": "¡Verificado! Bienvenido.",
+    "err": {
+      "already": "Ya estás verificado.",
+      "notConfigured": "La verificación no está configurada.",
+      "roleUnmanageable": "No puedo asignar el rol de verificación."
+    }
+  },
+  "member": {
+    "queryShort": "Escribe al menos 2 caracteres.",
+    "lookupTitle": "Resultados: {query}",
+    "section": "Elige una sección"
+  },
+  "hist": {
+    "overview": "Resumen",
+    "names": "Historial de nombres",
+    "roles": "Historial de roles",
+    "presence": "Entradas y salidas",
+    "moderation": "Historial de moderación",
+    "kind": {
+      "username": "usuario",
+      "globalname": "nombre visible",
+      "nickname": "apodo"
+    },
+    "joined": "entró",
+    "left": "salió",
+    "accountCreated": "Cuenta creada",
+    "joinedServer": "Unión",
+    "notMember": "no es miembro",
+    "joinsLeaves": "Entradas/salidas",
+    "lastSeen": "Visto por última vez",
+    "activity": "Actividad",
+    "economy": "Economía",
+    "tickets": "Tickets",
+    "open": "abiertos",
+    "handled": "reclamados/cerrados",
+    "applications": "Solicitudes",
+    "roleCount": "Roles"
+  },
+  "an": {
+    "serverTitle": "Analíticas del servidor",
+    "staffTitle": "Analíticas del staff",
+    "staffLegend": "💬 mensajes • 🔊 horas de voz • 🎫 reclamados/cerrados • 📝 revisiones • ⏱️ respuesta media",
+    "period": {
+      "today": "Hoy",
+      "7d": "7 días",
+      "30d": "30 días",
+      "90d": "90 días",
+      "year": "Año"
+    },
+    "joins": "Entradas",
+    "leaves": "Salidas",
+    "messages": "Mensajes",
+    "active": "Activos",
+    "voice": "Voz",
+    "tickets": "Tickets",
+    "opened": "abiertos",
+    "closed": "cerrados",
+    "response": "Respuesta media",
+    "closeTime": "Cierre medio",
+    "applications": "Solicitudes",
+    "suggestions": "Sugerencias",
+    "giveaways": "Sorteos",
+    "economy": "Economía"
   }
 }
