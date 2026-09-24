@@ -5,7 +5,7 @@ class ReminderRepository {
 
   _row(r) {
     if (!r) return null;
-    let repeat = null;
+    let repeat;
     try {
       repeat = r.repeat ? JSON.parse(r.repeat) : null;
     } catch {
