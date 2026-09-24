@@ -24,6 +24,10 @@ class LeaderboardRepository {
       games: ["game_stats", "SELECT user_id, SUM(profit) AS score FROM game_stats WHERE guild_id = ? GROUP BY user_id HAVING score != 0 ORDER BY score DESC LIMIT ? OFFSET ?", [guildId]],
       invites: ["invite_joins", "SELECT inviter_id AS user_id, COUNT(*) AS score FROM invite_joins WHERE guild_id = ? AND inviter_id IS NOT NULL AND left_at IS NULL AND fake = 0 AND joined_at >= ? GROUP BY inviter_id ORDER BY score DESC LIMIT ? OFFSET ?", [guildId, sinceMs]],
       giveaways: ["giveaway_winners", "SELECT w.user_id, COUNT(*) AS score FROM giveaway_winners w JOIN giveaways g ON g.id = w.giveaway_id WHERE g.guild_id = ? AND w.drawn_at >= ? GROUP BY w.user_id ORDER BY score DESC LIMIT ? OFFSET ?", [guildId, sinceMs]],
+      stars: ["starboard_board_entries", `SELECT author_id AS user_id, SUM(stars) AS score FROM (
+          SELECT author_id, stars, created_at FROM starboard_entries WHERE guild_id = ? AND board_message_id IS NOT NULL
+          UNION ALL SELECT author_id, stars, created_at FROM starboard_board_entries WHERE guild_id = ? AND board_message_id IS NOT NULL
+        ) WHERE author_id IS NOT NULL AND created_at >= ? GROUP BY author_id ORDER BY score DESC LIMIT ? OFFSET ?`, [guildId, guildId, sinceMs]],
       reputation: ["social_reputation", "SELECT receiver_id AS user_id, COUNT(*) AS score FROM social_reputation WHERE guild_id = ? AND created_at >= ? GROUP BY receiver_id ORDER BY score DESC LIMIT ? OFFSET ?", [guildId, sinceMs]]
     }[type];
     if (!q || !this._has(q[0])) return [];

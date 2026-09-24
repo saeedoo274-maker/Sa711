@@ -2,7 +2,7 @@ const { SlashCommandBuilder } = require("discord.js");
 const { Level } = require("../../../core/permissions/PermissionService");
 const { historyPayload } = require("../views");
 
-const lbTypes = ["xp", "level", "messages", "voice", "activity", "economy", "tickets", "staff", "achievements", "reputation", "games", "invites", "giveaways"];
+const lbTypes = ["xp", "level", "messages", "voice", "activity", "economy", "tickets", "staff", "achievements", "reputation", "games", "invites", "giveaways", "stars"];
 const lbPeriods = [{ name: "الكل", value: "all" }, { name: "اليوم", value: "today" }, { name: "7 أيام", value: "7d" }, { name: "30 يومًا", value: "30d" }, { name: "90 يومًا", value: "90d" }, { name: "سنة", value: "year" }];
 
 module.exports = [
@@ -22,7 +22,7 @@ module.exports = [
       { name: "lookup", required: false, description: "بحث بالاسم الحالي أو القديم (طاقم)" },
       { name: "achievements", required: false, description: "إنجازاتك وتقدمك" },
       { name: "badges", required: false, description: "شاراتك" },
-      { name: "leaderboard", required: false, description: "لوحات المتصدرين (13 نوعًا)" },
+      { name: "leaderboard", required: false, description: "لوحات المتصدرين (14 نوعًا)" },
       { name: "invites", required: false, description: "دعوات عضو ومن دعاه" }
     ],
     examples: ["/عضو history user:@عضو", "!whois 123456789012345678", "/عضو lookup query:ahmed"],

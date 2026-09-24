@@ -16,7 +16,8 @@ const TYPES = {
   reputation: { emoji: "👍", feature: "social", periodic: true },
   games: { emoji: "🎮", feature: "games", periodic: false },
   invites: { emoji: "📨", feature: "invites", periodic: true },
-  giveaways: { emoji: "🎁", feature: "giveaways", periodic: true }
+  giveaways: { emoji: "🎁", feature: "giveaways", periodic: true },
+  stars: { emoji: "🌟", feature: "starboard", periodic: true }
 };
 
 class LeaderboardService {

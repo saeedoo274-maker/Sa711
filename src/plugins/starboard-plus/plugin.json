@@ -1,0 +1,15 @@
+{
+  "name": "starboard-plus",
+  "version": "1.0.0",
+  "label": "لوحات النجوم المتعددة",
+  "description": "توسعة لوحة النجوم: عدة لوحات بإيموجي وحد وقناة لكل منها، أصوات فريدة محفوظة (بلا جلب متكرر)، تجاهل رتب وقنوات، دعم الثريدات والمرفقات، ولوحة متصدرين للنجوم.",
+  "feature": "starboard",
+  "defaultEnabled": true,
+  "dependencies": [],
+  "configKey": "starboard",
+  "config": {
+    "ignoredRoles": [],
+    "maxBoards": 10
+  },
+  "permissions": { "manage": 3 }
+}

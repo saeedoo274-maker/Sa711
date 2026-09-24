@@ -32,12 +32,27 @@ class StarboardService {
     const message = reaction.message;
     if (!message?.id) return;
     if (message.channel.id === cfg.channelId) return; // لا نُرشّح رسائل اللوحة نفسها
-    if ((cfg.ignoredChannels || []).includes(message.channel.id)) return;
+    const ignored = cfg.ignoredChannels || [];
+    // رسائل الثريدات تتبع استثناء القناة الأم
+    if (ignored.includes(message.channel.id) || (message.channel.parentId && ignored.includes(message.channel.parentId))) return;
     if (message.author?.bot && !cfg.allowBots) return;
 
     // عدّ النجوم مع استبعاد نجمة صاحب الرسالة إن كان ذلك معطّلًا
     let stars = reaction.count || 0;
-    if (!cfg.allowSelfStar && message.author) {
+    const ignoredRoles = cfg.ignoredRoles || [];
+    if (ignoredRoles.length) {
+      // مع الرتب المتجاهلة نعدّ الأصوات فردًا فردًا (أصوات فريدة بلا بوتات)
+      const users = await reaction.users.fetch().catch(() => null);
+      if (users) {
+        stars = 0;
+        for (const u of users.values()) {
+          if (u.bot || (!cfg.allowSelfStar && u.id === message.author?.id)) continue;
+          const m = guild.members.cache.get(u.id);
+          if (m && ignoredRoles.some((r) => m.roles.cache.has(r))) continue;
+          stars++;
+        }
+      }
+    } else if (!cfg.allowSelfStar && message.author) {
       const users = await reaction.users.fetch().catch(() => null);
       if (users?.has(message.author.id)) stars -= 1;
     }
@@ -90,10 +105,19 @@ class StarboardService {
   }
 
   buildPayload(message, stars, emoji) {
-    const image = message.attachments?.find((a) => /^image\//i.test(a.contentType || ""));
+    const attachments = [...(message.attachments?.values?.() || [])];
+    const image = attachments.find((a) => /^image\//i.test(a.contentType || ""))
+      || (message.embeds || []).map((e) => e.image || e.thumbnail).find((i) => i?.url);
+    const others = attachments.filter((a) => a !== image);
+    const sticker = message.stickers?.first?.();
+
+    const parts = [truncate(message.content || (attachments.length || sticker ? "" : "*(بلا نص)*"), 3000)];
+    if (others.length) parts.push(others.slice(0, 5).map((a) => `${/^video\//i.test(a.contentType || "") ? "🎬" : "📎"} [${truncate(a.name || "file", 60)}](${a.url})`).join("\n"));
+    if (sticker) parts.push(`🏷️ ${sticker.name}`);
+    if (message.reference?.messageId) parts.push(`↩️ [رد على رسالة](https://discord.com/channels/${message.guild?.id}/${message.reference.channelId || message.channel.id}/${message.reference.messageId})`);
 
     const embed = buildEmbed({
-      description: truncate(message.content || "*(بلا نص)*", 3000),
+      description: parts.filter(Boolean).join("\n\n") || "*(بلا نص)*",
       color: this.app.config.color("warning"),
       image: image?.url,
       footer: `${message.id}`
@@ -104,7 +128,7 @@ class StarboardService {
     });
 
     return {
-      content: `${emoji} **${stars}** — <#${message.channel.id}>`,
+      content: `${emoji} **${stars}** — <#${message.channel.id}>${message.channel.isThread?.() && message.channel.parentId ? ` (<#${message.channel.parentId}>)` : ""}`,
       embeds: [embed],
       components: [
         new ActionRowBuilder().addComponents(

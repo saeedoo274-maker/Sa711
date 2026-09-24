@@ -405,7 +405,8 @@
       "reputation": "Top reputation",
       "games": "Game profits",
       "invites": "Top inviters",
-      "giveaways": "Top giveaway winners"
+      "giveaways": "Top giveaway winners",
+      "stars": "Most stars"
     },
     "period": {
       "all": "All time",
