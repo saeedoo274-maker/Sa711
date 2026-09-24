@@ -200,6 +200,10 @@ class TicketRepository {
     return this.db.prepare("SELECT * FROM ticket_members WHERE ticket_id = ?").all(ticketId);
   }
 
+  lastCreatedBy(guildId, userId) {
+    return this.db.prepare("SELECT MAX(created_at) AS t FROM tickets WHERE guild_id = ? AND owner_id = ?").get(guildId, userId)?.t || null;
+  }
+
   openCountForUser(guildId, userId) {
     return this.db
       .prepare("SELECT COUNT(*) AS c FROM tickets WHERE guild_id = ? AND owner_id = ? AND status = 'open'")

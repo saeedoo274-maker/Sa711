@@ -111,6 +111,13 @@ class TicketService {
     const cfg = this.app.guildConfig.get(guild.id);
     if (!cfg.tickets.enabled) return { ok: false, reason: "systemDisabled" };
 
+    // تبريد فتح التذاكر (0 = معطّل، وهو الافتراضي فلا يتغير سلوك السيرفرات الحالية)
+    const cooldownMs = cfg.tickets.cooldownMs || 0;
+    if (cooldownMs > 0) {
+      const last = this.app.tickets.lastCreatedBy(guild.id, member.id);
+      if (last && Date.now() - last < cooldownMs) return { ok: false, reason: "cooldown", remainingMs: cooldownMs - (Date.now() - last) };
+    }
+
     // حد التذاكر يُحسب داخل النوع الواحد، فيقدر العضو يفتح تذكرة لكل خدمة
     if (type) {
       const open = this.app.ticketTypes.openCountForType(guild.id, type.id, member.id);
@@ -188,6 +195,19 @@ class TicketService {
 
     this.app.bus.emitSafe("ticket:created", { guild, ticket, member, type });
     return { ok: true, ticket, channel };
+  }
+
+  /**
+   * الإغلاق الموحّد (زر الإغلاق، الإغلاق المجدول، الأدوات الإضافية).
+   * الإغلاق ذرّي في قاعدة البيانات: `WHERE status = 'open'` — لا يُغلق مرتين.
+   */
+  async closeBy(guild, channel, ticket, member) {
+    const success = this.app.tickets.close(ticket.channel_id, member.id);
+    if (!success) return { ok: false, reason: "alreadyClosed" };
+    if (channel) await this.closeChannel(channel, ticket);
+    this.app.activity.increment(guild.id, member.id, "tickets_closed");
+    this.app.bus.emitSafe("ticket:closed", { guild, ticket, member });
+    return { ok: true, ticket: this.app.tickets.getByChannel(ticket.channel_id) };
   }
 
   /** يعرض إجابات نموذج التذكرة في إمبيد منظم. */

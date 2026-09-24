@@ -1,0 +1,17 @@
+{
+  "name": "tickets-plus",
+  "version": "1.0.0",
+  "label": "التذاكر المتقدمة",
+  "description": "توسعة نظام التذاكر الموجود: نقل، أولوية، وسوم، SLA، تصعيد، عدة موظفين، قفل/فتح، إغلاق مؤجل قابل للإلغاء، تغيير النوع، زمن الاستجابة والإغلاق، وإحصاءات الطاقم.",
+  "feature": "tickets",
+  "defaultEnabled": true,
+  "dependencies": [],
+  "configKey": "tickets",
+  "config": {
+    "cooldownMs": 0,
+    "sla": { "low": 1440, "normal": 240, "high": 60, "urgent": 15 },
+    "escalation": { "channelId": null, "roleId": null, "autoOnBreach": false },
+    "maxTags": 10
+  },
+  "permissions": { "manage": 1 }
+}

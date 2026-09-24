@@ -1,6 +1,7 @@
 const { ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder, ButtonBuilder, ButtonStyle, PermissionFlagsBits } = require("discord.js");
 const { buildEmbed, extractId } = require("../../core/utils/helpers");
 const { Level } = require("../../core/permissions/PermissionService");
+const { formatDuration } = require("../../core/utils/common");
 const { safeUpdate, safeReply, safeModal, ackComponent } = require("../../core/interactions/interactionSafe");
 
 /**
@@ -78,6 +79,7 @@ async function openTicket(interaction, app, panelId) {
     const messages = {
       systemDisabled: `${app.config.emoji("error")} نظام التذاكر معطّل في هذا السيرفر.`,
       duplicate: `${app.config.emoji("warning")} لديك تذكرة مفتوحة بالفعل. أغلقها أولًا قبل فتح تذكرة جديدة.`,
+      cooldown: `${app.config.emoji("warning")} ${app.i18n.tg(interaction.guild.id, "tk.cooldown", { time: formatDuration(result.remainingMs || 0) })}`,
       actionFailed: `${app.config.emoji("error")} تعذّر إنشاء التذكرة: ${result.details || "خطأ غير معروف"}`
     };
     return safeUpdate(interaction, { content: messages[result.reason] || messages.actionFailed });
@@ -138,20 +140,14 @@ async function unclaim(interaction, app, ticket, canManage) {
 async function close(interaction, app, ticket, allowed) {
   if (!allowed) return deny(interaction, app);
 
-  const success = app.tickets.close(ticket.channel_id, interaction.user.id);
-  if (!success) return safeReply(interaction, { content: `${app.config.emoji("warning")} التذكرة مغلقة بالفعل.`, flags: 64 });
-
-  await app.ticketService.closeChannel(interaction.channel, ticket);
-  app.activity.increment(interaction.guild.id, interaction.user.id, "tickets_closed");
-  app.bus.emitSafe("ticket:closed", { guild: interaction.guild, ticket, member: interaction.member });
+  const result = await app.ticketService.closeBy(interaction.guild, interaction.channel, ticket, interaction.member);
+  if (!result.ok) return safeReply(interaction, { content: `${app.config.emoji("warning")} التذكرة مغلقة بالفعل.`, flags: 64 });
 
   await safeReply(interaction, {
     embeds: [buildEmbed({ description: `🔒 تم إغلاق التذكرة بواسطة <@${interaction.user.id}>`, color: app.config.color("danger") })]
   });
   await refreshHeader(interaction, app, ticket);
-
-  const closed = app.tickets.getByChannel(ticket.channel_id);
-  await app.ticketAutomation.requestRating(interaction.guild, closed).catch(() => {});
+  await app.ticketAutomation.requestRating(interaction.guild, result.ticket).catch(() => {});
 }
 
 async function reopen(interaction, app, ticket, canManage) {
@@ -331,6 +327,7 @@ async function finishTyped(interaction, app, type, answers) {
     const messages = {
       systemDisabled: `${app.config.emoji("error")} نظام التذاكر معطّل في هذا السيرفر.`,
       duplicate: `${app.config.emoji("warning")} لديك تذكرة مفتوحة من نوع **${type.label}**. أغلقها أولًا.`,
+      cooldown: `${app.config.emoji("warning")} ${app.i18n.tg(interaction.guild.id, "tk.cooldown", { time: formatDuration(result.remainingMs || 0) })}`,
       actionFailed: `${app.config.emoji("error")} تعذّر إنشاء التذكرة: ${result.details || "خطأ غير معروف"}`
     };
     return safeUpdate(interaction, { content: messages[result.reason] || messages.actionFailed });
