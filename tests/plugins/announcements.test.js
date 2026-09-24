@@ -41,13 +41,13 @@ test("الإعلانات: معاينة وتأكيد، منشن، جدولة وت
     const stranger = H.fakeMember(guild, "300000000000000005", { admin: true });
     let c = await click(stranger, confirm);
     assert.match(H.textOf(c.replies), /ليست لك/);
-    c = await click(admin, confirm);
+    await click(admin, confirm);
     assert.equal(news.sent.length, 1);
     const payload = news.sent[0].payload;
     assert.equal(payload.embeds[0].data.title, "تنبيه");
     assert.match(payload.embeds[0].data.description, /Test Server/);
     assert.deepEqual(payload.allowedMentions, { parse: [] });
-    c = await click(admin, confirm);
+    await click(admin, confirm);
     assert.equal(news.sent.length, 1, "الضغط الثاني لا يعيد الإرسال");
   });
 
