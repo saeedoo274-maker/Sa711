@@ -1,0 +1,21 @@
+{
+  "gw": {
+    "reqUnavailable": "Este requisito depende de un sistema desactivado ({system}).",
+    "reqLevel": "Necesitas nivel {level} (tienes {current}).",
+    "reqMessages": "Necesitas {count} mensajes en {days} días (tienes {current}).",
+    "reqInvites": "Necesitas {count} invitaciones reales (tienes {current}).",
+    "fLevel": "Nivel {level}+",
+    "fMessages": "{count} mensajes / {days} días",
+    "fInvites": "{count} invitaciones",
+    "requirements": "Requisitos",
+    "bonus": "Entradas extra",
+    "dmWin": "¡Felicidades! Ganaste **{prize}** en {server}.",
+    "dmRerollWin": "¡Felicidades! Ganaste **{prize}** en un nuevo sorteo en {server}.",
+    "winsTitle": "Victorias ({count})",
+    "historyTitle": "Historial de sorteos",
+    "status": "Estado",
+    "entries": "Entradas",
+    "startsAt": "Empieza",
+    "message": "Mensaje"
+  }
+}

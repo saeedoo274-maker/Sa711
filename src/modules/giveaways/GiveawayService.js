@@ -1,3 +1,4 @@
+const crypto = require("node:crypto");
 const { ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
 const { buildEmbed, timestamp } = require("../../core/utils/helpers");
 
@@ -39,6 +40,8 @@ class GiveawayService {
     ];
     if (giveaway.required_role_id) fields.push({ name: "شرط الدخول", value: `<@&${giveaway.required_role_id}>`, inline: true });
     if (giveaway.bonus_role_id) fields.push({ name: "فرص إضافية", value: `<@&${giveaway.bonus_role_id}> ×${giveaway.bonus_entries}`, inline: true });
+    // شروط وفرص إضافية من إضافة السحوبات المتقدمة (إن وُجدت)
+    if (this.app.giveawaysPlus) fields.push(...this.app.giveawaysPlus.extraFields(giveaway));
     if (ended) {
       fields.push({
         name: "الفائزون",
@@ -48,7 +51,7 @@ class GiveawayService {
 
     return buildEmbed({
       title: `🎁 ${giveaway.prize}`,
-      description: ended ? "**انتهى السحب**" : "اضغط الزر أدناه للمشاركة!",
+      description: `${giveaway.description ? `${giveaway.description}\n\n` : ""}${ended ? "**انتهى السحب**" : "اضغط الزر أدناه للمشاركة!"}`,
       color: this.app.config.color(ended ? "neutral" : "success"),
       fields
     });
@@ -81,14 +84,17 @@ class GiveawayService {
         return { ok: false, message: "حسابك جديد جدًا للمشاركة في هذا السحب." };
       }
     }
+    if (this.app.giveawaysPlus) return this.app.giveawaysPlus.eligibility(giveaway, member);
     return { ok: true };
   }
 
   entryWeight(giveaway, member) {
+    let weight = 1;
     if (giveaway.bonus_role_id && member.roles.cache.has(giveaway.bonus_role_id)) {
-      return Math.max(1, giveaway.bonus_entries || 1);
+      weight = Math.max(1, giveaway.bonus_entries || 1);
     }
-    return 1;
+    if (this.app.giveawaysPlus) weight = Math.max(weight, this.app.giveawaysPlus.weight(giveaway, member));
+    return weight;
   }
 
   /** اختيار عشوائي مرجّح بعدد الفرص، بدون تكرار الفائز نفسه. */
@@ -100,7 +106,7 @@ class GiveawayService {
     const winners = [];
     const chosen = new Set();
     while (winners.length < count && pool.length > 0) {
-      const index = Math.floor(Math.random() * pool.length);
+      const index = crypto.randomInt(0, pool.length);
       const userId = pool[index];
       if (!chosen.has(userId)) {
         chosen.add(userId);

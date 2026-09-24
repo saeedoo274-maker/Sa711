@@ -403,7 +403,9 @@
       "staff": "Yetkili puanları",
       "achievements": "En çok başarım",
       "reputation": "En yüksek itibar",
-      "games": "Oyun kazançları"
+      "games": "Oyun kazançları",
+      "invites": "En çok davet",
+      "giveaways": "En çok çekiliş kazanan"
     },
     "period": {
       "all": "Tüm zamanlar",

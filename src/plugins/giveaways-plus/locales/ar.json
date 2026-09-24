@@ -1,0 +1,21 @@
+{
+  "gw": {
+    "reqUnavailable": "شرط هذا السحب يعتمد على نظام غير مفعّل حاليًا ({system}).",
+    "reqLevel": "يجب أن تصل للمستوى {level} (مستواك {current}).",
+    "reqMessages": "تحتاج {count} رسالة خلال آخر {days} يوم (لديك {current}).",
+    "reqInvites": "تحتاج {count} دعوة فعلية (لديك {current}).",
+    "fLevel": "المستوى {level}+",
+    "fMessages": "{count} رسالة / {days} يوم",
+    "fInvites": "{count} دعوة",
+    "requirements": "الشروط",
+    "bonus": "فرص إضافية",
+    "dmWin": "مبروك! فزت بـ **{prize}** في {server}.",
+    "dmRerollWin": "مبروك! فزت بـ **{prize}** في إعادة السحب في {server}.",
+    "winsTitle": "سجل الفوز ({count})",
+    "historyTitle": "سجل السحوبات",
+    "status": "الحالة",
+    "entries": "المشاركات",
+    "startsAt": "يبدأ",
+    "message": "الرسالة"
+  }
+}

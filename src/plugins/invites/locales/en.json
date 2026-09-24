@@ -1,0 +1,10 @@
+{
+  "inv": {
+    "title": "Invites of {user}",
+    "real": "Real",
+    "left": "Left",
+    "fake": "Fake",
+    "invitedBy": "Invited by",
+    "recent": "Recent invites"
+  }
+}

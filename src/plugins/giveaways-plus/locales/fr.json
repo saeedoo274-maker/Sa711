@@ -1,0 +1,21 @@
+{
+  "gw": {
+    "reqUnavailable": "Cette condition dépend d'un système désactivé ({system}).",
+    "reqLevel": "Niveau {level} requis (vous êtes {current}).",
+    "reqMessages": "{count} messages requis sur {days} jours (vous avez {current}).",
+    "reqInvites": "{count} invitations réelles requises (vous avez {current}).",
+    "fLevel": "Niveau {level}+",
+    "fMessages": "{count} messages / {days} jours",
+    "fInvites": "{count} invitations",
+    "requirements": "Conditions",
+    "bonus": "Participations bonus",
+    "dmWin": "Bravo ! Vous avez gagné **{prize}** sur {server}.",
+    "dmRerollWin": "Bravo ! Vous avez gagné **{prize}** lors d'un nouveau tirage sur {server}.",
+    "winsTitle": "Victoires ({count})",
+    "historyTitle": "Historique des concours",
+    "status": "Statut",
+    "entries": "Participations",
+    "startsAt": "Commence",
+    "message": "Message"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "name": "giveaways-plus",
+  "version": "1.0.0",
+  "label": "السحوبات المتقدمة",
+  "description": "توسعة السحوبات الموجودة: شروط مستوى ونشاط ودعوات، عدة رتب فرص إضافية، سحوبات مجدولة، قوالب، سجل السحوبات والفائزين، ورسائل خاصة للفائزين.",
+  "feature": "giveaways",
+  "defaultEnabled": true,
+  "dependencies": [],
+  "configKey": "giveaways",
+  "config": {
+    "maxTemplates": 25,
+    "maxBonusRoles": 5,
+    "dmWinnersDefault": false
+  },
+  "permissions": { "manage": 2 }
+}

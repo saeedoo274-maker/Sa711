@@ -1,0 +1,21 @@
+{
+  "gw": {
+    "reqUnavailable": "This giveaway requirement depends on a disabled system ({system}).",
+    "reqLevel": "You need level {level} (you are {current}).",
+    "reqMessages": "You need {count} messages in the last {days} days (you have {current}).",
+    "reqInvites": "You need {count} real invites (you have {current}).",
+    "fLevel": "Level {level}+",
+    "fMessages": "{count} messages / {days} days",
+    "fInvites": "{count} invites",
+    "requirements": "Requirements",
+    "bonus": "Bonus entries",
+    "dmWin": "Congrats! You won **{prize}** in {server}.",
+    "dmRerollWin": "Congrats! You won **{prize}** in a reroll in {server}.",
+    "winsTitle": "Wins ({count})",
+    "historyTitle": "Giveaway history",
+    "status": "Status",
+    "entries": "Entries",
+    "startsAt": "Starts",
+    "message": "Message"
+  }
+}

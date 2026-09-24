@@ -14,7 +14,9 @@ const TYPES = {
   staff: { emoji: "👥", feature: "staff", periodic: true },
   achievements: { emoji: "🏆", feature: "achievements", periodic: true },
   reputation: { emoji: "👍", feature: "social", periodic: true },
-  games: { emoji: "🎮", feature: "games", periodic: false }
+  games: { emoji: "🎮", feature: "games", periodic: false },
+  invites: { emoji: "📨", feature: "invites", periodic: true },
+  giveaways: { emoji: "🎁", feature: "giveaways", periodic: true }
 };
 
 class LeaderboardService {

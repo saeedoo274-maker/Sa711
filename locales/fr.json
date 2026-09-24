@@ -403,7 +403,9 @@
       "staff": "Points du staff",
       "achievements": "Plus de succès",
       "reputation": "Meilleure réputation",
-      "games": "Gains aux jeux"
+      "games": "Gains aux jeux",
+      "invites": "Meilleurs inviteurs",
+      "giveaways": "Plus de gains aux concours"
     },
     "period": {
       "all": "Tout",

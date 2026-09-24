@@ -1,0 +1,21 @@
+{
+  "gw": {
+    "reqUnavailable": "Bu şart devre dışı bir sisteme bağlı ({system}).",
+    "reqLevel": "{level}. seviye gerekli (sen {current}).",
+    "reqMessages": "Son {days} günde {count} mesaj gerekli (sende {current}).",
+    "reqInvites": "{count} gerçek davet gerekli (sende {current}).",
+    "fLevel": "Seviye {level}+",
+    "fMessages": "{count} mesaj / {days} gün",
+    "fInvites": "{count} davet",
+    "requirements": "Şartlar",
+    "bonus": "Ek şans",
+    "dmWin": "Tebrikler! {server} sunucusunda **{prize}** kazandın.",
+    "dmRerollWin": "Tebrikler! {server} yeniden çekilişinde **{prize}** kazandın.",
+    "winsTitle": "Kazanımlar ({count})",
+    "historyTitle": "Çekiliş geçmişi",
+    "status": "Durum",
+    "entries": "Katılımlar",
+    "startsAt": "Başlar",
+    "message": "Mesaj"
+  }
+}

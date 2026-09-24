@@ -1,0 +1,14 @@
+{
+  "name": "invites",
+  "version": "1.0.0",
+  "label": "تتبع الدعوات",
+  "description": "يعرف من دعا كل عضو جديد (بمقارنة استخدامات روابط الدعوة)، ويحسب الدعوات الفعلية والمغادرين والوهمية، ويغذّي شروط السحوبات ولوحة المتصدرين.",
+  "feature": "invites",
+  "defaultEnabled": false,
+  "dependencies": [],
+  "configKey": "invites",
+  "config": {
+    "fakeAccountAgeDays": 7
+  },
+  "permissions": { "manage": 3 }
+}

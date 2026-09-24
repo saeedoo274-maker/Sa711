@@ -2,7 +2,7 @@ const { SlashCommandBuilder } = require("discord.js");
 const { Level } = require("../../../core/permissions/PermissionService");
 const { historyPayload } = require("../views");
 
-const lbTypes = ["xp", "level", "messages", "voice", "activity", "economy", "tickets", "staff", "achievements", "reputation", "games"];
+const lbTypes = ["xp", "level", "messages", "voice", "activity", "economy", "tickets", "staff", "achievements", "reputation", "games", "invites", "giveaways"];
 const lbPeriods = [{ name: "الكل", value: "all" }, { name: "اليوم", value: "today" }, { name: "7 أيام", value: "7d" }, { name: "30 يومًا", value: "30d" }, { name: "90 يومًا", value: "90d" }, { name: "سنة", value: "year" }];
 
 module.exports = [
@@ -13,7 +13,7 @@ module.exports = [
       whois: { sub: "history" }, "سجل_عضو": { sub: "history" }, achievements: { sub: "achievements" }, ach: { sub: "achievements" },
       "انجازات": { sub: "achievements" }, badges: { sub: "badges" }, "شارات": { sub: "badges" }, leaderboards: { sub: "leaderboard" }, "متصدرين": { sub: "leaderboard" }
     },
-    subAliases: { سجل: "history", بحث: "lookup", انجازات: "achievements", شارات: "badges", ترتيب: "leaderboard" },
+    subAliases: { سجل: "history", بحث: "lookup", انجازات: "achievements", شارات: "badges", ترتيب: "leaderboard", دعوات: "invites" },
     defaultSubcommand: "history",
     description: "ملف العضو: السجل الكامل (أسماء، رتب، دخول/خروج، إدارة، تذاكر، تقديمات، نشاط، XP، اقتصاد) والبحث.",
     usage: "/عضو history user:@عضو | /عضو lookup query:الاسم",
@@ -22,7 +22,8 @@ module.exports = [
       { name: "lookup", required: false, description: "بحث بالاسم الحالي أو القديم (طاقم)" },
       { name: "achievements", required: false, description: "إنجازاتك وتقدمك" },
       { name: "badges", required: false, description: "شاراتك" },
-      { name: "leaderboard", required: false, description: "لوحات المتصدرين (11 نوعًا)" }
+      { name: "leaderboard", required: false, description: "لوحات المتصدرين (13 نوعًا)" },
+      { name: "invites", required: false, description: "دعوات عضو ومن دعاه" }
     ],
     examples: ["/عضو history user:@عضو", "!whois 123456789012345678", "/عضو lookup query:ahmed"],
     category: "member",
@@ -39,7 +40,8 @@ module.exports = [
       .addSubcommand((s) => s.setName("badges").setDescription("الشارات").addUserOption((o) => o.setName("user").setDescription("العضو")))
       .addSubcommand((s) => s.setName("leaderboard").setDescription("لوحات المتصدرين")
         .addStringOption((o) => o.setName("type").setDescription("النوع").addChoices(...lbTypes.map((v) => ({ name: v, value: v }))))
-        .addStringOption((o) => o.setName("period").setDescription("الفترة").addChoices(...lbPeriods))),
+        .addStringOption((o) => o.setName("period").setDescription("الفترة").addChoices(...lbPeriods)))
+      .addSubcommand((s) => s.setName("invites").setDescription("الدعوات").addUserOption((o) => o.setName("user").setDescription("العضو"))),
 
     async execute(ctx) {
       const app = ctx.app;
@@ -103,6 +105,12 @@ module.exports = [
         const type = ctx.getString("type", 0) || "xp";
         const period = ctx.getString("period", 1) || "all";
         return ctx.reply(app.leaderboards.payload(ctx.guild, { type: lbTypes.includes(type) ? type : "xp", period, page: 1, ownerId: ctx.user.id }));
+      }
+
+      if (sub === "invites") {
+        if (!app.invites || !app.features.isEnabled(ctx.guild.id, "invites")) return ctx.fail("errors.systemDisabled", { system: "invites" });
+        const user = (await ctx.getUser("user", 0)) || ctx.user;
+        return ctx.reply(app.invites.payload(ctx.guild, user));
       }
 
       return ctx.fail("errors.actionFailed", { details: sub });

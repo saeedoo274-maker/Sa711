@@ -403,7 +403,9 @@
       "staff": "Staff points",
       "achievements": "Most achievements",
       "reputation": "Top reputation",
-      "games": "Game profits"
+      "games": "Game profits",
+      "invites": "Top inviters",
+      "giveaways": "Top giveaway winners"
     },
     "period": {
       "all": "All time",

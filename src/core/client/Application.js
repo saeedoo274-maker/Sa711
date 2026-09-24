@@ -190,7 +190,8 @@ class Application {
         GatewayIntentBits.GuildVoiceStates,
         GatewayIntentBits.GuildModeration,
         GatewayIntentBits.DirectMessages,
-        GatewayIntentBits.GuildMessageReactions
+        GatewayIntentBits.GuildMessageReactions,
+        GatewayIntentBits.GuildInvites
       ],
       partials: [Partials.Channel, Partials.Message, Partials.GuildMember, Partials.Reaction, Partials.User]
     });

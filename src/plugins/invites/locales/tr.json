@@ -1,0 +1,10 @@
+{
+  "inv": {
+    "title": "{user} davetleri",
+    "real": "Gerçek",
+    "left": "Ayrılan",
+    "fake": "Sahte",
+    "invitedBy": "Davet eden",
+    "recent": "Son davetler"
+  }
+}
