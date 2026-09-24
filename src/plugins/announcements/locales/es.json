@@ -1,0 +1,40 @@
+{
+  "ann": {
+    "dmTo": "MD a miembros de {role}",
+    "now": "Ahora",
+    "preview": "Vista previa del anuncio",
+    "confirmSend": "Enviar",
+    "confirmSchedule": "Programar",
+    "cancel": "Cancelar",
+    "cancelled": "Anuncio cancelado.",
+    "scheduledAt": "Anuncio #{id} programado para {time}.",
+    "queued": "Envío por MD iniciado en segundo plano (tarea #{job}).",
+    "sent": "Anuncio publicado en {channel}.",
+    "listTitle": "Anuncios",
+    "scheduled": "Programados",
+    "templates": "Plantillas",
+    "err": {
+      "expired": "Esta vista previa expiró o ya se usó.",
+      "notOwner": "Esta vista previa no es tuya.",
+      "empty": "Indica texto, título o un embed.",
+      "badImage": "La URL de la imagen debe ser https pública.",
+      "badButton": "El botón necesita texto y una URL https pública.",
+      "mentionRole": "Elige el rol a mencionar.",
+      "mentionPermission": "Necesitas el permiso Mencionar a todos.",
+      "embedMissing": "Embed no encontrado.",
+      "dmRole": "Elige el rol objetivo para MD.",
+      "channel": "Elige un canal de texto.",
+      "noSend": "No puedo enviar mensajes en ese canal.",
+      "maxScheduled": "Límite de anuncios programados alcanzado.",
+      "maxTemplates": "Límite de plantillas alcanzado.",
+      "badName": "Nombre inválido (letras, dígitos, - _).",
+      "notFound": "Anuncio no encontrado.",
+      "notScheduled": "El anuncio no está programado.",
+      "time": "Hora inválida o pasada (p. ej. 2026-10-01 18:00 o in:2h).",
+      "template": "Plantilla no encontrada."
+    },
+    "templateSaved": "Plantilla {name} guardada.",
+    "templateDeleted": "Plantilla {name} eliminada.",
+    "cancelledScheduled": "Anuncio programado #{id} cancelado."
+  }
+}

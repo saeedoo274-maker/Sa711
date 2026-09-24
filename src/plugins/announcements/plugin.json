@@ -1,0 +1,17 @@
+{
+  "name": "announcements",
+  "version": "1.0.0",
+  "label": "الإعلانات",
+  "description": "إعلانات نصية أو إمبيد مع أزرار روابط، في قناة أو خاص أعضاء رتبة (عبر الطابور)، مع معاينة وتأكيد، جدولة وتكرار، قوالب، وتحكم بالمنشن.",
+  "feature": "announcements",
+  "defaultEnabled": true,
+  "dependencies": [],
+  "configKey": "announcements",
+  "config": {
+    "maxScheduled": 50,
+    "maxTemplates": 25,
+    "dmDelayMs": 1200,
+    "draftTtlMs": 900000
+  },
+  "permissions": { "manage": 3 }
+}

@@ -1,0 +1,40 @@
+{
+  "ann": {
+    "dmTo": "MP aux membres de {role}",
+    "now": "Maintenant",
+    "preview": "Aperçu de l'annonce",
+    "confirmSend": "Envoyer",
+    "confirmSchedule": "Planifier",
+    "cancel": "Annuler",
+    "cancelled": "Annonce annulée.",
+    "scheduledAt": "Annonce #{id} planifiée pour {time}.",
+    "queued": "Envoi en MP démarré en arrière-plan (tâche #{job}).",
+    "sent": "Annonce publiée dans {channel}.",
+    "listTitle": "Annonces",
+    "scheduled": "Planifiées",
+    "templates": "Modèles",
+    "err": {
+      "expired": "Cet aperçu a expiré ou a déjà été utilisé.",
+      "notOwner": "Cet aperçu n'est pas à vous.",
+      "empty": "Fournissez un texte, un titre ou un embed.",
+      "badImage": "L'URL de l'image doit être https publique.",
+      "badButton": "Le bouton exige un libellé et une URL https publique.",
+      "mentionRole": "Choisissez le rôle à mentionner.",
+      "mentionPermission": "Vous avez besoin de la permission Mentionner tout le monde.",
+      "embedMissing": "Embed introuvable.",
+      "dmRole": "Choisissez le rôle cible pour les MP.",
+      "channel": "Choisissez un salon textuel.",
+      "noSend": "Je ne peux pas écrire dans ce salon.",
+      "maxScheduled": "Limite d'annonces planifiées atteinte.",
+      "maxTemplates": "Limite de modèles atteinte.",
+      "badName": "Nom invalide (lettres, chiffres, - _).",
+      "notFound": "Annonce introuvable.",
+      "notScheduled": "L'annonce n'est pas planifiée.",
+      "time": "Heure invalide ou passée (ex. 2026-10-01 18:00 ou in:2h).",
+      "template": "Modèle introuvable."
+    },
+    "templateSaved": "Modèle {name} enregistré.",
+    "templateDeleted": "Modèle {name} supprimé.",
+    "cancelledScheduled": "Annonce planifiée #{id} annulée."
+  }
+}

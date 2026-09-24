@@ -1,0 +1,40 @@
+{
+  "ann": {
+    "dmTo": "{role} üyelerine DM",
+    "now": "Şimdi",
+    "preview": "Duyuru önizlemesi",
+    "confirmSend": "Gönder",
+    "confirmSchedule": "Zamanla",
+    "cancel": "İptal",
+    "cancelled": "Duyuru iptal edildi.",
+    "scheduledAt": "#{id} duyurusu {time} için zamanlandı.",
+    "queued": "DM gönderimi arka planda başladı (iş #{job}).",
+    "sent": "Duyuru {channel} kanalında yayınlandı.",
+    "listTitle": "Duyurular",
+    "scheduled": "Zamanlanmış",
+    "templates": "Şablonlar",
+    "err": {
+      "expired": "Bu önizlemenin süresi doldu veya kullanıldı.",
+      "notOwner": "Bu önizleme senin değil.",
+      "empty": "Metin, başlık veya embed girin.",
+      "badImage": "Görsel bağlantısı herkese açık https olmalı.",
+      "badButton": "Düğme için etiket ve https bağlantısı gerekli.",
+      "mentionRole": "Etiketlenecek rolü seçin.",
+      "mentionPermission": "Bu etiket için Herkesten Bahset izni gerekli.",
+      "embedMissing": "Embed bulunamadı.",
+      "dmRole": "DM için hedef rolü seçin.",
+      "channel": "Bir metin kanalı seçin.",
+      "noSend": "O kanala mesaj gönderemiyorum.",
+      "maxScheduled": "Zamanlanmış duyuru sınırına ulaşıldı.",
+      "maxTemplates": "Şablon sınırına ulaşıldı.",
+      "badName": "Geçersiz ad (harf, rakam, - _).",
+      "notFound": "Duyuru bulunamadı.",
+      "notScheduled": "Duyuru zamanlanmamış.",
+      "time": "Geçersiz veya geçmiş zaman (örn. 2026-10-01 18:00 veya in:2h).",
+      "template": "Şablon bulunamadı."
+    },
+    "templateSaved": "{name} şablonu kaydedildi.",
+    "templateDeleted": "{name} şablonu silindi.",
+    "cancelledScheduled": "Zamanlanmış duyuru #{id} iptal edildi."
+  }
+}

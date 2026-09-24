@@ -1,0 +1,40 @@
+{
+  "ann": {
+    "dmTo": "DMs to {role}",
+    "now": "Now",
+    "preview": "Announcement preview",
+    "confirmSend": "Send",
+    "confirmSchedule": "Schedule",
+    "cancel": "Cancel",
+    "cancelled": "Announcement cancelled.",
+    "scheduledAt": "Announcement #{id} scheduled for {time}.",
+    "queued": "DM delivery started in background (job #{job}).",
+    "sent": "Announcement posted in {channel}.",
+    "listTitle": "Announcements",
+    "scheduled": "Scheduled",
+    "templates": "Templates",
+    "err": {
+      "expired": "This preview expired or was already used.",
+      "notOwner": "This preview is not yours.",
+      "empty": "Provide text, a title or an embed.",
+      "badImage": "Image URL must be a public https link.",
+      "badButton": "Button needs a label and a public https URL.",
+      "mentionRole": "Choose the role to mention.",
+      "mentionPermission": "You need the Mention Everyone permission for this mention.",
+      "embedMissing": "Embed not found.",
+      "dmRole": "Choose the target role for DMs.",
+      "channel": "Choose a text channel.",
+      "noSend": "I can't send messages in that channel.",
+      "maxScheduled": "Scheduled announcements limit reached.",
+      "maxTemplates": "Templates limit reached.",
+      "badName": "Invalid name (letters, digits, - _).",
+      "notFound": "Announcement not found.",
+      "notScheduled": "Announcement is not scheduled.",
+      "time": "Invalid or past time (e.g. 2026-10-01 18:00 or in:2h).",
+      "template": "Template not found."
+    },
+    "templateSaved": "Template {name} saved.",
+    "templateDeleted": "Template {name} deleted.",
+    "cancelledScheduled": "Scheduled announcement #{id} cancelled."
+  }
+}

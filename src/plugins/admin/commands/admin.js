@@ -3,6 +3,32 @@ const { Level } = require("../../../core/permissions/PermissionService");
 
 const { METRICS } = require("../../achievements/catalog");
 
+const { parseDuration } = require("../../../core/utils/common");
+const { parseDateTime, zonedParts, isValidTimezone } = require("../../../core/utils/time");
+
+/** خيارات تأليف الإعلان المشتركة بين الإرسال والجدولة والقوالب. */
+function composeOptions(s, { withTarget = true } = {}) {
+  s.addStringOption((o) => o.setName("message").setDescription("نص الإعلان (يدعم المتغيرات)").setMaxLength(2000))
+    .addStringOption((o) => o.setName("title").setDescription("عنوان (يجعله إمبيد)").setMaxLength(256))
+    .addStringOption((o) => o.setName("image").setDescription("رابط صورة https").setMaxLength(400))
+    .addStringOption((o) => o.setName("color").setDescription("لون الإمبيد").addChoices(
+      { name: "أساسي", value: "primary" }, { name: "نجاح", value: "success" }, { name: "تحذير", value: "warning" },
+      { name: "خطر", value: "danger" }, { name: "معلومة", value: "info" }))
+    .addStringOption((o) => o.setName("embed").setDescription("إمبيد محفوظ بالاسم").setMaxLength(64))
+    .addStringOption((o) => o.setName("mention").setDescription("المنشن").addChoices(
+      { name: "بدون", value: "none" }, { name: "@everyone", value: "everyone" }, { name: "@here", value: "here" }, { name: "رتبة", value: "role" }))
+    .addRoleOption((o) => o.setName("role").setDescription("رتبة المنشن"))
+    .addStringOption((o) => o.setName("button-label").setDescription("زر رابط").setMaxLength(80))
+    .addStringOption((o) => o.setName("button-url").setDescription("رابط الزر https").setMaxLength(400))
+    .addStringOption((o) => o.setName("template").setDescription("تحميل قالب").setAutocomplete(true));
+  if (withTarget) {
+    s.addChannelOption((o) => o.setName("channel").setDescription("القناة (افتراضي الحالية)"))
+      .addStringOption((o) => o.setName("target").setDescription("الوجهة").addChoices({ name: "قناة", value: "channel" }, { name: "خاص أعضاء رتبة", value: "dm" }))
+      .addRoleOption((o) => o.setName("dm-role").setDescription("الرتبة المستهدفة للخاص"));
+  }
+  return s;
+}
+
 const metricChoices = Object.keys(METRICS).map((m) => ({ name: m, value: m }));
 const periodChoices = [
   { name: "اليوم", value: "today" }, { name: "7 أيام", value: "7d" }, { name: "30 يومًا", value: "30d" },
@@ -64,10 +90,27 @@ module.exports = [
           .addStringOption((o) => o.setName("key").setDescription("المفتاح").setRequired(true).setAutocomplete(true)))
         .addSubcommand((s) => s.setName("announce").setDescription("قناة إعلان الإنجازات")
           .addChannelOption((o) => o.setName("channel").setDescription("القناة"))
-          .addBooleanOption((o) => o.setName("dm").setDescription("إشعار خاص")))),
+          .addBooleanOption((o) => o.setName("dm").setDescription("إشعار خاص"))))
+      .addSubcommandGroup((g) => g.setName("announcement").setDescription("الإعلانات")
+        .addSubcommand((s) => composeOptions(s.setName("send").setDescription("إعلان الآن (مع معاينة)")))
+        .addSubcommand((s) => composeOptions(s.setName("schedule").setDescription("جدولة إعلان (مع معاينة)"))
+          .addStringOption((o) => o.setName("at").setDescription("التاريخ/الوقت مثل 2026-10-01 18:00 أو 18:00").setMaxLength(20))
+          .addStringOption((o) => o.setName("in").setDescription("بعد مدة مثل 2h").setMaxLength(10))
+          .addStringOption((o) => o.setName("repeat").setDescription("التكرار").addChoices(
+            { name: "بدون", value: "none" }, { name: "يومي", value: "daily" }, { name: "أسبوعي", value: "weekly" }, { name: "شهري", value: "monthly" })))
+        .addSubcommand((s) => s.setName("list").setDescription("المجدولة والقوالب"))
+        .addSubcommand((s) => s.setName("cancel").setDescription("إلغاء إعلان مجدول")
+          .addIntegerOption((o) => o.setName("id").setDescription("رقم الإعلان").setRequired(true)))
+        .addSubcommand((s) => composeOptions(s.setName("template").setDescription("حفظ/حذف قالب")
+          .addStringOption((o) => o.setName("name").setDescription("اسم القالب").setRequired(true).setMaxLength(32)), { withTarget: false })
+          .addBooleanOption((o) => o.setName("delete").setDescription("حذف القالب")))),
 
     async autocomplete(interaction, app) {
       const typed = String(interaction.options.getFocused() || "").toLowerCase();
+      if (interaction.options.getSubcommandGroup(false) === "announcement") {
+        const rows = app.announcementsRepo ? app.announcementsRepo.list(interaction.guild.id, ["template"]) : [];
+        return interaction.respond(rows.filter((r) => r.name.includes(typed)).slice(0, 25).map((r) => ({ name: r.name, value: r.name })));
+      }
       const list = (app.achievements ? app.achievements.definitions(interaction.guild.id) : [])
         .concat(app.achievementsRepo ? app.achievementsRepo.custom(interaction.guild.id).filter((c) => !c.enabled) : [])
         .map((a) => ({ name: `${a.emoji || "🏅"} ${a.name} (${a.key})`.slice(0, 100), value: a.key }));
@@ -148,7 +191,80 @@ module.exports = [
         }
       }
 
+      if (ctx.subcommandGroup() === "announcement") {
+        const blocked = need("announcements");
+        if (blocked) return blocked;
+        return announcement(ctx, sub);
+      }
+
       return ctx.fail("errors.actionFailed", { details: sub || "?" });
     }
   }
 ];
+
+async function announcement(ctx, sub) {
+  const app = ctx.app;
+  const svc = app.announcements;
+  const o = ctx.interaction.options;
+  const t = (k, v) => ctx.t(k, v);
+  const fail = (reason) => ctx.fail("errors.actionFailed", { details: t(`ann.err.${reason}`) });
+
+  if (sub === "list") return ctx.reply(svc.listPayload(ctx.guild), { ephemeral: true });
+  if (sub === "cancel") {
+    const res = svc.cancelScheduled(ctx.guild.id, o.getInteger("id"));
+    return res.ok ? ctx.success(t("ann.cancelledScheduled", { id: o.getInteger("id") })) : fail(res.reason);
+  }
+
+  // تأليف المواصفات: القالب أولًا ثم ما يحدده المستخدم فوقه
+  let spec = {};
+  const templateName = o.getString("template");
+  if (templateName) {
+    const tpl = app.announcementsRepo.template(ctx.guild.id, templateName.trim().toLowerCase());
+    if (!tpl) return fail("template");
+    spec = { ...tpl.spec };
+  }
+  const embedName = o.getString("embed");
+  if (embedName) {
+    const record = app.embeds.getByName(ctx.guild.id, embedName.trim());
+    if (!record) return fail("embedMissing");
+    spec.embedId = record.id;
+  }
+  for (const [opt, key] of [["message", "content"], ["title", "title"], ["image", "image"], ["color", "color"], ["mention", "mention"]]) {
+    if (o.getString(opt)) spec[key] = o.getString(opt);
+  }
+  if (o.getRole("role")) spec.mentionRoleId = o.getRole("role").id;
+  if (o.getString("button-label") || o.getString("button-url")) spec.buttons = [{ label: o.getString("button-label"), url: o.getString("button-url") }];
+
+  if (sub === "template") {
+    const name = o.getString("name").trim().toLowerCase();
+    if (o.getBoolean("delete")) {
+      return app.announcementsRepo.deleteTemplate(ctx.guild.id, name) ? ctx.success(t("ann.templateDeleted", { name })) : fail("template");
+    }
+    const res = svc.saveTemplate(ctx.member, name, spec);
+    return res.ok ? ctx.success(t("ann.templateSaved", { name: res.name })) : fail(res.reason);
+  }
+
+  const target = o.getString("target") || "channel";
+  const channel = o.getChannel("channel") || ctx.channel;
+  let runAt = null;
+  let repeat = null;
+  if (sub === "schedule") {
+    const own = app.platform.userTimezone(ctx.user.id);
+    const guildTz = app.guildConfig.value(ctx.guild.id, "reminders.defaultTimezone");
+    const tz = isValidTimezone(own) ? own : isValidTimezone(guildTz) ? guildTz : "UTC";
+    const inText = o.getString("in");
+    const atText = o.getString("at");
+    runAt = inText ? Date.now() + (parseDuration(inText) || 0) : atText ? parseDateTime(atText, tz) : null;
+    if (!runAt || runAt <= Date.now() + 30_000 || runAt - Date.now() > 366 * 86_400_000) return fail("time");
+    const kind = o.getString("repeat");
+    if (kind && kind !== "none") {
+      const p = zonedParts(runAt, tz);
+      repeat = { kind, time: `${String(p.hour).padStart(2, "0")}:${String(p.minute).padStart(2, "0")}`, tz };
+      if (kind === "weekly") repeat.weekday = p.weekday;
+      if (kind === "monthly") repeat.dayOfMonth = p.day;
+    }
+  }
+  const res = svc.draft(ctx.member, { spec, target, channel, dmRole: o.getRole("dm-role"), runAt, repeat });
+  if (!res.ok) return fail(res.reason);
+  return ctx.reply(res.preview, { ephemeral: true });
+}
