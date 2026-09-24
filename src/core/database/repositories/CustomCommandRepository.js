@@ -65,12 +65,57 @@ class CustomCommandRepository {
     return this.getById(id);
   }
 
+  /**
+   * تحديث عدة أعمدة من التوسعة دفعة واحدة (قائمة بيضاء ثابتة).
+   * القيم المصفوفية/الكائنات تُحفظ JSON.
+   */
+  updateExtras(id, fields) {
+    const allowed = [
+      "responses", "response_mode", "required_roles", "allowed_channels", "dm", "reply", "min_args", "usage",
+      "components", "attachments", "webhook_name", "webhook_avatar", "api_url", "enabled", "cooldown_ms",
+      "content", "embed_id", "prefix", "min_level", "ephemeral", "delete_trigger", "allow_mentions"
+    ];
+    const cols = Object.keys(fields).filter((k) => allowed.includes(k));
+    if (!cols.length) return this.getById(id);
+    const values = Object.fromEntries(cols.map((c) => [c, fields[c] !== null && typeof fields[c] === "object" ? JSON.stringify(fields[c]) : fields[c]]));
+    this.db.prepare(`UPDATE custom_commands SET ${cols.map((c) => `${c} = @${c}`).join(", ")}, updated_at = @now WHERE id = @id`).run({ ...values, now: Date.now(), id });
+    return this.getById(id);
+  }
+
+  // ---------- الأسماء البديلة (جدول custom_command_aliases) ----------
+
+  aliases(guildId) {
+    return this.db.prepare("SELECT alias, command_id FROM custom_command_aliases WHERE guild_id = ?").all(guildId);
+  }
+
+  aliasesOf(commandId) {
+    return this.db.prepare("SELECT alias FROM custom_command_aliases WHERE command_id = ? ORDER BY alias").all(commandId).map((r) => r.alias);
+  }
+
+  addAlias(guildId, commandId, alias) {
+    return this.db.prepare("INSERT OR IGNORE INTO custom_command_aliases (guild_id, command_id, alias, created_at) VALUES (?, ?, ?, ?)").run(guildId, commandId, alias, Date.now()).changes === 1;
+  }
+
+  removeAlias(guildId, alias) {
+    return this.db.prepare("DELETE FROM custom_command_aliases WHERE guild_id = ? AND alias = ?").run(guildId, alias).changes === 1;
+  }
+
+  aliasOwner(guildId, alias) {
+    return this.db.prepare("SELECT command_id FROM custom_command_aliases WHERE guild_id = ? AND alias = ?").get(guildId, alias)?.command_id || null;
+  }
+
   recordUse(id) {
     this.db.prepare("UPDATE custom_commands SET uses = uses + 1 WHERE id = ?").run(id);
   }
 
   delete(guildId, name) {
-    return this.db.prepare("DELETE FROM custom_commands WHERE guild_id = ? AND name = ?").run(guildId, name).changes === 1;
+    const record = this.getByName(guildId, name);
+    if (!record) return false;
+    this.db.transaction(() => {
+      this.db.prepare("DELETE FROM custom_command_aliases WHERE command_id = ?").run(record.id);
+      this.db.prepare("DELETE FROM custom_commands WHERE id = ?").run(record.id);
+    })();
+    return true;
   }
 
   count(guildId) {

@@ -40,7 +40,7 @@ class CommandHandler {
     const custom = this.app.customCommandService.match(message.guild.id, content, prefix);
     if (custom) {
       try {
-        const handled = await this.app.customCommandService.run(message, custom.command);
+        const handled = await this.app.customCommandService.run(message, custom.command, custom.args);
         if (handled) return;
       } catch (error) {
         this.app.errors.capture(error, {
