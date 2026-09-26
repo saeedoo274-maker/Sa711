@@ -90,6 +90,7 @@ const ReactionReplyService = require("../../modules/reactionreply/ReactionReplyS
 const ChangelogService = require("../../modules/devtools/ChangelogService");
 const BackupService = require("../database/BackupService");
 const TestCenter = require("../diagnostics/TestCenter");
+const CleanupService = require("../maintenance/CleanupService");
 const HealthServer = require("../server/HealthServer");
 
 /**
@@ -225,6 +226,8 @@ class Application {
     this.scheduler.define("maintenance:expire", (job) => {
       this.maintenanceService.expire(job.payload.scope, job.payload.target);
     }, { description: "تسجيل انتهاء صيانة مجدولة" });
+    this.cleanup = new CleanupService(this);
+    this.scheduler.define("cleanup:run", () => { this.cleanup.run({ dryRun: false }); }, { description: "تنظيف البيانات القديمة حسب سياسات الاحتفاظ" });
 
     this.registry = new CommandRegistry(this.logger);
     this.registry.setExtraSources(() => this.plugins.commandSources());

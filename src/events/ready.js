@@ -65,6 +65,8 @@ module.exports = async function ready(app) {
   app.health.start();
   // المجدول والطابور المركزيان: يستأنفان أي مهمة محفوظة من قبل إعادة التشغيل
   app.scheduler.start();
+  // تنظيف يومي للبيانات القديمة حسب سياسات الاحتفاظ (قابلة للتعديل من /مطور cleanup)
+  app.scheduler.ensureRecurring("cleanup:run", "cleanup:daily", { kind: "daily", time: "03:30" });
   app.queue.start();
   await app.plugins.start();
   await app.scheduler.tick().catch((err) => app.errors.capture(err, { system: "scheduler" }));

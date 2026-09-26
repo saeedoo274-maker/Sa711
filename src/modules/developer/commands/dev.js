@@ -21,7 +21,8 @@ module.exports = [
       { name: "jobs", required: false, description: "المجدول والطابور (عرض/إلغاء)" },
       { name: "maint", required: false, description: "صيانة لنظام أو أمر محدد، أو مجدولة" },
       { name: "test", required: false, description: "مركز الاختبار (فحوص ذاتية)" },
-      { name: "backup", required: false, description: "نسخة احتياطية فورية لقاعدة البيانات" }
+      { name: "backup", required: false, description: "نسخة احتياطية فورية لقاعدة البيانات" },
+      { name: "cleanup", required: false, description: "مدير التنظيف: معاينة/تنفيذ/سياسات الاحتفاظ" }
     ],
     examples: ["/dev status", "/dev errors limit:5"],
     category: "developer",
@@ -66,15 +67,21 @@ module.exports = [
         .addStringOption((o) => o.setName("message").setDescription("رسالة للمستخدمين").setMaxLength(200))
         .addStringOption((o) => o.setName("duration").setDescription("ينتهي بعد (مثل 30m)").setMaxLength(10)))
       .addSubcommand((s) => s.setName("test").setDescription("مركز الاختبار"))
-      .addSubcommand((s) => s.setName("backup").setDescription("نسخة احتياطية فورية")),
+      .addSubcommand((s) => s.setName("backup").setDescription("نسخة احتياطية فورية"))
+      .addSubcommand((s) => s.setName("cleanup").setDescription("مدير التنظيف")
+        .addStringOption((o) => o.setName("action").setDescription("الإجراء").addChoices(
+          { name: "معاينة", value: "preview" }, { name: "تنفيذ", value: "run" }, { name: "تعديل سياسة", value: "set" }))
+        .addStringOption((o) => o.setName("task").setDescription("المهمة").setAutocomplete(true))
+        .addIntegerOption((o) => o.setName("days").setDescription("أيام الاحتفاظ (0 = تعطيل، -1 = الافتراضي)").setMinValue(-1).setMaxValue(3650))),
 
     async autocomplete(interaction, app) {
       if (!app.permissions.isDeveloper(interaction.user.id)) return interaction.respond([]);
       const focused = interaction.options.getFocused(true);
       const typed = String(focused.value || "").toLowerCase();
-      const list = focused.name === "name" && interaction.options.getSubcommand() === "migrations"
+      const sub = interaction.options.getSubcommand();
+      const list = focused.name === "name" && sub === "migrations"
         ? app.database.migrationStatus().filter((m) => m.appliedAt && m.reversible).map((m) => m.name)
-        : app.features.list().map((f) => f.name);
+        : sub === "cleanup" ? [...app.cleanup.tasks.keys(), "leftGuilds"] : app.features.list().map((f) => f.name);
       return interaction.respond(list.filter((x) => x.toLowerCase().includes(typed)).slice(-25).map((x) => ({ name: x.slice(0, 100), value: x.slice(0, 100) })));
     },
 
@@ -174,7 +181,7 @@ module.exports = [
         return ctx.success(ctx.t("developer.reloaded", { count }));
       }
 
-      if (["migrations", "plugins", "flags", "jobs", "maint", "test", "backup"].includes(sub)) return devConsole(ctx, sub);
+      if (["migrations", "plugins", "flags", "jobs", "maint", "test", "backup", "cleanup"].includes(sub)) return devConsole(ctx, sub);
 
       if (sub === "maintenance") {
         const enabled = ctx.interaction.options.getBoolean("enabled");
@@ -278,6 +285,20 @@ async function devConsole(ctx, sub) {
       enabled: o.getBoolean("enabled"), message: o.getString("message"), endsAt: ms ? Date.now() + ms : null, actorId: ctx.user.id
     });
     return ctx.success(`صيانة \`${scope}${target ? `:${target}` : ""}\` = ${o.getBoolean("enabled") ? "🔴 مفعّلة" : "🟢 متوقفة"}${ms ? ` حتى <t:${Math.floor((Date.now() + ms) / 1000)}:R>` : ""}`);
+  }
+
+  if (sub === "cleanup") {
+    const action = o.getString("action") || "preview";
+    const task = o.getString("task");
+    if (action === "set") {
+      const days = o.getInteger("days");
+      if (!task || days === null) return ctx.fail("errors.actionFailed", { details: "حدد task و days." });
+      if (!app.cleanup.setPolicy(task, days === -1 ? null : days)) return ctx.fail("errors.actionFailed", { details: "مهمة غير معروفة." });
+      app.logger.warn(`سياسة تنظيف ${task} = ${days} بواسطة ${ctx.user.id}`);
+    }
+    const report = app.cleanup.run({ dryRun: action !== "run", only: task && action !== "set" ? task : null });
+    return embed(`🧹 Cleanup — ${report.dryRun ? "preview" : "done"} (${report.total})`, report.rows.map((r) =>
+      `${r.skipped ? "⚪" : r.count ? (report.dryRun ? "🟡" : "🟢") : "✅"} \`${r.key}\` ${r.label} — ${r.days ? `${r.days}d` : "off"}${r.skipped ? ` (${r.skipped})` : ` • ${r.count}`}${r.guilds ? ` • ${r.guilds} guilds` : ""}`));
   }
 
   if (sub === "backup") {

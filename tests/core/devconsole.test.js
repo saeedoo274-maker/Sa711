@@ -67,4 +67,37 @@ test("لوحة المطور ومركز الاختبار", async (t) => {
     await run(dev, "maint", { scope: "command", target: "بحث", enabled: false });
     assert.match(await run(dev, "maint", { scope: "module", enabled: true }), /حدد اسم/);
   });
+
+  await t.test("مدير التنظيف: معاينة لا تحذف، التنفيذ يحذف القديم فقط، والسياسات قابلة للتعديل", async () => {
+    const old = Date.now() - 200 * 86_400_000;
+    app.db.prepare("INSERT INTO error_logs (error_id, message, created_at) VALUES ('OLD1', 'x', ?)").run(old);
+    app.db.prepare("INSERT INTO error_logs (error_id, message, created_at) VALUES ('NEW1', 'x', ?)").run(Date.now());
+    let text = await run(dev, "cleanup");
+    assert.match(text, /preview/);
+    assert.equal(app.db.prepare("SELECT COUNT(*) AS c FROM error_logs WHERE error_id IN ('OLD1','NEW1')").get().c, 2);
+    assert.match(text, /`transactions`.*off/, "السجلات المالية معطّلة افتراضيًا");
+    text = await run(dev, "cleanup", { action: "run", task: "errors" });
+    assert.match(text, /done/);
+    assert.deepEqual(app.db.prepare("SELECT error_id FROM error_logs WHERE error_id IN ('OLD1','NEW1')").all().map((r) => r.error_id), ["NEW1"]);
+    await run(dev, "cleanup", { action: "set", task: "errors", days: 0 });
+    assert.equal(app.cleanup.daysFor("errors"), 0);
+    await run(dev, "cleanup", { action: "set", task: "errors", days: -1 });
+    assert.equal(app.cleanup.daysFor("errors"), 90);
+    assert.match(await run(dev, "cleanup", { action: "set", task: "nope", days: 5 }), /غير معروفة/);
+  });
+
+  await t.test("مدير التنظيف: بيانات السيرفرات المغادرة (اختياري)", async () => {
+    const goneId = "200000000000000077";
+    app.db.prepare("INSERT OR REPLACE INTO guild_registry (guild_id, name, joined_at, left_at, status) VALUES (?, 'gone', ?, ?, 'left')").run(goneId, Date.now() - 400 * 86_400_000, Date.now() - 100 * 86_400_000);
+    app.guilds.ensure(goneId);
+    app.cases.create({ guildId: goneId, type: "warn", targetId: "700000000000000007", moderatorId: dev.id });
+    assert.equal(app.cleanup.run({ dryRun: false, only: "leftGuilds" }).total, 0, "معطّل افتراضيًا");
+    app.cleanup.setPolicy("leftGuilds", 30);
+    const preview = app.cleanup.run({ dryRun: true, only: "leftGuilds" });
+    assert.ok(preview.total >= 1);
+    app.cleanup.run({ dryRun: false, only: "leftGuilds" });
+    assert.equal(app.db.prepare("SELECT COUNT(*) AS c FROM cases WHERE guild_id = ?").get(goneId).c, 0);
+    assert.equal(app.db.prepare("SELECT status FROM guild_registry WHERE guild_id = ?").get(goneId).status, "purged");
+    assert.ok(app.db.prepare("SELECT COUNT(*) AS c FROM cases WHERE guild_id = ?").get(guild.id).c >= 0);
+  });
 });
