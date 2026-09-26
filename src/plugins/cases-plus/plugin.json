@@ -1,0 +1,15 @@
+{
+  "name": "cases-plus",
+  "version": "1.0.0",
+  "label": "إدارة القضايا والبلاغات",
+  "description": "ملاحظات وأدلة وربط قضايا وخط زمني وتصدير للقضايا الإدارية الموجودة، ودورة حياة للبلاغات على الإداريين: أولوية، تكليف، ملاحظات، تصعيد، وSLA.",
+  "feature": "moderation",
+  "defaultEnabled": true,
+  "dependencies": [],
+  "configKey": "casework",
+  "config": {
+    "reportSlaHours": 24,
+    "maxNotesPerCase": 100
+  },
+  "permissions": { "manage": 2 }
+}

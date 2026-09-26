@@ -101,16 +101,27 @@ module.exports = [
   {
     name: "قضية",
     aliases: ["case"],
-    description: "عرض تفاصيل قضية إدارية برقمها.",
-    usage: "case <الرقم>",
-    arguments: [{ name: "الرقم", required: true, description: "رقم القضية" }],
-    examples: ["case 152"],
+    description: "عرض تفاصيل قضية إدارية برقمها، وإدارتها: ملاحظات، أدلة، ربط قضايا، خط زمني، تصدير، إغلاق/إعادة فتح.",
+    usage: "case <الرقم> [timeline|note|evidence|link|unlink|export|close|reopen] [نص/رقم/روابط]",
+    arguments: [
+      { name: "الرقم", required: true, description: "رقم القضية" },
+      { name: "الإجراء", required: false, description: "timeline, note, evidence, link, unlink, export, close, reopen" },
+      { name: "النص", required: false, description: "نص الملاحظة، روابط الأدلة، أو رقم القضية المرتبطة" }
+    ],
+    examples: ["case 152", "case 152 timeline", "case 152 note راجعت التسجيل", "case 152 link 140"],
     category: "moderation",
     permissions: { level: Level.STAFF },
     slash: new SlashCommandBuilder()
       .setName("قضية")
       .setDescription("عرض تفاصيل قضية إدارية")
       .addIntegerOption((o) => o.setName("number").setDescription("رقم القضية").setRequired(true))
+      .addStringOption((o) => o.setName("action").setDescription("إجراء على القضية").addChoices(
+        { name: "عرض", value: "view" }, { name: "الخط الزمني", value: "timeline" }, { name: "ملاحظة", value: "note" },
+        { name: "دليل", value: "evidence" }, { name: "ربط قضية", value: "link" }, { name: "فك ربط", value: "unlink" },
+        { name: "تصدير", value: "export" }, { name: "إغلاق", value: "close" }, { name: "إعادة فتح", value: "reopen" }))
+      .addStringOption((o) => o.setName("text").setDescription("نص الملاحظة أو روابط الأدلة").setMaxLength(1000))
+      .addIntegerOption((o) => o.setName("related").setDescription("رقم القضية المرتبطة").setMinValue(1))
+      .addAttachmentOption((o) => o.setName("file").setDescription("ملف دليل"))
       .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers),
 
     async execute(ctx) {
@@ -119,6 +130,9 @@ module.exports = [
 
       const record = ctx.app.cases.getByNumber(ctx.guild.id, number);
       if (!record) return ctx.fail("errors.caseNotFound");
+
+      const action = String(ctx.getString("action", 1) || "view").toLowerCase();
+      if (action !== "view") return manageCase(ctx, record, action);
 
       const fields = [
         { name: "النوع", value: TYPE_LABELS[record.type] || record.type, inline: true },
@@ -142,3 +156,33 @@ module.exports = [
     }
   }
 ];
+
+/** إجراءات إدارة القضية (إضافة cases-plus). المشرفون فما فوق لأي تعديل. */
+async function manageCase(ctx, record, action) {
+  const app = ctx.app;
+  const svc = app.casework;
+  if (!svc || !app.features.isEnabled(ctx.guild.id, "moderation")) return ctx.fail("errors.systemDisabled", { system: "cases-plus" });
+  const t = (k, v) => ctx.t(k, v);
+  const fail = (res) => ctx.fail("errors.actionFailed", { details: t(`cw.err.${res.reason}`) });
+  const guildId = ctx.guild.id;
+  const text = ctx.isSlash ? ctx.interaction.options.getString("text") : ctx.args.slice(2).join(" ");
+  const related = ctx.isSlash ? ctx.interaction.options.getInteger("related") : parseInt(ctx.args[2], 10);
+
+  if (action === "timeline") return ctx.reply(svc.casePayload(ctx.guild, record));
+  if (action === "export") return ctx.reply({ files: [svc.exportCase(guildId, record)] }, { ephemeral: true });
+
+  if (app.permissions.resolveLevel(ctx.member) < Level.MODERATOR) return ctx.fail("errors.noPermission");
+  let res;
+  if (action === "note") res = svc.addNote(guildId, record.case_number, ctx.user.id, text);
+  else if (action === "evidence") {
+    const file = ctx.isSlash ? ctx.interaction.options.getAttachment("file") : null;
+    const urls = [...String(text || "").split(/\s+/).filter(Boolean), ...(file ? [file.url] : []), ...(ctx.message?.attachments ? [...ctx.message.attachments.values()].map((a) => a.url) : [])];
+    res = svc.addEvidence(guildId, record.case_number, ctx.user.id, urls);
+  } else if (action === "link" || action === "unlink") {
+    if (!Number.isInteger(related) || related < 1) return ctx.fail("errors.invalidNumber");
+    res = action === "link" ? svc.link(guildId, record.case_number, related, ctx.user.id) : svc.unlink(guildId, record.case_number, related, ctx.user.id);
+  } else if (action === "close" || action === "reopen") res = svc.setStatus(guildId, record.case_number, ctx.user.id, action === "reopen");
+  else return ctx.fail("errors.actionFailed", { details: action });
+  if (!res.ok) return fail(res);
+  return ctx.success(t("cw.done"));
+}

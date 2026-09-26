@@ -1,0 +1,39 @@
+{
+  "cw": {
+    "caseTitle": "Dava #{number}",
+    "type": "Tür",
+    "status": "Durum",
+    "active": "Aktif",
+    "closed": "Kapalı",
+    "target": "Üye",
+    "moderator": "Moderatör",
+    "duration": "Süre",
+    "related": "İlgili davalar",
+    "timeline": "Zaman çizelgesi",
+    "reportTitle": "Rapor #{number}",
+    "priority": "Öncelik",
+    "assignee": "Atanan",
+    "reporter": "Bildiren",
+    "reason": "Sebep",
+    "reportSla": "Rapor #{number} inceleme süresini aştı.",
+    "reportEscalated": "Rapor #{number} {user} tarafından yükseltildi.",
+    "err": {
+      "empty": "Metin gerekli.",
+      "full": "Not sınırına ulaşıldı.",
+      "noLinks": "Dosya veya geçerli https bağlantıları ekleyin.",
+      "self": "Dava kendisine bağlanamaz.",
+      "notFound": "Dava bulunamadı.",
+      "exists": "Davalar zaten bağlı.",
+      "notLinked": "Davalar bağlı değil.",
+      "alreadyActive": "Dava zaten aktif.",
+      "alreadyClosed": "Dava zaten kapalı.",
+      "decided": "Rapor zaten incelendi.",
+      "conflict": "Bildirilen yetkili atanamaz.",
+      "notStaff": "Atanan en az moderatör olmalı.",
+      "invalid": "Geçersiz değer.",
+      "alreadyEscalated": "Rapor zaten yükseltildi.",
+      "reportNotFound": "Rapor bulunamadı."
+    },
+    "done": "Tamam."
+  }
+}

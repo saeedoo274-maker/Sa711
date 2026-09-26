@@ -1,0 +1,39 @@
+{
+  "cw": {
+    "caseTitle": "Case #{number}",
+    "type": "Type",
+    "status": "Status",
+    "active": "Active",
+    "closed": "Closed",
+    "target": "Member",
+    "moderator": "Moderator",
+    "duration": "Duration",
+    "related": "Related cases",
+    "timeline": "Timeline",
+    "reportTitle": "Report #{number}",
+    "priority": "Priority",
+    "assignee": "Assignee",
+    "reporter": "Reporter",
+    "reason": "Reason",
+    "reportSla": "Report #{number} passed its review deadline.",
+    "reportEscalated": "Report #{number} escalated by {user}.",
+    "err": {
+      "empty": "Text is required.",
+      "full": "Notes limit reached.",
+      "noLinks": "Attach a file or valid https links.",
+      "self": "A case can't be linked to itself.",
+      "notFound": "Case not found.",
+      "exists": "Cases already linked.",
+      "notLinked": "Cases are not linked.",
+      "alreadyActive": "Case is already active.",
+      "alreadyClosed": "Case is already closed.",
+      "decided": "Report already reviewed.",
+      "conflict": "Can't assign the reported staff member.",
+      "notStaff": "Assignee must be a moderator or above.",
+      "invalid": "Invalid value.",
+      "alreadyEscalated": "Report already escalated.",
+      "reportNotFound": "Report not found."
+    },
+    "done": "Done."
+  }
+}

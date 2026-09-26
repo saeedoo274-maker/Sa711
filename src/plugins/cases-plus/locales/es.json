@@ -1,0 +1,39 @@
+{
+  "cw": {
+    "caseTitle": "Caso #{number}",
+    "type": "Tipo",
+    "status": "Estado",
+    "active": "Activo",
+    "closed": "Cerrado",
+    "target": "Miembro",
+    "moderator": "Moderador",
+    "duration": "Duración",
+    "related": "Casos relacionados",
+    "timeline": "Cronología",
+    "reportTitle": "Reporte #{number}",
+    "priority": "Prioridad",
+    "assignee": "Asignado",
+    "reporter": "Denunciante",
+    "reason": "Motivo",
+    "reportSla": "El reporte #{number} superó su plazo.",
+    "reportEscalated": "Reporte #{number} escalado por {user}.",
+    "err": {
+      "empty": "Se requiere texto.",
+      "full": "Límite de notas alcanzado.",
+      "noLinks": "Adjunta un archivo o enlaces https válidos.",
+      "self": "Un caso no puede vincularse a sí mismo.",
+      "notFound": "Caso no encontrado.",
+      "exists": "Casos ya vinculados.",
+      "notLinked": "Casos no vinculados.",
+      "alreadyActive": "El caso ya está activo.",
+      "alreadyClosed": "El caso ya está cerrado.",
+      "decided": "Reporte ya revisado.",
+      "conflict": "No se puede asignar al reportado.",
+      "notStaff": "El asignado debe ser moderador o superior.",
+      "invalid": "Valor inválido.",
+      "alreadyEscalated": "Reporte ya escalado.",
+      "reportNotFound": "Reporte no encontrado."
+    },
+    "done": "Hecho."
+  }
+}

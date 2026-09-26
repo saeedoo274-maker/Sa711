@@ -1,0 +1,39 @@
+{
+  "cw": {
+    "caseTitle": "Dossier #{number}",
+    "type": "Type",
+    "status": "Statut",
+    "active": "Actif",
+    "closed": "Fermé",
+    "target": "Membre",
+    "moderator": "Modérateur",
+    "duration": "Durée",
+    "related": "Dossiers liés",
+    "timeline": "Chronologie",
+    "reportTitle": "Signalement #{number}",
+    "priority": "Priorité",
+    "assignee": "Assigné",
+    "reporter": "Rapporteur",
+    "reason": "Raison",
+    "reportSla": "Le signalement #{number} a dépassé son délai.",
+    "reportEscalated": "Signalement #{number} escaladé par {user}.",
+    "err": {
+      "empty": "Texte requis.",
+      "full": "Limite de notes atteinte.",
+      "noLinks": "Joignez un fichier ou des liens https.",
+      "self": "Un dossier ne peut pas être lié à lui-même.",
+      "notFound": "Dossier introuvable.",
+      "exists": "Dossiers déjà liés.",
+      "notLinked": "Dossiers non liés.",
+      "alreadyActive": "Dossier déjà actif.",
+      "alreadyClosed": "Dossier déjà fermé.",
+      "decided": "Signalement déjà traité.",
+      "conflict": "Impossible d'assigner le membre signalé.",
+      "notStaff": "L'assigné doit être modérateur ou plus.",
+      "invalid": "Valeur invalide.",
+      "alreadyEscalated": "Signalement déjà escaladé.",
+      "reportNotFound": "Signalement introuvable."
+    },
+    "done": "Fait."
+  }
+}

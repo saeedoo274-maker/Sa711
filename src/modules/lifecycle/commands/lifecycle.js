@@ -209,7 +209,8 @@ module.exports = [
     arguments: [
       { name: "admin", required: false, description: "رفع بلاغ على إداري" },
       { name: "pending", required: false, description: "البلاغات المعلّقة (للإدارة)" },
-      { name: "history", required: false, description: "سجل البلاغات على إداري" }
+      { name: "history", required: false, description: "سجل البلاغات على إداري" },
+      { name: "view / assign / priority / note / escalate", required: false, description: "إدارة دورة حياة البلاغ (للمشرفين)" }
     ],
     examples: ["/report admin user:@أحمد reason:إساءة تصرف evidence:https://... متى:أمس"],
     category: "lifecycle",
@@ -231,7 +232,22 @@ module.exports = [
       .addSubcommand((s) =>
         s.setName("history").setDescription("سجل البلاغات على إداري")
           .addUserOption((o) => o.setName("user").setDescription("الإداري").setRequired(true))
-      ),
+      )
+      .addSubcommand((s) => s.setName("view").setDescription("تفاصيل بلاغ وخطه الزمني")
+        .addIntegerOption((o) => o.setName("number").setDescription("رقم البلاغ").setRequired(true).setMinValue(1)))
+      .addSubcommand((s) => s.setName("assign").setDescription("تكليف مشرف بالبلاغ")
+        .addIntegerOption((o) => o.setName("number").setDescription("رقم البلاغ").setRequired(true).setMinValue(1))
+        .addUserOption((o) => o.setName("user").setDescription("المشرف").setRequired(true)))
+      .addSubcommand((s) => s.setName("priority").setDescription("أولوية البلاغ")
+        .addIntegerOption((o) => o.setName("number").setDescription("رقم البلاغ").setRequired(true).setMinValue(1))
+        .addStringOption((o) => o.setName("level").setDescription("الأولوية").setRequired(true).addChoices(
+          { name: "منخفضة", value: "low" }, { name: "عادية", value: "normal" }, { name: "عالية", value: "high" }, { name: "عاجلة", value: "urgent" })))
+      .addSubcommand((s) => s.setName("note").setDescription("ملاحظة داخلية على البلاغ")
+        .addIntegerOption((o) => o.setName("number").setDescription("رقم البلاغ").setRequired(true).setMinValue(1))
+        .addStringOption((o) => o.setName("text").setDescription("الملاحظة").setRequired(true).setMaxLength(1000)))
+      .addSubcommand((s) => s.setName("escalate").setDescription("تصعيد البلاغ للإدارة العليا")
+        .addIntegerOption((o) => o.setName("number").setDescription("رقم البلاغ").setRequired(true).setMinValue(1))
+        .addStringOption((o) => o.setName("reason").setDescription("السبب").setMaxLength(300))),
 
     async execute(ctx) {
       const sub = ctx.interaction.options.getSubcommand();
@@ -253,6 +269,28 @@ module.exports = [
             })
           ]
         }, { ephemeral: true });
+      }
+
+      if (["view", "assign", "priority", "note", "escalate"].includes(sub)) {
+        if (level < Level.MODERATOR) return ctx.fail("errors.noPermission");
+        const cw = ctx.app.casework;
+        if (!cw) return ctx.fail("errors.systemDisabled", { system: "cases-plus" });
+        const o = ctx.interaction.options;
+        const report = cw.repo.report(guildId, o.getInteger("number"));
+        if (!report) return ctx.fail("errors.actionFailed", { details: ctx.t("cw.err.reportNotFound") });
+        // المُبلَّغ عنه لا يدير بلاغه (تعارض مصالح)
+        if (report.target_id === ctx.user.id) return ctx.fail("errors.noPermission");
+        if (sub === "view") return ctx.reply(cw.reportPayload(ctx.guild, report), { ephemeral: true });
+        let res;
+        if (sub === "assign") {
+          const member = await ctx.getMember("user");
+          if (!member) return ctx.fail("errors.memberNotFound");
+          res = cw.assignReport(ctx.guild, report, ctx.member, member);
+        } else if (sub === "priority") res = cw.setReportPriority(ctx.guild, report, ctx.member, o.getString("level"));
+        else if (sub === "note") res = cw.noteReport(ctx.guild, report, ctx.member, o.getString("text"));
+        else res = await cw.escalateReport(ctx.guild, report, ctx.member, o.getString("reason"));
+        if (!res.ok) return ctx.fail("errors.actionFailed", { details: ctx.t(`cw.err.${res.reason}`) });
+        return ctx.reply(cw.reportPayload(ctx.guild, cw.repo.report(guildId, report.number)), { ephemeral: true });
       }
 
       if (sub === "history") {
@@ -302,6 +340,7 @@ module.exports = [
         evidence
       });
       const posted = await ctx.app.lifecycleService.publish(ctx.guild, "report", record, ctx.user);
+      ctx.app.bus.emitSafe("report:created", { guild: ctx.guild, record });
 
       return ctx.reply(
         {
