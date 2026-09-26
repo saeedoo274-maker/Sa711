@@ -174,9 +174,9 @@ test("التذاكر المتقدمة: النقل، الأولوية وSLA، ا�
     assert.match(H.textOf(i.replies), /صلاحي/);
     i = await cmd(staffA, ch, "stats", { days: 7 });
     assert.match(H.textOf(i.replies), /📊/);
-    await cmd(staffA, ch, "settings", { cooldown: 5 });
-    assert.equal(app.guildConfig.value(guild.id, "tickets.cooldownMs") || 0, 0);
-    await cmd(admin, ch, "settings", { cooldown: 5, "sla-high": 30 });
+    await H.panelClick(app, staffA, ch, "panel:sysns:tkt:0", { kind: "modal", fields: { n0: "5" } });
+    assert.equal(app.guildConfig.value(guild.id, "tickets.cooldownMs") || 0, 0, "الإعداد من اللوحة للأدمن فقط");
+    await H.panelClick(app, admin, ch, "panel:sysns:tkt:0", { kind: "modal", fields: { n0: "5", n3: "30" } });
     assert.equal(app.guildConfig.value(guild.id, "tickets.cooldownMs"), 5 * 60_000);
     assert.equal(app.guildConfig.value(guild.id, "tickets.sla.high"), 30);
   });

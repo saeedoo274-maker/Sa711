@@ -25,7 +25,7 @@
     "settingsTitle": "Paramètres des niveaux",
     "status": "Statut",
     "on": "Activé",
-    "off": "Désactivé — activez avec /مستوى admin settings enabled:true",
+    "off": "Désactivé — activez-le depuis /لوحة → Systèmes → Niveaux",
     "messageXp": "XP par message",
     "cooldown": "Délai",
     "voiceXp": "XP vocal",

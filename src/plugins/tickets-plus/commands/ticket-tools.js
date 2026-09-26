@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, ChannelType } = require("discord.js");
+const { SlashCommandBuilder } = require("discord.js");
 const { Level } = require("../../../core/permissions/PermissionService");
 const { parseDuration } = require("../../../core/utils/common");
 
@@ -45,16 +45,7 @@ module.exports = [
       .addSubcommand((s) => s.setName("escalate").setDescription("تصعيد للإدارة العليا").addStringOption((o) => o.setName("reason").setDescription("السبب").setMaxLength(300)))
       .addSubcommand((s) => s.setName("stats").setDescription("إحصاءات الطاقم")
         .addUserOption((o) => o.setName("user").setDescription("موظف محدد"))
-        .addIntegerOption((o) => o.setName("days").setDescription("آخر كم يوم").setMinValue(1).setMaxValue(365)))
-      .addSubcommand((s) => s.setName("settings").setDescription("إعدادات (أدمن)")
-        .addIntegerOption((o) => o.setName("cooldown").setDescription("تبريد فتح التذاكر بالدقائق").setMinValue(0).setMaxValue(10080))
-        .addIntegerOption((o) => o.setName("sla-low").setDescription("SLA منخفضة (دقائق)").setMinValue(0))
-        .addIntegerOption((o) => o.setName("sla-normal").setDescription("SLA عادية (دقائق)").setMinValue(0))
-        .addIntegerOption((o) => o.setName("sla-high").setDescription("SLA عالية (دقائق)").setMinValue(0))
-        .addIntegerOption((o) => o.setName("sla-urgent").setDescription("SLA عاجلة (دقائق)").setMinValue(0))
-        .addChannelOption((o) => o.setName("escalation-channel").setDescription("قناة التصعيد").addChannelTypes(ChannelType.GuildText))
-        .addRoleOption((o) => o.setName("escalation-role").setDescription("رتبة التصعيد"))
-        .addBooleanOption((o) => o.setName("auto-escalate").setDescription("تصعيد تلقائي عند خرق SLA"))),
+        .addIntegerOption((o) => o.setName("days").setDescription("آخر كم يوم").setMinValue(1).setMaxValue(365))),
 
     async autocomplete(interaction, app) {
       const typed = String(interaction.options.getFocused() || "").toLowerCase();
@@ -78,31 +69,6 @@ module.exports = [
         if (level < Level.STAFF) return ctx.fail("errors.noPermission");
         const user = await ctx.getUser("user", 0);
         return ctx.reply(svc.statsPayload(guild, user?.id || null, ctx.getNumber("days", 1) || 30));
-      }
-
-      if (sub === "settings") {
-        if (level < Level.ADMIN) return ctx.fail("errors.noPermission");
-        const o = ctx.interaction?.options;
-        if (!o) return fail({ reason: "slashOnly" });
-        const updates = {};
-        if (o.getInteger("cooldown") !== null) updates["tickets.cooldownMs"] = o.getInteger("cooldown") * 60_000;
-        for (const p of ["low", "normal", "high", "urgent"]) if (o.getInteger(`sla-${p}`) !== null) updates[`tickets.sla.${p}`] = o.getInteger(`sla-${p}`);
-        if (o.getChannel("escalation-channel")) updates["tickets.escalation.channelId"] = o.getChannel("escalation-channel").id;
-        if (o.getRole("escalation-role")) updates["tickets.escalation.roleId"] = o.getRole("escalation-role").id;
-        if (o.getBoolean("auto-escalate") !== null) updates["tickets.escalation.autoOnBreach"] = o.getBoolean("auto-escalate");
-        if (Object.keys(updates).length) app.guildConfig.setMany(guild.id, updates);
-        const c = svc.config(guild.id);
-        return ctx.reply({
-          embeds: [ctx.embed({
-            title: `⚙️ ${t("tk.settingsTitle")}`,
-            color: "info",
-            fields: [
-              { name: t("tk.cooldownLabel"), value: c.cooldownMs ? `${Math.round(c.cooldownMs / 60_000)}m` : "—", inline: true },
-              { name: "SLA", value: ["low", "normal", "high", "urgent"].map((p) => `${t(`tk.priority.${p}`)}: ${c.sla?.[p] ?? "—"}m`).join("\n"), inline: true },
-              { name: t("tk.escalationLabel"), value: `${c.escalation?.channelId ? `<#${c.escalation.channelId}>` : "—"} ${c.escalation?.roleId ? `<@&${c.escalation.roleId}>` : ""}\n${t("tk.auto")}: ${c.escalation?.autoOnBreach ? "✅" : "❌"}`, inline: true }
-            ]
-          })]
-        }, { ephemeral: true });
       }
 
       // بقية الأوامر تعمل داخل قناة تذكرة فقط

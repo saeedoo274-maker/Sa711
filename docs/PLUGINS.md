@@ -21,7 +21,7 @@ src/plugins/<name>/
 |---|---|
 | `name` | اسم فريد `[a-z][a-z0-9-]` ويطابق اسم المجلد |
 | `version` | يُحفظ في `system_state`؛ تغيّره يستدعي `upgrade(app, from, to)` إن وُجد |
-| `label` / `description` | للعرض في `/مطور plugins` و`/اعداد features` |
+| `label` / `description` | للعرض في `/مطور plugins` و`/لوحة ← تشغيل الأنظمة` |
 | `feature` | اسم علم الميزة (يمكن أن تتشاركه إضافة ووحدة قديمة) |
 | `defaultEnabled` | الحالة الافتراضية لكل سيرفر |
 | `dependencies` | إضافات يجب تحميلها قبلها |
@@ -49,11 +49,11 @@ src/plugins/<name>/
 
 ## الترجمة
 
-`ctx.t(key)` و`app.i18n.forGuild(guildId)(key)` يستخدمان لغة السيرفر (`/اعداد language`). أي مفتاح ناقص في لغة يعود للعربية. `npm run check` يرفض أي مفتاح مستخدم في الكود وغير موجود.
+`ctx.t(key)` و`app.i18n.forGuild(guildId)(key)` يستخدمان لغة السيرفر (`/لوحة ← لغة البوت`). أي مفتاح ناقص في لغة يعود للعربية. `npm run check` يرفض أي مفتاح مستخدم في الكود وغير موجود.
 
 ## أعلام الميزات
 
-- لكل سيرفر: `/اعداد features` أو اللوحة أو `PUT /api/v1/guilds/:id/features/:name`.
+- لكل سيرفر: `/لوحة ← تشغيل الأنظمة` أو لوحة الويب أو `PUT /api/v1/guilds/:id/features/:name`.
 - عامة (المطور): `/مطور flags` — إيقاف عام يعطّل الميزة في كل السيرفرات.
 
 ## الإضافات الحالية

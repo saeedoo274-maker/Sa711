@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, ChannelType } = require("discord.js");
+const { SlashCommandBuilder } = require("discord.js");
 const { Level } = require("../../../core/permissions/PermissionService");
 const { truncate } = require("../../../core/utils/common");
 
@@ -39,8 +39,7 @@ module.exports = [
       { name: "top", required: false, description: "أفضل الاقتراحات" },
       { name: "stats", required: false, description: "إحصاءات الاقتراحات" },
       { name: "decide", required: false, description: "قبول/رفض/مراجعة (طاقم)" },
-      { name: "delete", required: false, description: "حذف اقتراح (طاقم)" },
-      { name: "settings", required: false, description: "الإعدادات (أدمن)" }
+      { name: "delete", required: false, description: "حذف اقتراح (طاقم)" }
     ],
     examples: ["/اقتراح new content:إضافة قناة للألعاب", "!suggest إضافة قناة للألعاب", "/اقتراح decide number:4 status:accepted reason:تم"],
     category: "suggestions",
@@ -63,17 +62,7 @@ module.exports = [
         .addStringOption((o) => o.setName("status").setDescription("الحالة").setRequired(true).addChoices(...statusChoices))
         .addStringOption((o) => o.setName("reason").setDescription("رد الطاقم").setMaxLength(1000)))
       .addSubcommand((s) => s.setName("delete").setDescription("حذف اقتراح")
-        .addIntegerOption((o) => o.setName("number").setDescription("رقم الاقتراح").setRequired(true).setMinValue(1)))
-      .addSubcommand((s) => s.setName("settings").setDescription("إعدادات الاقتراحات")
-        .addChannelOption((o) => o.setName("channel").setDescription("قناة الاقتراحات").addChannelTypes(ChannelType.GuildText, ChannelType.GuildAnnouncement))
-        .addChannelOption((o) => o.setName("archive").setDescription("قناة الأرشيف").addChannelTypes(ChannelType.GuildText))
-        .addRoleOption((o) => o.setName("required-role").setDescription("رتبة مطلوبة للاقتراح (تبديل)"))
-        .addRoleOption((o) => o.setName("vote-role").setDescription("رتبة مطلوبة للتصويت (تبديل)"))
-        .addChannelOption((o) => o.setName("allowed-channel").setDescription("قناة يُسمح منها بالأمر (تبديل)"))
-        .addBooleanOption((o) => o.setName("anonymous").setDescription("السماح بالمجهول"))
-        .addBooleanOption((o) => o.setName("threads").setDescription("سلسلة نقاش لكل اقتراح"))
-        .addIntegerOption((o) => o.setName("cooldown").setDescription("التبريد بالدقائق").setMinValue(0).setMaxValue(1440))
-        .addBooleanOption((o) => o.setName("enabled").setDescription("تفعيل النظام"))),
+        .addIntegerOption((o) => o.setName("number").setDescription("رقم الاقتراح").setRequired(true).setMinValue(1))),
 
     async execute(ctx) {
       const app = ctx.app;
@@ -154,49 +143,6 @@ module.exports = [
         return ctx.success(t("suggest.deleted", { number: s.number }));
       }
 
-      if (sub === "settings") {
-        if (app.permissions.resolveLevel(ctx.member) < Level.ADMIN) return ctx.fail("errors.noPermission");
-        const o = ctx.isSlash ? ctx.interaction.options : null;
-        const cfg = svc.config(guild.id);
-        const updates = {};
-        const toggle = (key, id) => {
-          const set = new Set(cfg[key] || []);
-          if (set.has(id)) set.delete(id);
-          else set.add(id);
-          updates[`suggestions.${key}`] = [...set];
-        };
-        if (o) {
-          if (o.getChannel("channel")) updates["suggestions.channelId"] = o.getChannel("channel").id;
-          if (o.getChannel("archive")) updates["suggestions.archiveChannelId"] = o.getChannel("archive").id;
-          if (o.getRole("required-role")) toggle("requiredRoleIds", o.getRole("required-role").id);
-          if (o.getRole("vote-role")) toggle("voteRoleIds", o.getRole("vote-role").id);
-          if (o.getChannel("allowed-channel")) toggle("allowedChannelIds", o.getChannel("allowed-channel").id);
-          if (o.getBoolean("anonymous") !== null) updates["suggestions.anonymousAllowed"] = o.getBoolean("anonymous");
-          if (o.getBoolean("threads") !== null) updates["suggestions.threads"] = o.getBoolean("threads");
-          if (o.getInteger("cooldown") !== null) updates["suggestions.cooldownMs"] = o.getInteger("cooldown") * 60_000;
-          if (o.getBoolean("enabled") !== null) app.features.setForGuild(guild.id, "suggestions", o.getBoolean("enabled"));
-        }
-        if (Object.keys(updates).length) app.guildConfig.setMany(guild.id, updates);
-        const c = svc.config(guild.id);
-        const list = (ids, k) => (ids || []).map((id) => (k === "r" ? `<@&${id}>` : `<#${id}>`)).join(" ") || "—";
-        return ctx.reply({
-          embeds: [ctx.embed({
-            title: `⚙️ ${t("suggest.settingsTitle")}`,
-            color: svc.isReady(guild.id) ? "success" : "neutral",
-            fields: [
-              { name: t("suggest.set.channel"), value: c.channelId ? `<#${c.channelId}>` : "⚠️ —", inline: true },
-              { name: t("suggest.set.archive"), value: c.archiveChannelId ? `<#${c.archiveChannelId}>` : "—", inline: true },
-              { name: t("suggest.set.enabled"), value: app.features.isEnabled(guild.id, "suggestions") ? "✅" : "❌", inline: true },
-              { name: t("suggest.set.requiredRoles"), value: list(c.requiredRoleIds, "r"), inline: true },
-              { name: t("suggest.set.voteRoles"), value: list(c.voteRoleIds, "r"), inline: true },
-              { name: t("suggest.set.allowedChannels"), value: list(c.allowedChannelIds, "c"), inline: true },
-              { name: t("suggest.set.anonymous"), value: c.anonymousAllowed ? "✅" : "❌", inline: true },
-              { name: t("suggest.set.threads"), value: c.threads ? "✅" : "❌", inline: true },
-              { name: t("suggest.set.cooldown"), value: `\`${Math.round((c.cooldownMs || 0) / 60_000)}m\``, inline: true }
-            ]
-          })]
-        }, { ephemeral: true });
-      }
       return ctx.fail("errors.actionFailed", { details: sub });
     }
   }

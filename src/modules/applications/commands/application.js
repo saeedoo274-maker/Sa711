@@ -1,11 +1,10 @@
-const { SlashCommandBuilder, PermissionFlagsBits, ChannelType } = require("discord.js");
+const { SlashCommandBuilder, ChannelType } = require("discord.js");
 const crypto = require("crypto");
 const { Level } = require("../../../core/permissions/PermissionService");
 const { AttachmentBuilder } = require("discord.js");
 const { buildEmbed, parseDuration, formatDuration, truncate, timestamp } = require("../../../core/utils/helpers");
 const { parseDateTime } = require("../../../core/utils/time");
 const editor = require("../editor");
-const interactions = require("../interactions");
 
 const NAME_PATTERN = /^[\p{L}\p{N}_-]{2,32}$/u;
 
@@ -21,7 +20,6 @@ module.exports = [
       { name: "edit", required: false, description: "فتح المحرّر التفاعلي (كل شي بالأزرار)" },
       { name: "set", required: false, description: "تعديل خاصية واحدة مباشرة" },
       { name: "list", required: false, description: "عرض الأنواع" },
-      { name: "panel", required: false, description: "نشر لوحة تصفّح فئات ثم أنواع" },
       { name: "pending", required: false, description: "الطلبات المعلّقة" },
       { name: "show", required: false, description: "عرض طلب برقمه" },
       { name: "delete", required: false, description: "حذف نوع تقديم" },
@@ -32,7 +30,6 @@ module.exports = [
       "/application create name:العصابات label:تقديم - العصابات review:#مراجعة role:@عصابة category:وزارة الداخلية",
       "/application edit name:العصابات",
       "/application form name:العصابات q1:الاسم q2:العمر q3:الخبرات q4:اسم العصابة q5:سبب التقديم",
-      "/application panel channel:#تقديم-الوظائف",
       "/application pending"
     ],
     category: "applications",
@@ -97,10 +94,6 @@ module.exports = [
           .addStringOption((o) => o.setName("value").setDescription("القيمة الجديدة").setRequired(true))
       )
       .addSubcommand((s) => s.setName("list").setDescription("عرض أنواع التقديم"))
-      .addSubcommand((s) =>
-        s.setName("panel").setDescription("نشر لوحة تصفّح التقديمات (فئات ثم أنواع) بالشكل الحديث")
-          .addChannelOption((o) => o.setName("channel").setDescription("القناة").setRequired(true))
-      )
       .addSubcommand((s) => s.setName("pending").setDescription("الطلبات المعلّقة"))
       .addSubcommand((s) =>
         s.setName("show").setDescription("عرض طلب")
@@ -156,24 +149,6 @@ module.exports = [
             ]
           })]
         }, { ephemeral: true });
-      }
-
-      if (sub === "panel") {
-        if (ctx.app.permissions.resolveLevel(ctx.member) < Level.ADMIN) return ctx.fail("errors.noPermission");
-
-        const channel = ctx.interaction.options.getChannel("channel");
-        if (!channel?.isTextBased?.()) return ctx.fail("errors.actionFailed", { details: "اختر قناة نصية." });
-
-        const me = ctx.guild.members.me;
-        if (!channel.permissionsFor(me)?.has(PermissionFlagsBits.SendMessages)) {
-          return ctx.fail("errors.actionFailed", { details: `لا أملك صلاحية الإرسال في <#${channel.id}>.` });
-        }
-
-        const payload = interactions.browsePanel(ctx.app, guildId);
-        const message = await channel.send(payload).catch(() => null);
-        if (!message) return ctx.fail("errors.actionFailed", { details: "تعذّر نشر اللوحة." });
-
-        return ctx.success(`تم نشر لوحة التقديمات في <#${channel.id}>.`);
       }
 
       if (sub === "pending") {

@@ -310,8 +310,16 @@ function textOf(replies) {
   return parts.join("\n");
 }
 
+/** ضغطة على لوحة التحكم المركزية (/لوحة) — بديل أوامر الإعداد المحذوفة في الاختبارات. */
+async function panelClick(app, member, channel, customId, opts = {}) {
+  const i = fakeComponent(member, channel, customId, opts);
+  await app.interactions.route(i);
+  return i;
+}
+
 module.exports = {
   createApp,
+  panelClick,
   cleanup,
   collection,
   fakeUser,

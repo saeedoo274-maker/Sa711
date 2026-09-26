@@ -87,7 +87,7 @@ function welcomePayload(app, guild) {
         { name: t("cfg.rules"), value: w.rulesChannelId ? `<#${w.rulesChannelId}>` : "—", inline: true },
         { name: t("cfg.message"), value: (w.message || "—").slice(0, 300) },
         { name: t("cfg.buttons"), value: (w.buttons || []).map((b) => `[${b.label}](${b.url})`).join(" • ") || "—" },
-        { name: t("cfg.autoRoles"), value: `${on(autoRoles.enabled)} ${(autoRoles.memberRoleIds || []).map((r) => `<@&${r}>`).join(" ") || "—"}\n-# /رتبة_تلقائية`, inline: false },
+        { name: t("cfg.autoRoles"), value: `${on(autoRoles.enabled)} ${(autoRoles.memberRoleIds || []).map((r) => `<@&${r}>`).join(" ") || "—"}\n-# /لوحة ← الأنظمة ← الرتب التلقائية`, inline: false },
         { name: t("cfg.goodbyeChannel"), value: g.channelId ? `<#${g.channelId}>` : "—", inline: true },
         { name: t("cfg.goodbyeEmbedImage"), value: `${on(g.embed?.enabled)} / ${on(g.image?.enabled)}`, inline: true }
       ],

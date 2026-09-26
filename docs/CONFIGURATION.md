@@ -27,7 +27,8 @@
 محفوظة لكل سيرفر في قاعدة البيانات، وتُدمج مع الافتراضيات (`config/guild-defaults.json` + افتراضيات الإضافات من `plugin.json`). طرق التعديل:
 
 - **معالج الإعداد**: `/اعداد setup` — خطوات مع معاينة قبل الحفظ.
-- **الأوامر**: `/اعداد language|features|theme|logs|welcome|goodbye|verify|notifications|appeals|permissions|automation|backup|api` وأوامر كل نظام.
+- **اللوحة**: `/لوحة ← الأنظمة والإعدادات` (اللغة، الأنظمة، الثيم، السجلات، الإشعارات، الترحيب، التحقق، الاستئنافات، وإعدادات كل نظام).
+- **الأوامر**: `/اعداد setup|permissions|automation|backup|api`.
 - **اللوحة** و**REST API**.
 
 ### مفاتيح الإضافات الرئيسية

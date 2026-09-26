@@ -1,5 +1,4 @@
-const { SlashCommandBuilder, PermissionFlagsBits, ChannelType } = require("discord.js");
-const adminPanel = require("../interactions");
+const { SlashCommandBuilder, PermissionFlagsBits } = require("discord.js");
 const { Level } = require("../../../core/permissions/PermissionService");
 const { buildEmbed, formatDuration, timestamp } = require("../../../core/utils/helpers");
 
@@ -182,48 +181,6 @@ module.exports = [
     }
   },
 
-  {
-    name: "لوحة_الادارة",
-    aliases: ["admin-panel", "لوحة-الادارة"],
-    description: "نشر لوحة نظام الإدارة الدائمة في قناة — إمبيد بأزرار وقوائم يستخدمها كل الطاقم.",
-    usage: "/لوحة_الادارة channel:<#قناة>",
-    arguments: [{ name: "channel", required: true, description: "القناة التي تُنشر فيها اللوحة" }],
-    examples: ["/لوحة_الادارة channel:#لوحة-الادارة"],
-    category: "staff",
-    permissions: { level: Level.ADMIN },
-    slash: new SlashCommandBuilder()
-      .setName("لوحة_الادارة")
-      .setDescription("نشر لوحة نظام الإدارة الدائمة")
-      .addChannelOption((o) =>
-        o.setName("channel").setDescription("القناة").setRequired(true).addChannelTypes(ChannelType.GuildText)
-      )
-      .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild),
-
-    async execute(ctx) {
-      const channel = ctx.interaction.options.getChannel("channel");
-      const me = ctx.guild.members.me;
-
-      if (!channel.permissionsFor(me)?.has(PermissionFlagsBits.SendMessages)) {
-        return ctx.fail("errors.actionFailed", { details: `لا أملك صلاحية الإرسال في <#${channel.id}>.` });
-      }
-
-      const payload = adminPanel.build(ctx.app, ctx.guild);
-      const message = await channel.send(payload).catch(() => null);
-      if (!message) return ctx.fail("errors.actionFailed", { details: "تعذّر نشر اللوحة." });
-
-      // نحفظ موقعها لتُحدَّث تلقائيًا بعد أي ترقية أو تنزيل أو سحب
-      ctx.app.guildConfig.setMany(ctx.guild.id, {
-        "staff.panelChannelId": channel.id,
-        "staff.panelMessageId": message.id
-      });
-
-      return ctx.success(
-        `تم نشر لوحة الإدارة في <#${channel.id}>.\n` +
-        "اللوحة دائمة ويستخدمها كل الطاقم، وكل رد يظهر لصاحبه وحده.\n" +
-        "تتحدّث أرقامها تلقائيًا بعد أي ترقية أو تنزيل أو سحب."
-      );
-    }
-  },
 
   {
     name: "سحب_اداري",

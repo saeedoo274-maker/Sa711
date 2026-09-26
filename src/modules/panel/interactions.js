@@ -230,6 +230,8 @@ module.exports = {
       tickets: Level.STAFF, ticketsetting: Level.ADMIN, ticketpick: Level.ADMIN, ticketset: Level.ADMIN,
       lifecycle: Level.ADMIN, lifecycletoggle: Level.ADMIN, lifecyclepick: Level.ADMIN, lifecycleset: Level.ADMIN,
       reports: Level.STAFF, reporttoggle: Level.ADMIN, reportpick: Level.ADMIN, reportset: Level.ADMIN,
+      reportsections: Level.ADMIN, reportschedule: Level.ADMIN, reportschedulesave: Level.ADMIN,
+      reportmention: Level.ADMIN, reportmentionset: Level.ADMIN, reportnow: Level.STAFF, reportinactive: Level.STAFF,
       engage: Level.ADMIN, engagetoggle: Level.ADMIN, engagepick: Level.ADMIN, engageset: Level.ADMIN,
       evidence: Level.ADMIN, evidencepick: Level.ADMIN, evidenceset: Level.ADMIN,
       security: Level.ADMIN, securitytoggle: Level.ADMIN, securitypick: Level.ADMIN, securityset: Level.ADMIN,
@@ -262,7 +264,7 @@ module.exports = {
       case "rolepick": return rolePick(interaction, app);
       case "roleset": return roleSet(interaction, app, arg);
       case "toggles": return togglesPanel(interaction, app);
-      case "toggle": return toggleSet(interaction, app);
+      case "toggle": return toggleSet(interaction, app, arg);
       case "staff": return staffPanel(interaction, app);
       case "staffadd": return staffAddPick(interaction, app);
       case "staffaddset": return staffAddSet(interaction, app);
@@ -300,6 +302,13 @@ module.exports = {
       case "reporttoggle": return reportsToggle(interaction, app);
       case "reportpick": return reportsChannelPick(interaction, app);
       case "reportset": return reportsChannelSet(interaction, app);
+      case "reportsections": return reportsSections(interaction, app);
+      case "reportschedule": return reportsScheduleModal(interaction, app);
+      case "reportschedulesave": return reportsScheduleSave(interaction, app);
+      case "reportmention": return reportsMentionPick(interaction, app);
+      case "reportmentionset": return reportsMentionSet(interaction, app);
+      case "reportnow": return reportsNow(interaction, app);
+      case "reportinactive": return reportsInactive(interaction, app);
 
       // التفاعل والمحتوى: الردود التلقائية، رد التفاعلات، لوحة النجوم، المميّز، السحوبات، الاستطلاعات، الإذاعة
       case "engage": return engagePanel(interaction, app);
@@ -620,10 +629,16 @@ async function togglesPanel(interaction, app) {
   return safeUpdate(interaction, panelView({ embeds: [embed], components: [new ActionRowBuilder().addComponents(menu), backRow(app)] }));
 }
 
-async function toggleSet(interaction, app) {
-  const key = interaction.values[0];
+// مفاتيح يسمح زر/قائمة panel:toggle بعكسها — قائمة بيضاء بدل كتابة أي مسار يصل في التفاعل
+const TOGGLE_KEYS = new Set([...TOGGLES.map((t) => t.key), "tickets.ratingEnabled"]);
+
+async function toggleSet(interaction, app, arg) {
+  // القائمة ترسل المفتاح في values، والأزرار (مثل تقييم التذاكر) ترسله في customId
+  const key = interaction.values?.[0] || arg;
+  if (!TOGGLE_KEYS.has(key)) return togglesPanel(interaction, app);
   const current = app.guildConfig.value(interaction.guild.id, key);
   app.guildConfig.set(interaction.guild.id, key, !current);
+  if (key === "tickets.ratingEnabled") return ticketsPanel(interaction, app);
   return togglesPanel(interaction, app);
 }
 
@@ -696,7 +711,8 @@ async function staffPanel(interaction, app) {
       new ActionRowBuilder().addComponents(
         btn("panel:staffadd", "إضافة رتبة", "➕", ButtonStyle.Success),
         btn("panel:staffdel", "حذف رتبة", "🗑️", ButtonStyle.Danger),
-        btn("panel:staffbase", "رتبة الطاقم الأساسية", "🎖️")
+        btn("panel:staffbase", "رتبة الطاقم الأساسية", "🎖️"),
+        btn("panel:sysa:pub:ch:adm", "نشر لوحة الإدارة", "📤", ButtonStyle.Success)
       )
     );
   }
@@ -994,51 +1010,7 @@ async function economyPanel(interaction, app) {
 //  التذاكر
 // ============================================================
 async function ticketsPanel(interaction, app) {
-  const guildId = interaction.guild.id;
-  const cfg = app.guildConfig.get(guildId);
-  const stats = app.tickets.stats(guildId);
-  const ratings = app.tickets.guildRatingStats(guildId);
-  const types = app.ticketTypes.list(guildId);
-
-  const embed = buildEmbed({
-    title: `${app.config.emoji("ticket")} التذاكر`,
-    color: app.config.color("primary"),
-    fields: [
-      { name: "النظام", value: cfg.tickets.enabled ? "🟢 مفعّل" : "⚪ معطّل", inline: true },
-      { name: "مفتوحة", value: `\`${stats.open}\``, inline: true },
-      { name: "مغلقة", value: `\`${stats.closed}\``, inline: true },
-      { name: "الكاتيغوري", value: cfg.tickets.categoryId ? `<#${cfg.tickets.categoryId}>` : "غير محددة", inline: true },
-      { name: "الأرشيف", value: cfg.tickets.transcriptChannelId ? `<#${cfg.tickets.transcriptChannelId}>` : "غير محددة", inline: true },
-      { name: "التقييم", value: cfg.tickets.ratingEnabled ? `🟢 ${cfg.tickets.ratingChannelId ? `<#${cfg.tickets.ratingChannelId}>` : "بلا قناة"}` : "⚪ معطّل", inline: true },
-      { name: "حد الاستلام", value: cfg.tickets.maxClaimsPerStaff ? `\`${cfg.tickets.maxClaimsPerStaff}\`` : "بلا حد", inline: true },
-      {
-        name: "الإغلاق التلقائي",
-        value: cfg.tickets.autoCloseIdleHours
-          ? `بعد ${formatDuration(cfg.tickets.autoCloseIdleHours * 3600000)} خمول`
-          : "⚪ معطّل",
-        inline: true
-      },
-      { name: "متوسط التقييم", value: ratings.count ? `⭐ \`${ratings.average.toFixed(2)}\` من \`${ratings.count}\`` : "لا يوجد", inline: true },
-      { name: `أنواع التذاكر (${types.length})`, value: types.length ? types.slice(0, 10).map((t) => `\`${t.name}\``).join(" • ") : "استخدم `/نوع_تذكرة create`" }
-    ]
-  });
-
-  return safeUpdate(interaction, panelView({
-    embeds: [embed],
-    components: [
-      new ActionRowBuilder().addComponents(
-        btn("panel:ticketpick:category", "الكاتيغوري", "📁"),
-        btn("panel:ticketpick:archive", "قناة الأرشيف", "🗄️"),
-        btn("panel:ticketpick:rating", "قناة التقييم", "⭐")
-      ),
-      new ActionRowBuilder().addComponents(
-        btn("panel:ticketsetting:autoclose", "الإغلاق التلقائي", "⏳"),
-        btn("panel:ticketsetting:limits", "حد الاستلام", "🚦"),
-        btn(`panel:toggle:tickets.ratingEnabled`, cfg.tickets.ratingEnabled ? "إيقاف التقييم" : "تفعيل التقييم", "🔀")
-      ),
-      backRow(app)
-    ]
-  }));
+  return safeUpdate(interaction, await ticketsPanelData(interaction, app));
 }
 
 async function ticketSettingModal(interaction, app, kind) {
@@ -1074,14 +1046,18 @@ async function ticketSettingModal(interaction, app, kind) {
 async function ticketSettingSave(interaction, app, kind) {
   const guildId = interaction.guild.id;
   if (kind === "autoclose") {
-    const idle = parseInt(interaction.fields.getTextInputValue("idle"), 10) || 0;
-    const grace = parseInt(interaction.fields.getTextInputValue("grace"), 10) || 12;
+    const clamp = (v, min, max, d) => (Number.isFinite(v) ? Math.min(max, Math.max(min, v)) : d);
+    const idle = clamp(parseInt(interaction.fields.getTextInputValue("idle"), 10), 0, 720, 0);
+    const grace = clamp(parseInt(interaction.fields.getTextInputValue("grace"), 10), 1, 168, 12);
     const action = interaction.fields.getTextInputValue("action").trim() === "delete" ? "delete" : "lock";
+    if (action === "delete" && !app.guildConfig.value(guildId, "tickets.transcriptChannelId")) {
+      return safeReply(interaction, { content: `${app.config.emoji("error")} الحذف التلقائي يحتاج قناة أرشيف أولًا — حدّدها من زر «قناة الأرشيف».`, flags: 64 });
+    }
     app.guildConfig.setMany(guildId, {
       "tickets.autoCloseIdleHours": idle, "tickets.autoCloseGraceHours": grace, "tickets.autoCloseAction": action
     });
   } else {
-    const max = parseInt(interaction.fields.getTextInputValue("max"), 10) || 0;
+    const max = Math.min(50, Math.max(0, parseInt(interaction.fields.getTextInputValue("max"), 10) || 0));
     app.guildConfig.set(guildId, "tickets.maxClaimsPerStaff", max);
   }
   return safeUpdate(interaction, await ticketsPanelData(interaction, app));
@@ -1122,6 +1098,10 @@ async function ticketsPanelData(interaction, app) {
         btn("panel:ticketsetting:autoclose", "الإغلاق التلقائي", "⏳"),
         btn("panel:ticketsetting:limits", "حد الاستلام", "🚦"),
         btn(`panel:toggle:tickets.ratingEnabled`, cfg.tickets.ratingEnabled ? "إيقاف التقييم" : "تفعيل التقييم", "🔀")
+      ),
+      new ActionRowBuilder().addComponents(
+        btn("panel:sysa:pub:ch:tkt", "إرسال لوحة تذاكر", "📤", ButtonStyle.Success),
+        btn("panel:sysv:tkt", "SLA والتصعيد", "🚨")
       ),
       backRow(app)
     ]
@@ -1239,31 +1219,137 @@ async function lifecycleChannelSet(interaction, app, kind) {
 // ============================================================
 //  التقارير الدورية
 // ============================================================
-async function reportsPanel(interaction, app) {
+async function reportsPanel(interaction, app, notice = null) {
+  return safeUpdate(interaction, reportsPanelData(interaction, app, notice));
+}
+
+/**
+ * شاشة التقارير الدورية — تغطي كل ما كان في `/تقرير_دوري`:
+ * التشغيل، القناة، التكرار والساعة واليوم، المنشن، الأقسام، الإرسال الآن، وغير النشطين.
+ */
+function reportsPanelData(interaction, app, notice = null) {
+  const { SECTIONS, WEEKDAYS } = require("../reports/ReportService");
   const guildId = interaction.guild.id;
   const s = app.reports.getSchedule(guildId);
+  const level = app.permissions.resolveLevel(interaction.member);
+  const active = s?.sections?.length ? s.sections : Object.keys(SECTIONS);
 
   const embed = buildEmbed({
     title: "📊 التقارير الدورية",
+    description: notice || undefined,
     color: s?.enabled ? app.config.color("success") : app.config.color("neutral"),
     fields: [
       { name: "الحالة", value: s?.enabled ? "🟢 مفعّل" : "⚪ معطّل", inline: true },
       { name: "القناة", value: s?.channel_id ? `<#${s.channel_id}>` : "غير محددة", inline: true },
-      { name: "التكرار", value: s ? (s.frequency === "daily" ? "يومي" : "أسبوعي") : "—", inline: true },
-      { name: "آخر إرسال", value: s?.last_run_at ? `<t:${Math.floor(s.last_run_at / 1000)}:R>` : "لم يُرسل بعد" }
+      { name: "التكرار", value: s ? (s.frequency === "daily" ? "يومي" : `أسبوعي (${WEEKDAYS[s.weekday] || "—"})`) : "—", inline: true },
+      { name: "الساعة", value: s ? `\`${s.hour}:00\` UTC` : "—", inline: true },
+      { name: "المنشن", value: s?.mention_role_id ? `<@&${s.mention_role_id}>` : "—", inline: true },
+      { name: "آخر إرسال", value: s?.last_run_at ? `<t:${Math.floor(s.last_run_at / 1000)}:R>` : "لم يُرسل بعد", inline: true },
+      { name: "الأقسام", value: active.map((k) => SECTIONS[k] || k).join(" • ") }
     ]
   });
 
+  const rows = [];
+  if (level >= Level.ADMIN) {
+    rows.push(new ActionRowBuilder().addComponents(
+      new StringSelectMenuBuilder().setCustomId("panel:reportsections").setPlaceholder("أقسام التقرير")
+        .setMinValues(1).setMaxValues(Object.keys(SECTIONS).length)
+        .addOptions(Object.entries(SECTIONS).map(([value, label]) => ({ label, value, default: active.includes(value) })))
+    ));
+    rows.push(new ActionRowBuilder().addComponents(
+      btn("panel:reporttoggle", s?.enabled ? "إيقاف التقارير" : "تفعيل التقارير", "🔀"),
+      btn("panel:reportpick", "قناة التقارير", "📥"),
+      btn("panel:reportschedule", "التوقيت", "🕒"),
+      btn("panel:reportmention", "رتبة المنشن", "🔔")
+    ));
+  }
+  rows.push(new ActionRowBuilder().addComponents(
+    btn("panel:reportnow", "إرسال التقرير الآن", "📤", ButtonStyle.Success),
+    btn("panel:reportinactive", "الطاقم غير النشط", "😴")
+  ));
+  rows.push(backRow(app));
+  return panelView({ embeds: [embed], components: rows });
+}
+
+async function reportsSections(interaction, app) {
+  const { SECTIONS } = require("../reports/ReportService");
+  const sections = (interaction.values || []).filter((v) => SECTIONS[v]);
+  if (!sections.length) return reportsPanel(interaction, app);
+  app.reports.saveSchedule(interaction.guild.id, { sections });
+  return reportsPanel(interaction, app, `${app.config.emoji("success")} حُفظت الأقسام.`);
+}
+
+async function reportsScheduleModal(interaction, app) {
+  const s = app.reports.getSchedule(interaction.guild.id);
+  const field = (id, label, value, max) => new ActionRowBuilder().addComponents(
+    new TextInputBuilder().setCustomId(id).setLabel(label).setStyle(TextInputStyle.Short).setRequired(false).setMaxLength(max).setValue(String(value))
+  );
+  return safeModal(interaction, new ModalBuilder().setCustomId("panel:reportschedulesave").setTitle("توقيت التقرير الدوري").addComponents(
+    field("frequency", "التكرار: daily أو weekly", s?.frequency || "weekly", 6),
+    field("hour", "الساعة بتوقيت UTC (0-23)", s?.hour ?? 12, 2),
+    field("weekday", "يوم الأسبوع للأسبوعي (0 = الأحد … 6 = السبت)", s?.weekday ?? 6, 1)
+  ));
+}
+
+async function reportsScheduleSave(interaction, app) {
+  const val = (id) => String(interaction.fields.getTextInputValue(id) || "").trim();
+  const frequency = val("frequency") || "weekly";
+  const hour = Number(val("hour") || 12);
+  const weekday = Number(val("weekday") || 6);
+  if (!["daily", "weekly"].includes(frequency) || !Number.isInteger(hour) || hour < 0 || hour > 23 || !Number.isInteger(weekday) || weekday < 0 || weekday > 6) {
+    return safeReply(interaction, { content: `${app.config.emoji("error")} قيم غير صالحة: التكرار daily/weekly، الساعة 0-23، اليوم 0-6.`, flags: 64 });
+  }
+  app.reports.saveSchedule(interaction.guild.id, { frequency, hour, weekday });
+  return reportsPanel(interaction, app, `${app.config.emoji("success")} حُفظ التوقيت.`);
+}
+
+async function reportsMentionPick(interaction, app) {
   return safeUpdate(interaction, panelView({
-    embeds: [embed],
+    embeds: [buildEmbed({ title: "🔔 رتبة تُمنشن مع التقرير", color: app.config.color("primary") })],
     components: [
-      new ActionRowBuilder().addComponents(
-        btn("panel:reporttoggle", s?.enabled ? "إيقاف التقارير" : "تفعيل التقارير", "🔀"),
-        btn("panel:reportpick", "قناة التقارير", "📥")
-      ),
-      backRow(app)
+      new ActionRowBuilder().addComponents(new RoleSelectMenuBuilder().setCustomId("panel:reportmentionset").setPlaceholder("اختر الرتبة").setMinValues(0).setMaxValues(1)),
+      new ActionRowBuilder().addComponents(btn("panel:reports", "رجوع", "⬅️"), btn("panel:home", "الرئيسية", "🏠"))
     ]
   }));
+}
+
+async function reportsMentionSet(interaction, app) {
+  app.reports.saveSchedule(interaction.guild.id, { mention_role_id: interaction.values?.[0] || null });
+  return reportsPanel(interaction, app, `${app.config.emoji("success")} حُفظت رتبة المنشن.`);
+}
+
+/** يرسل تقرير آخر 7 أيام: في قناة التقارير إن وُجدت، وإلا ردًا مخفيًا. */
+async function reportsNow(interaction, app) {
+  const guild = interaction.guild;
+  await ackComponent(interaction);
+  const schedule = app.reports.getSchedule(guild.id);
+  const embed = await app.reportService.build(guild, 7, schedule?.sections || []);
+  const channel = schedule?.channel_id ? guild.channels.cache.get(schedule.channel_id) : null;
+  if (channel) {
+    const sent = await channel.send({ embeds: [embed] }).catch(() => null);
+    if (sent) return safeReply(interaction, { content: `${app.config.emoji("success")} أُرسل التقرير إلى <#${channel.id}>.`, flags: 64 });
+  }
+  return safeReply(interaction, { embeds: [embed], flags: 64 });
+}
+
+async function reportsInactive(interaction, app) {
+  const guild = interaction.guild;
+  if (!app.guildConfig.value(guild.id, "staff.baseRoleId")) {
+    return safeReply(interaction, { content: `${app.config.emoji("error")} حدّد رتبة الطاقم الأساسية أولًا (السلم الإداري ← رتبة الطاقم الأساسية).`, flags: 64 });
+  }
+  await ackComponent(interaction);
+  const rows = await app.reportService.inactiveStaff(guild, 7);
+  if (!rows.length) return safeReply(interaction, { content: "✅ كل الطاقم نشط.", flags: 64 });
+  const min = app.guildConfig.value(guild.id, "staff.minMessages") ?? 10;
+  return safeReply(interaction, {
+    embeds: [buildEmbed({
+      title: "😴 الطاقم غير النشط — آخر 7 أيام",
+      description: rows.slice(0, 25).map((m) => `• <@${m.id}> — \`${m.messages}\` رسالة`).join("\n"),
+      color: app.config.color("warning"),
+      footer: `الحد الأدنى: ${min} رسالة • الإجمالي: ${rows.length}`
+    })],
+    flags: 64
+  });
 }
 
 async function reportsToggle(interaction, app) {
@@ -1283,6 +1369,11 @@ async function reportsChannelPick(interaction, app) {
 
 async function reportsChannelSet(interaction, app) {
   const id = interaction.values[0];
+  const channel = interaction.guild.channels.cache.get(id);
+  const me = interaction.guild.members.me;
+  if (channel && me && channel.permissionsFor?.(me)?.has(PermissionFlagsBits.SendMessages) === false) {
+    return safeReply(interaction, { content: `${app.config.emoji("error")} لا أملك صلاحية الإرسال في <#${id}>.`, flags: 64 });
+  }
   app.reports.saveSchedule(interaction.guild.id, { channel_id: id });
   return reportsPanel(interaction, app);
 }

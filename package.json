@@ -1,6 +1,6 @@
 {
   "name": "arabic-admin-bot",
-  "version": "37.1.0",
+  "version": "37.2.0",
   "description": "بوت Discord إداري عربي احترافي - Modular, Multi-Guild, Production Ready",
   "main": "index.js",
   "type": "commonjs",

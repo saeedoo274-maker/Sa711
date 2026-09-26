@@ -36,7 +36,7 @@ const ACTIONS = {
 const SYSTEM_FLAGS = { economy: "economy.enabled", violations: "violations.enabled", flights: "flights.enabled" };
 
 /**
- * صفوف أزرار اللوحة البنكية الدائمة (تُستخدم في `/بنك panel` وفي محرّر الإمبيد
+ * صفوف أزرار اللوحة البنكية الدائمة (تُستخدم في /لوحة ← نشر اللوحات وفي محرّر الإمبيد
  * عبر الإجراء `sys:bank:*`). كل زر customId مطابق تمامًا لمفتاح في ACTIONS أعلاه،
  * فتشتغل بنفس منطق `_dispatch` بلا أي تكرار للكود.
  */

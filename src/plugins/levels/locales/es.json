@@ -25,7 +25,7 @@
     "settingsTitle": "Ajustes de niveles",
     "status": "Estado",
     "on": "Activado",
-    "off": "Desactivado — actívalo con /مستوى admin settings enabled:true",
+    "off": "Desactivado — actívalo desde /لوحة → Sistemas → Niveles",
     "messageXp": "XP por mensaje",
     "cooldown": "Enfriamiento",
     "voiceXp": "XP de voz",

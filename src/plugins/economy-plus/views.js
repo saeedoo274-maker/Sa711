@@ -311,31 +311,6 @@ async function adminExecute(ctx, sub, ShopService) {
     }, { ephemeral: true });
   }
 
-  if (sub === "settings") {
-    const updates = {};
-    for (const k of ["daily", "weekly", "monthly"]) if (o.getInteger(k) !== null) updates[`economy.${k}.amount`] = o.getInteger(k);
-    if (o.getBoolean("rob") !== null) updates["economy.rob.enabled"] = o.getBoolean("rob");
-    if (o.getBoolean("loans") !== null) updates["economy.loans.enabled"] = o.getBoolean("loans");
-    if (o.getInteger("interest") !== null) updates["economy.loans.interestPercent"] = o.getInteger("interest");
-    if (o.getInteger("market-tax") !== null) updates["economy.market.taxPercent"] = o.getInteger("market-tax");
-    if (Object.keys(updates).length) app.guildConfig.setMany(guild.id, updates);
-    const c = app.economyPlus.config(guild.id);
-    const fmt = (v) => app.economyService.format(guild.id, v || 0);
-    return ctx.reply({
-      embeds: [ctx.embed({
-        title: `⚙️ ${t("eco.settingsTitle")}`,
-        color: "info",
-        fields: [
-          { name: t("eco.claim.daily"), value: fmt(c.daily?.amount), inline: true },
-          { name: t("eco.claim.weekly"), value: fmt(c.weekly?.amount), inline: true },
-          { name: t("eco.claim.monthly"), value: fmt(c.monthly?.amount), inline: true },
-          { name: t("eco.robLabel"), value: c.rob?.enabled ? "✅" : "❌", inline: true },
-          { name: t("eco.loans"), value: `${c.loans?.enabled ? "✅" : "❌"} ${c.loans?.interestPercent ?? 10}%`, inline: true },
-          { name: t("eco.marketTax"), value: `${c.market?.taxPercent ?? 5}%`, inline: true }
-        ]
-      })]
-    }, { ephemeral: true });
-  }
   return ctx.fail("errors.actionFailed", { details: sub });
 }
 

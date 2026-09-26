@@ -129,15 +129,7 @@ module.exports = [
           .addIntegerOption((o) => o.setName("max").setDescription("أعلى أجر").setRequired(true).setMinValue(1))
           .addIntegerOption((o) => o.setName("level").setDescription("مستوى مطلوب").setMinValue(0)))
         .addSubcommand((s) => s.setName("job-remove").setDescription("حذف وظيفة").addIntegerOption((o) => o.setName("job").setDescription("الوظيفة").setRequired(true).setAutocomplete(true)))
-        .addSubcommand((s) => s.setName("loans").setDescription("طلبات القروض المعلقة"))
-        .addSubcommand((s) => s.setName("settings").setDescription("إعدادات")
-          .addIntegerOption((o) => o.setName("daily").setDescription("مبلغ اليومي").setMinValue(0))
-          .addIntegerOption((o) => o.setName("weekly").setDescription("مبلغ الأسبوعي").setMinValue(0))
-          .addIntegerOption((o) => o.setName("monthly").setDescription("مبلغ الشهري").setMinValue(0))
-          .addBooleanOption((o) => o.setName("rob").setDescription("تفعيل السرقة"))
-          .addBooleanOption((o) => o.setName("loans").setDescription("تفعيل القروض"))
-          .addIntegerOption((o) => o.setName("interest").setDescription("فائدة القرض %").setMinValue(0).setMaxValue(200))
-          .addIntegerOption((o) => o.setName("market-tax").setDescription("ضريبة السوق %").setMinValue(0).setMaxValue(50)))),
+        .addSubcommand((s) => s.setName("loans").setDescription("طلبات القروض المعلقة"))),
 
     async autocomplete(interaction, app) {
       const focused = interaction.options.getFocused(true);

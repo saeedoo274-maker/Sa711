@@ -18,15 +18,12 @@ module.exports = [
       { name: "تصفير-النقاط", required: false, description: "تصفير جميع النقاط" },
       { name: "مباشرين", required: false, description: "كشف العسكريين المباشرين" },
       { name: "دوامي", required: false, description: "سجل دوامك وإجمالي ساعاتك" },
-      { name: "لوحة-عمليات", required: false, description: "نشر لوحة مركز العمليات" },
-      { name: "لوحة-بلاغات", required: false, description: "نشر لوحة البلاغات" },
       { name: "بلاغات", required: false, description: "عرض البلاغات وإحصائياتها" },
       { name: "اعدادات", required: false, description: "ضبط الرتب والقنوات" }
     ],
     examples: [
       "/عسكرية نقاطي",
       "/عسكرية نقطة-اضافة user:@أحمد amount:10",
-      "/عسكرية لوحة-عمليات channel:#مركز-العمليات",
       "/عسكرية اعدادات duty-role:@مباشر duty-log:#سجل-الدوام"
     ],
     category: "military",
@@ -67,14 +64,6 @@ module.exports = [
       )
       .addSubcommand((s) => s.setName("دوامي").setDescription("سجل دوامك")
         .addUserOption((o) => o.setName("user").setDescription("عسكري آخر (للإدارة)")))
-      .addSubcommand((s) =>
-        s.setName("لوحة-عمليات").setDescription("نشر لوحة مركز العمليات")
-          .addChannelOption((o) => o.setName("channel").setDescription("القناة").setRequired(true).addChannelTypes(ChannelType.GuildText))
-      )
-      .addSubcommand((s) =>
-        s.setName("لوحة-بلاغات").setDescription("نشر لوحة البلاغات")
-          .addChannelOption((o) => o.setName("channel").setDescription("القناة").setRequired(true).addChannelTypes(ChannelType.GuildText))
-      )
       .addSubcommand((s) => s.setName("بلاغات").setDescription("عرض البلاغات")
         .addStringOption((o) => o.setName("status").setDescription("الحالة")
           .addChoices({ name: "مفتوح", value: "open" }, { name: "قيد المعالجة", value: "claimed" }, { name: "مغلق", value: "closed" })))
@@ -245,7 +234,7 @@ module.exports = [
         }, { ephemeral: true });
       }
 
-      // ---------- إعداد ونشر اللوحات: للأدمن ----------
+      // ---------- الإعداد: للأدمن (نشر اللوحات من /لوحة ← نشر اللوحات) ----------
 
       if (level < Level.ADMIN) return ctx.fail("errors.noPermission");
 
@@ -319,30 +308,7 @@ module.exports = [
         }, { ephemeral: true });
       }
 
-      // نشر اللوحات
-      const channel = ctx.interaction.options.getChannel("channel");
-      const me = ctx.guild.members.me;
-      if (!channel.permissionsFor(me)?.has(PermissionFlagsBits.SendMessages)) {
-        return ctx.fail("errors.actionFailed", { details: `لا أملك صلاحية الإرسال في <#${channel.id}>.` });
-      }
-
-      if (sub === "لوحة-عمليات") {
-        const payload = svc.operationsPanelPayload(guildId);
-        const message = await channel.send(payload).catch(() => null);
-        if (!message) return ctx.fail("errors.actionFailed", { details: "تعذّر نشر اللوحة." });
-
-        // نحفظ موقع اللوحة ليُحدَّث عدّاد المباشرين فيها تلقائيًا
-        ctx.app.guildConfig.setMany(guildId, {
-          "military.panelChannelId": channel.id,
-          "military.panelMessageId": message.id
-        });
-        return ctx.success(`تم نشر لوحة مركز العمليات في <#${channel.id}>.`);
-      }
-
-      // لوحة-بلاغات
-      const message = await channel.send(svc.reportsPanelPayload()).catch(() => null);
-      if (!message) return ctx.fail("errors.actionFailed", { details: "تعذّر نشر اللوحة." });
-      return ctx.success(`تم نشر لوحة البلاغات في <#${channel.id}>.`);
+      return ctx.fail("errors.actionFailed", { details: sub || "?" });
     }
   }
 ];

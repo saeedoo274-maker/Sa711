@@ -25,7 +25,7 @@
     "settingsTitle": "إعدادات المستويات",
     "status": "الحالة",
     "on": "مفعّل",
-    "off": "معطّل — فعّله بـ /مستوى admin settings enabled:true",
+    "off": "معطّل — فعّله من /لوحة ← الأنظمة والإعدادات ← المستويات",
     "messageXp": "XP الرسالة",
     "cooldown": "التبريد",
     "voiceXp": "XP الصوت",

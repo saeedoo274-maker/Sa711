@@ -288,6 +288,8 @@ class Application {
     for (const moduleName of this.registry.modules.keys()) {
       if (!this.registry.byModule(moduleName).some((c) => c.plugin)) this.features.register(moduleName, { defaultEnabled: true });
     }
+    // أنظمة قديمة صار تحكمها كله من /لوحة بعد حذف أوامرها — تبقى أعلامها كما كانت
+    for (const moduleName of ["roles", "services", "reports"]) this.features.register(moduleName, { defaultEnabled: true });
 
     // ---- الإضافات: تنفيذ التسجيل بعد جاهزية كل الخدمات ----
     this.plugins.register();

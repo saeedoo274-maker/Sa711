@@ -1,8 +1,6 @@
 const { SlashCommandBuilder, PermissionFlagsBits } = require("discord.js");
 const { Level } = require("../../../core/permissions/PermissionService");
 const { buildEmbed, parseAmount } = require("../../../core/utils/helpers");
-const { containerPayload } = require("../../../core/utils/componentsV2");
-const { bankPanelRows } = require("../interactions");
 
 const SYSTEM = "economy.enabled";
 
@@ -67,10 +65,6 @@ module.exports = [
       .addSubcommand((s) =>
         s.setName("tax").setDescription("حساب المبلغ الإجمالي شامل الضريبة لمبلغ صافٍ")
           .addStringOption((o) => o.setName("amount").setDescription("المبلغ الصافي، يقبل صيغة مختصرة مثل 10k أو 1.5m").setRequired(true))
-      )
-      .addSubcommand((s) =>
-        s.setName("panel").setDescription("نشر لوحة بنكية دائمة بالشكل الحديث في قناة")
-          .addChannelOption((o) => o.setName("channel").setDescription("القناة").setRequired(true))
       ),
 
     async execute(ctx) {
@@ -117,37 +111,6 @@ module.exports = [
             ]
           })]
         }, { ephemeral: true });
-      }
-
-      if (sub === "panel") {
-        // نشر لوحة دائمة إجراء إداري — الأمر نفسه متاح للجميع لبقية العمليات
-        if (ctx.app.permissions.resolveLevel(ctx.member) < Level.ADMIN) return ctx.fail("errors.noPermission");
-
-        const channel = ctx.interaction.options.getChannel("channel");
-        if (!channel?.isTextBased?.()) return ctx.fail("errors.actionFailed", { details: "اختر قناة نصية." });
-
-        const me = ctx.guild.members.me;
-        if (!channel.permissionsFor(me)?.has(PermissionFlagsBits.SendMessages)) {
-          return ctx.fail("errors.actionFailed", { details: `لا أملك صلاحية الإرسال في <#${channel.id}>.` });
-        }
-
-        const payload = containerPayload({
-          text:
-            "## 🏦 النظام البنكي\n\n" +
-            "مرحبًا بك في نظام البنك، يمكنك من خلاله إدارة حسابك البنكي والاستفادة من جميع الخدمات المتاحة.\n\n" +
-            "👤 فتح حساب بنكي\n" +
-            "💵 معرفة الرصيد\n" +
-            "💲 تحويل المبالغ\n" +
-            "📋 متابعة العمليات البنكية\n" +
-            "📋 إدارة الحساب والخدمات",
-          color: ctx.color("primary"),
-          rows: bankPanelRows()
-        });
-
-        const message = await channel.send(payload).catch(() => null);
-        if (!message) return ctx.fail("errors.actionFailed", { details: "تعذّر نشر اللوحة." });
-
-        return ctx.success(`تم نشر اللوحة البنكية في <#${channel.id}>.`);
       }
 
       if (sub === "statement") {

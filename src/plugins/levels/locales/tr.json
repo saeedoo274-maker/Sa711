@@ -25,7 +25,7 @@
     "settingsTitle": "Seviye ayarları",
     "status": "Durum",
     "on": "Etkin",
-    "off": "Kapalı — /مستوى admin settings enabled:true ile açın",
+    "off": "Kapalı — /لوحة → Sistemler → Seviyeler üzerinden açın",
     "messageXp": "Mesaj XP",
     "cooldown": "Bekleme",
     "voiceXp": "Ses XP",

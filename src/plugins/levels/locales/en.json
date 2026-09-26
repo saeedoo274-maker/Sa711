@@ -25,7 +25,7 @@
     "settingsTitle": "Level settings",
     "status": "Status",
     "on": "Enabled",
-    "off": "Disabled — enable with /مستوى admin settings enabled:true",
+    "off": "Disabled — enable it from /لوحة → Systems → Levels",
     "messageXp": "Message XP",
     "cooldown": "Cooldown",
     "voiceXp": "Voice XP",

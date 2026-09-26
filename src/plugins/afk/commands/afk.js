@@ -13,8 +13,7 @@ module.exports = [
     arguments: [
       { name: "set", required: false, description: "تفعيل الغياب بسبب ومدة اختيارية" },
       { name: "list", required: false, description: "الغائبون الآن" },
-      { name: "clear", required: false, description: "إزالة غياب عضو (مشرف)" },
-      { name: "settings", required: false, description: "إعدادات النظام (أدمن)" }
+      { name: "clear", required: false, description: "إزالة غياب عضو (مشرف)" }
     ],
     examples: ["/afk set reason:اجتماع duration:1h", "!afk نايم", "!afk list"],
     category: "afk",
@@ -28,11 +27,7 @@ module.exports = [
         .addStringOption((o) => o.setName("duration").setDescription("المدة (مثل 30m أو 2h) — تُزال بعدها تلقائيًا")))
       .addSubcommand((s) => s.setName("list").setDescription("الغائبون الآن"))
       .addSubcommand((s) => s.setName("clear").setDescription("إزالة غياب عضو (مشرف)")
-        .addUserOption((o) => o.setName("user").setDescription("العضو").setRequired(true)))
-      .addSubcommand((s) => s.setName("settings").setDescription("إعدادات الغياب (أدمن)")
-        .addBooleanOption((o) => o.setName("nickname").setDescription("إضافة بادئة للاسم"))
-        .addStringOption((o) => o.setName("prefix").setDescription("البادئة").setMaxLength(12))
-        .addChannelOption((o) => o.setName("ignore-channel").setDescription("تجاهل/إلغاء تجاهل قناة للتنبيهات"))),
+        .addUserOption((o) => o.setName("user").setDescription("العضو").setRequired(true))),
 
     async execute(ctx) {
       const app = ctx.app;
@@ -77,32 +72,6 @@ module.exports = [
         return removed ? ctx.success(t("afk.cleared", { user: `<@${user.id}>` })) : ctx.fail("errors.actionFailed", { details: t("afk.notAfk") });
       }
 
-      if (sub === "settings") {
-        if (level < Level.ADMIN) return ctx.fail("errors.noPermission");
-        const o = ctx.isSlash ? ctx.interaction.options : null;
-        const updates = {};
-        if (o?.getBoolean("nickname") !== null && o?.getBoolean("nickname") !== undefined) updates["afk.setNickname"] = o.getBoolean("nickname");
-        if (o?.getString("prefix")) updates["afk.nickPrefix"] = `${o.getString("prefix").trim()} `;
-        const ch = o?.getChannel("ignore-channel");
-        if (ch) {
-          const set = new Set(app.afk.config(ctx.guild.id).ignoredChannels || []);
-          if (set.has(ch.id)) set.delete(ch.id);
-          else set.add(ch.id);
-          updates["afk.ignoredChannels"] = [...set];
-        }
-        if (Object.keys(updates).length) app.guildConfig.setMany(ctx.guild.id, updates);
-        const cfg = app.afk.config(ctx.guild.id);
-        return ctx.reply({
-          embeds: [ctx.embed({
-            title: `⚙️ ${t("afk.settingsTitle")}`,
-            color: "info",
-            fields: [
-              { name: t("afk.nickLabel"), value: cfg.setNickname ? `✅ \`${cfg.nickPrefix}\`` : "❌", inline: true },
-              { name: t("afk.ignoredLabel"), value: (cfg.ignoredChannels || []).map((c) => `<#${c}>`).join(" ") || "—", inline: true }
-            ]
-          })]
-        }, { ephemeral: true });
-      }
       return ctx.fail("errors.actionFailed", { details: sub });
     }
   }

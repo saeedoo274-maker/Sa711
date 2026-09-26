@@ -45,8 +45,11 @@ test("الاستئنافات", async (t) => {
     assert.equal(app.appeals.eligibility(guild.id, alice.id, c).reason, "disabled");
   });
 
-  await t.test("الإعداد عبر /اعداد appeals", async () => {
-    await slash("اعداد", "appeals", { channel: review, "cooldown-days": 1, max: 2 });
+  await t.test("الإعداد عبر /لوحة ← الاستئنافات", async () => {
+    await H.panelClick(app, admin, general, "panel:syscs:apl:0", { values: [review.id], kind: "select" });
+    await H.panelClick(app, admin, general, "panel:sysns:apl:0", { kind: "modal", fields: { n0: "1", n1: "2" } });
+    assert.equal(app.appeals.config(guild.id).cooldownMs, 86_400_000);
+    assert.equal(app.appeals.config(guild.id).maxPerCase, 2);
     assert.equal(app.appeals.config(guild.id).channelId, review.id);
     const row = app.appeals.dmComponents(guild, "ban")[0].toJSON();
     assert.equal(row.components[0].custom_id, `appeal:open:${guild.id}:ban`);

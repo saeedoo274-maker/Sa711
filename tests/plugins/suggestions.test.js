@@ -35,7 +35,9 @@ test("نظام الاقتراحات", async (t) => {
   });
 
   await t.test("الإعداد ثم النشر برقم تسلسلي وأزرار", async () => {
-    await slash(admin, "settings", { channel: board, archive, cooldown: 5 });
+    await H.panelClick(app, admin, cmdChannel, "panel:syscs:sug:0", { values: [board.id], kind: "select" });
+    await H.panelClick(app, admin, cmdChannel, "panel:syscs:sug:1", { values: [archive.id], kind: "select" });
+    await H.panelClick(app, admin, cmdChannel, "panel:sysns:sug:0", { kind: "modal", fields: { n0: "5" } });
     const i = await slash(author, "new", { content: "إضافة قناة للألعاب الجماعية" });
     assert.match(H.textOf(i.replies), /#1/);
     const s = app.suggestionsRepo.byNumber(guild.id, 1);

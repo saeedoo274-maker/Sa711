@@ -1,7 +1,7 @@
-const { SlashCommandBuilder, ChannelType } = require("discord.js");
+const { SlashCommandBuilder } = require("discord.js");
 const { Level } = require("../../../core/permissions/PermissionService");
 const { confirmRow, stamp } = require("../../../core/interactions/ui");
-const { leaderboardPayload, rewardsPayload, statusPayload } = require("../views");
+const { leaderboardPayload, rewardsPayload } = require("../views");
 
 const periodChoices = [
   { name: "الكل", value: "all" },
@@ -39,7 +39,6 @@ module.exports = [
     cooldown: 3000,
     permissions: { level: Level.EVERYONE },
     // إعدادات النظام تعمل وهو معطّل حتى يمكن تفعيله منها
-    featureExempt: (ctx) => ctx.subcommandGroup() === "admin" && ["settings", "status"].includes(ctx.subcommand()),
     slash: new SlashCommandBuilder()
       .setName("مستوى")
       .setDescription("نظام المستويات والخبرة")
@@ -83,20 +82,7 @@ module.exports = [
           .addStringOption((o) => o.setName("mode").setDescription("النوع").setRequired(true).addChoices(
             { name: "تجاهل قناة", value: "channel" }, { name: "تجاهل رتبة", value: "role" }, { name: "قناة XP حصرية", value: "only" }))
           .addChannelOption((o) => o.setName("channel").setDescription("القناة"))
-          .addRoleOption((o) => o.setName("role").setDescription("الرتبة")))
-        .addSubcommand((s) => s.setName("settings").setDescription("إعدادات النظام")
-          .addBooleanOption((o) => o.setName("enabled").setDescription("تفعيل النظام"))
-          .addStringOption((o) => o.setName("levelup").setDescription("إعلان الترقية").addChoices(
-            { name: "نفس القناة", value: "current" }, { name: "قناة محددة", value: "channel" }, { name: "الخاص", value: "dm" }, { name: "بلا إعلان", value: "off" }))
-          .addChannelOption((o) => o.setName("channel").setDescription("قناة الإعلان").addChannelTypes(ChannelType.GuildText, ChannelType.GuildAnnouncement))
-          .addStringOption((o) => o.setName("message").setDescription("نص الإعلان (يدعم {USER} {LEVEL})").setMaxLength(500).setAutocomplete(true))
-          .addIntegerOption((o) => o.setName("min-xp").setDescription("أقل XP للرسالة").setMinValue(0).setMaxValue(1000))
-          .addIntegerOption((o) => o.setName("max-xp").setDescription("أعلى XP للرسالة").setMinValue(0).setMaxValue(1000))
-          .addIntegerOption((o) => o.setName("cooldown").setDescription("التبريد بالثواني").setMinValue(0).setMaxValue(3600))
-          .addIntegerOption((o) => o.setName("voice-xp").setDescription("XP لكل دقيقة صوت").setMinValue(0).setMaxValue(500))
-          .addIntegerOption((o) => o.setName("daily-cap").setDescription("سقف يومي (0 = بلا)").setMinValue(0))
-          .addBooleanOption((o) => o.setName("stack").setDescription("تكديس رتب المكافآت")))
-        .addSubcommand((s) => s.setName("status").setDescription("عرض الإعدادات والإحصاءات"))),
+          .addRoleOption((o) => o.setName("role").setDescription("الرتبة")))),
 
     /** اقتراح المتغيرات أثناء كتابة نص الإعلان. */
     async autocomplete(interaction) {
@@ -129,8 +115,6 @@ module.exports = [
       // ---- الإدارة ----
       if (!isAdmin(ctx)) return ctx.fail("errors.noPermission");
       const t = (k, v) => ctx.t(k, v);
-
-      if (sub === "status") return ctx.reply(statusPayload(app, guild), { ephemeral: true });
 
       if (["give", "take", "set"].includes(sub)) {
         const member = await ctx.getMember("user", 0);
@@ -222,41 +206,6 @@ module.exports = [
         else set.delete(target.id);
         app.guildConfig.set(guild.id, `levels.${key}`, [...set]);
         return ctx.success(t(added ? "xp.listAdded" : "xp.listRemoved", { target: mode === "role" ? `<@&${target.id}>` : `<#${target.id}>`, list: t(`xp.list.${mode}`) }));
-      }
-
-      if (sub === "settings") {
-        const o = ctx.isSlash ? ctx.interaction.options : null;
-        if (!o) return ctx.reply(statusPayload(app, guild), { ephemeral: true });
-        const updates = {};
-        const enabled = o.getBoolean("enabled");
-        const mode = o.getString("levelup");
-        const channel = o.getChannel("channel");
-        const message = o.getString("message");
-        const min = o.getInteger("min-xp");
-        const max = o.getInteger("max-xp");
-        const cooldown = o.getInteger("cooldown");
-        const voice = o.getInteger("voice-xp");
-        const cap = o.getInteger("daily-cap");
-        const stack = o.getBoolean("stack");
-        if (mode) updates["levels.levelUp.mode"] = mode;
-        if (channel) updates["levels.levelUp.channelId"] = channel.id;
-        if (message) updates["levels.levelUp.message"] = message;
-        if (min !== null) updates["levels.messageXpMin"] = min;
-        if (max !== null) updates["levels.messageXpMax"] = max;
-        if (cooldown !== null) updates["levels.cooldownMs"] = cooldown * 1000;
-        if (voice !== null) updates["levels.voiceXpPerMinute"] = voice;
-        if (cap !== null) updates["levels.dailyCap"] = cap;
-        if (stack !== null) updates["levels.stackRewards"] = stack;
-        const nextMin = min ?? app.levels.config(guild.id).messageXpMin;
-        const nextMax = max ?? app.levels.config(guild.id).messageXpMax;
-        if (nextMin > nextMax) return ctx.fail("errors.actionFailed", { details: t("xp.minMax") });
-        if ((mode || app.levels.config(guild.id).levelUp?.mode) === "channel" && !(channel || app.levels.config(guild.id).levelUp?.channelId)) {
-          return ctx.fail("errors.actionFailed", { details: t("xp.needChannel") });
-        }
-        if (Object.keys(updates).length) app.guildConfig.setMany(guild.id, updates);
-        if (enabled !== null) app.features.setForGuild(guild.id, "levels", enabled);
-        if (!Object.keys(updates).length && enabled === null) return ctx.reply(statusPayload(app, guild), { ephemeral: true });
-        return ctx.reply(statusPayload(app, guild), { ephemeral: true });
       }
 
       return ctx.fail("errors.actionFailed", { details: sub });

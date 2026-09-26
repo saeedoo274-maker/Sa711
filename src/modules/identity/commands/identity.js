@@ -9,9 +9,8 @@ module.exports = [
     name: "هوية",
     aliases: ["identity", "id"],
     description: "الهوية الوطنية: إصدار بطاقات بأرقام متسلسلة، مراجعة، وبحث في السجل المدني.",
-    usage: "/هوية لوحة channel:#الأحوال-المدنية",
+    usage: "/هوية بطاقتي",
     arguments: [
-      { name: "لوحة", required: false, description: "نشر لوحة إنشاء الهوية" },
       { name: "بطاقتي", required: false, description: "عرض بطاقتك" },
       { name: "بحث", required: false, description: "بحث في السجل المدني بالاسم أو الرقم" },
       { name: "معلقة", required: false, description: "الطلبات بانتظار المراجعة" },
@@ -20,7 +19,6 @@ module.exports = [
       { name: "قالب", required: false, description: "ضبط صورة قالب البطاقة ومواضع النص" }
     ],
     examples: [
-      "/هوية لوحة channel:#الأحوال-المدنية",
       "/هوية اعدادات review:#مراجعة-الهويات citizen-role:@مواطن",
       "/هوية قالب url:https://example.com/card.png"
     ],
@@ -40,10 +38,6 @@ module.exports = [
       .addSubcommand((s) =>
         s.setName("حذف").setDescription("حذف هوية عضو")
           .addUserOption((o) => o.setName("user").setDescription("العضو").setRequired(true))
-      )
-      .addSubcommand((s) =>
-        s.setName("لوحة").setDescription("نشر لوحة إنشاء الهوية")
-          .addChannelOption((o) => o.setName("channel").setDescription("القناة").setRequired(true).addChannelTypes(ChannelType.GuildText))
       )
       .addSubcommand((s) =>
         s.setName("اعدادات").setDescription("ضبط النظام")
@@ -122,17 +116,6 @@ module.exports = [
           return ctx.fail("errors.actionFailed", { details: "ما عنده هوية مسجّلة." });
         }
         return ctx.success(`تم حذف هوية <@${user.id}>. يقدر يقدّم من جديد.`);
-      }
-
-      if (sub === "لوحة") {
-        const channel = ctx.interaction.options.getChannel("channel");
-        const me = ctx.guild.members.me;
-        if (!channel.permissionsFor(me)?.has(PermissionFlagsBits.SendMessages)) {
-          return ctx.fail("errors.actionFailed", { details: `لا أملك صلاحية الإرسال في <#${channel.id}>.` });
-        }
-        const message = await channel.send(svc.panelPayload(ctx.guild)).catch(() => null);
-        if (!message) return ctx.fail("errors.actionFailed", { details: "تعذّر نشر اللوحة." });
-        return ctx.success(`تم نشر لوحة الهوية في <#${channel.id}>.`);
       }
 
       if (sub === "قالب") {

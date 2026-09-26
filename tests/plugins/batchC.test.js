@@ -15,16 +15,13 @@ test("السجلات، سجل الأعضاء، التحليلات، الترحي
   const staffRole = H.fakeRole("860000000000000086");
   const alice = H.fakeMember(guild, "700000000000000007");
 
-  const settings = async (sub, options = {}) => {
-    app.commands.cooldowns.clear();
-    const i = H.fakeSlash(admin, general, { command: "اعداد", sub, options });
-    await app.commands.handleInteraction(i);
-    return i;
-  };
+  // الإعدادات صارت من /لوحة ← الأنظمة والإعدادات
+  const panel = (customId, opts = {}) => H.panelClick(app, admin, general, customId, opts);
+  const pick = (customId, values) => panel(customId, { values, kind: "select" });
 
-  await t.test("الإعدادات: قنوات السجلات عبر /اعداد logs", async () => {
+  await t.test("الإعدادات: قنوات السجلات عبر /لوحة ← السجلات", async () => {
     for (const category of ["messages", "members", "moderation", "roles", "tickets", "suggestions", "verification"]) {
-      await settings("logs", { category, channel: logCh });
+      await pick(`panel:sysa:logs:cat:${category}`, [logCh.id]);
     }
     assert.equal(app.guildConfig.value(guild.id, "logs.messages"), logCh.id);
   });
@@ -41,13 +38,14 @@ test("السجلات، سجل الأعضاء، التحليلات، الترحي
   });
 
   await t.test("تعطيل نوع سجل واحد لا يؤثر على غيره، و all يعيد الكل", async () => {
-    await settings("logs", { event: "messageDelete", enabled: false });
+    await pick("panel:sysa:logs:ev:0", ["messageDelete"]);
+    assert.equal(app.logs.isEnabled(guild.id, "messageDelete"), false);
     const before = logCh.sent.length;
     await app.logs.messageDelete(H.fakeMessage(alice, general, "لن تُسجَّل"));
     assert.equal(logCh.sent.length, before);
     await app.logs.memberJoin(alice);
     assert.equal(logCh.sent.length, before + 1, "سجل الدخول ما زال يعمل");
-    await settings("logs", { event: "all", enabled: true });
+    await panel("panel:sysa:logs:allon");
     assert.equal(app.logs.isEnabled(guild.id, "messageDelete"), true);
   });
 
@@ -133,7 +131,10 @@ test("السجلات، سجل الأعضاء، التحليلات، الترحي
   });
 
   await t.test("الترحيب: قناة + متغيرات + خاص + معاينة، والوداع", async () => {
-    await settings("welcome", { channel: welcomeCh, dm: true, image: true });
+    await pick("panel:syscs:wel:0", [welcomeCh.id]);
+    await pick("panel:sysb:wel", ["2"]); // الرسالة الخاصة
+    await pick("panel:sysb:wel", ["1"]); // صورة الترحيب
+    assert.equal(app.welcome.config(guild.id).dm.enabled, true);
     app.guildConfig.set(guild.id, "welcome.message", "أهلًا {USER} رقم {MEMBER_COUNT} في {SERVER_NAME}");
     const newbie = H.fakeMember(guild, "700000000000000055");
     await app.plugins.dispatch("guildMemberAdd", [newbie]);
@@ -143,10 +144,10 @@ test("السجلات، سجل الأعضاء، التحليلات، الترحي
     assert.equal(!!sent.payload.files?.length, require("../../src/core/utils/canvas").available());
     assert.ok(app.__sent.some((d) => d.to === newbie.id), "رسالة خاصة");
 
-    const preview = await settings("welcome", { test: true });
+    const preview = await panel("panel:sysa:wel:test");
     assert.match(H.textOf(preview.replies), /معاينة/);
 
-    await settings("goodbye", { channel: welcomeCh });
+    await pick("panel:syscs:wel:2", [welcomeCh.id]);
     await app.plugins.dispatch("guildMemberRemove", [newbie]);
     assert.match(welcomeCh.sent.at(-1).content, /وداعًا/);
   });
@@ -171,7 +172,9 @@ test("السجلات، سجل الأعضاء، التحليلات، الترحي
     const unverified = H.fakeRole("870000000000000088", { position: 2 });
     guild.roles.cache.set(verified.id, verified);
     guild.roles.cache.set(unverified.id, unverified);
-    await settings("verify", { role: verified, unverified, publish: general });
+    await pick("panel:sysrs:ver:0", [verified.id]);
+    await pick("panel:sysrs:ver:1", [unverified.id]);
+    await pick("panel:sysa:pub:ch:ver", [general.id]);
     assert.match(JSON.stringify(general.sent.at(-1).payload.components[0].toJSON()), /verify:go/);
 
     const joiner = H.fakeMember(guild, "700000000000000066");
@@ -189,19 +192,18 @@ test("السجلات، سجل الأعضاء، التحليلات، الترحي
   });
 
   await t.test("الإعدادات: اللغة والأنظمة والثيم", async () => {
-    await settings("features", { name: "levels", enabled: true });
+    await pick("panel:sysa:feat:flip:0", ["levels"]);
     assert.equal(app.features.isEnabled(guild.id, "levels"), true);
-    const bad = await settings("theme", { "color-name": "primary", color: "zzz" });
+    const theme = (fields) => panel("panel:sysa:theme:edit", { kind: "modal", fields: { primary: "", footer: "", logo: "", banner: "", ...fields } });
+    const bad = await theme({ primary: "zzz" });
     assert.match(H.textOf(bad.replies), /غير صالحة/);
-    await settings("theme", { "color-name": "primary", color: "#ABCDEF", footer: "فريق السيرفر" });
+    await theme({ primary: "#ABCDEF", footer: "فريق السيرفر" });
     assert.equal(app.theme.color(guild.id, "primary"), 0xabcdef);
-    const lang = await settings("language", { lang: "en" });
+    const lang = await pick("panel:sysa:lang:set", ["en"]);
     assert.match(H.textOf(lang.replies), /Bot language/);
     app.guildConfig.set(guild.id, "language", "ar");
 
-    app.commands.cooldowns.clear();
-    const denied = H.fakeSlash(alice, general, { command: "اعداد", sub: "features", options: {} });
-    await app.commands.handleInteraction(denied);
+    const denied = await H.panelClick(app, alice, general, "panel:sysv:feat");
     assert.match(H.textOf(denied.replies), /الصلاحية/);
   });
 });

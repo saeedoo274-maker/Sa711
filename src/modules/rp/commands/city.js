@@ -9,7 +9,7 @@ module.exports = [
   {
     name: "مدينة",
     aliases: ["city", "rp"],
-    description: "إدارة أنظمة المدينة: العناصر، الوظائف، السرقات، اللوحات، والإعدادات.",
+    description: "إدارة أنظمة المدينة: العناصر، الوظائف، السرقات، والإعدادات. نشر لوحاتها من /لوحة ← نشر اللوحات.",
     usage: "/مدينة عنصر-انشاء key:wood label:خشب sell:17",
     arguments: [
       { name: "عنصر-انشاء", required: false, description: "تعريف عنصر جديد" },
@@ -22,15 +22,13 @@ module.exports = [
       { name: "سرقة-انشاء", required: false, description: "تعريف نوع سرقة" },
       { name: "سرقة-تعديل", required: false, description: "تعديل سرقة" },
       { name: "موقع-اضافة", required: false, description: "إضافة موقع عمل" },
-      { name: "لوحة", required: false, description: "نشر لوحة (وظائف/سوق/سرقة/عمل)" },
       { name: "اعطاء", required: false, description: "إعطاء عنصر لعضو" },
       { name: "سحب", required: false, description: "سحب عنصر من عضو" },
       { name: "اعدادات", required: false, description: "ضبط الرتب والقنوات" }
     ],
     examples: [
       "/مدينة عنصر-انشاء key:wood label:خشب sell:17",
-      "/مدينة وظيفة-انشاء key:logger label:حطاب emoji:🪓 reward-item:wood",
-      "/مدينة لوحة type:jobs channel:#تقديم-وظيفة"
+      "/مدينة وظيفة-انشاء key:logger label:حطاب emoji:🪓 reward-item:wood"
     ],
     category: "rp",
     slashOnly: true,
@@ -136,20 +134,6 @@ module.exports = [
           .addStringOption((o) => o.setName("note").setDescription("ملاحظة").setMaxLength(300))
       )
       .addSubcommand((s) =>
-        s.setName("لوحة").setDescription("نشر لوحة في قناة")
-          .addStringOption((o) =>
-            o.setName("type").setDescription("نوع اللوحة").setRequired(true)
-              .addChoices(
-                { name: "اختيار الوظائف", value: "jobs" },
-                { name: "بدء عمل (وظيفة محددة)", value: "job" },
-                { name: "السوق السوداء", value: "market" },
-                { name: "سرقة محددة", value: "robbery" }
-              )
-          )
-          .addChannelOption((o) => o.setName("channel").setDescription("القناة").setRequired(true).addChannelTypes(ChannelType.GuildText))
-          .addStringOption((o) => o.setName("key").setDescription("مفتاح الوظيفة/السرقة (للنوعين المحددين)").setAutocomplete(true))
-      )
-      .addSubcommand((s) =>
         s.setName("اعطاء").setDescription("إعطاء عنصر لعضو")
           .addUserOption((o) => o.setName("user").setDescription("العضو").setRequired(true))
           .addStringOption((o) => o.setName("item").setDescription("العنصر").setRequired(true).setAutocomplete(true))
@@ -216,13 +200,6 @@ module.exports = [
         else if (sub?.startsWith("وظيفة")) pool = app.rp.listJobs(guildId).map((j) => ({ name: j.label, value: j.key }));
         else if (sub?.startsWith("سرقة")) pool = app.rp.listRobberies(guildId).map((r) => ({ name: r.label, value: r.key }));
         else if (sub?.startsWith("ممتلك")) pool = app.rp.listProperties(guildId).map((r) => ({ name: `${r.label} (${r.key})`, value: r.key }));
-        else {
-          // لوحة: نعرض الوظائف والسرقات معًا لأن النوع يحدد المقصود
-          pool = [
-            ...app.rp.listJobs(guildId).map((j) => ({ name: `وظيفة: ${j.label}`, value: j.key })),
-            ...app.rp.listRobberies(guildId).map((r) => ({ name: `سرقة: ${r.label}`, value: r.key }))
-          ];
-        }
       }
 
       return interaction.respond(pool.filter((o) => o.name.toLowerCase().includes(term) || o.value.toLowerCase().includes(term)).slice(0, 25));
@@ -396,36 +373,6 @@ module.exports = [
         }
         const loc = app.rp.addLocation({ guildId, jobKey, name: opt("name"), imageUrl: image, note: opt("note") });
         return ctx.success(`تمت إضافة موقع **${loc.name}** لوظيفة \`${jobKey}\`.`);
-      }
-
-      // ---------- اللوحات ----------
-      if (sub === "لوحة") {
-        const type = opt("type");
-        const channel = ctx.interaction.options.getChannel("channel");
-        const key = opt("key");
-
-        if (!channel.permissionsFor(me)?.has(PermissionFlagsBits.SendMessages)) {
-          return ctx.fail("errors.actionFailed", { details: `لا أملك صلاحية الإرسال في <#${channel.id}>.` });
-        }
-
-        let payload;
-        if (type === "jobs") payload = svc.jobsPanelPayload(ctx.guild);
-        else if (type === "market") payload = svc.blackMarketPayload(ctx.guild);
-        else if (type === "job") {
-          if (!key) return ctx.fail("errors.actionFailed", { details: "حدد مفتاح الوظيفة." });
-          const job = app.rp.getJob(guildId, key);
-          if (!job) return ctx.fail("errors.actionFailed", { details: "الوظيفة غير موجودة." });
-          payload = svc.jobStartPanelPayload(ctx.guild, job);
-        } else {
-          if (!key) return ctx.fail("errors.actionFailed", { details: "حدد مفتاح السرقة." });
-          const rob = app.rp.getRobbery(guildId, key);
-          if (!rob) return ctx.fail("errors.actionFailed", { details: "السرقة غير موجودة." });
-          payload = svc.robberyPanelPayload(ctx.guild, rob);
-        }
-
-        const message = await channel.send(payload).catch(() => null);
-        if (!message) return ctx.fail("errors.actionFailed", { details: "تعذّر نشر اللوحة." });
-        return ctx.success(`تم نشر اللوحة في <#${channel.id}>.`);
       }
 
       // ---------- إعطاء وسحب ----------

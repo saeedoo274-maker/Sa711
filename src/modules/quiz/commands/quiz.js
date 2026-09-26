@@ -12,13 +12,11 @@ module.exports = [
       { name: "add", required: false, description: "إضافة سؤال" },
       { name: "remove", required: false, description: "حذف سؤال برقمه" },
       { name: "list", required: false, description: "عرض الأسئلة" },
-      { name: "settings", required: false, description: "ضبط درجة النجاح ورتبة التفعيل" },
-      { name: "panel", required: false, description: "نشر لوحة بدء الاختبار في قناة" }
+      { name: "settings", required: false, description: "ضبط درجة النجاح ورتبة التفعيل" }
     ],
     examples: [
       "/quiz add question:الرول بلاي هو تقمص الشخصية؟ correct:نعم",
-      "/quiz settings pass-score:8 role:@مفعل",
-      "/quiz panel"
+      "/quiz settings pass-score:8 role:@مفعل"
     ],
     category: "quiz",
     slashOnly: true,
@@ -45,10 +43,6 @@ module.exports = [
           .addIntegerOption((o) => o.setName("pass-score").setDescription("عدد الإجابات الصحيحة المطلوبة").setMinValue(1))
           .addRoleOption((o) => o.setName("role").setDescription("الرتبة عند النجاح"))
           .addChannelOption((o) => o.setName("results").setDescription("قناة نشر النتائج").addChannelTypes(ChannelType.GuildText))
-      )
-      .addSubcommand((s) =>
-        s.setName("panel").setDescription("نشر لوحة بدء الاختبار")
-          .addChannelOption((o) => o.setName("channel").setDescription("القناة").addChannelTypes(ChannelType.GuildText))
       )
       .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild),
 
@@ -120,21 +114,7 @@ module.exports = [
         return ctx.success("تم حفظ إعدادات اختبار التفعيل.");
       }
 
-      // panel
-      const channel = ctx.interaction.options.getChannel("channel") || ctx.channel;
-      const { ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
-      await channel.send({
-        embeds: [buildEmbed({
-          title: "اختبار التفعيل",
-          description: "اضغط الزر في الأسفل للبدء باختبار التفعيل.",
-          color: ctx.color("primary"),
-          timestamp: false
-        })],
-        components: [new ActionRowBuilder().addComponents(
-          new ButtonBuilder().setCustomId("quiz:start").setLabel("بدء اختبار التفعيل").setEmoji("📝").setStyle(ButtonStyle.Primary)
-        )]
-      });
-      return ctx.reply({ content: `${ctx.emoji("success")} تم نشر لوحة الاختبار في <#${channel.id}>` }, { ephemeral: true });
+      return ctx.fail("errors.actionFailed", { details: sub || "?" });
     }
   }
 ];

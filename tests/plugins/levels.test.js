@@ -30,10 +30,14 @@ test("المستويات والمكافآت", async (t) => {
     assert.match(H.textOf(i.replies), /levels/);
   });
 
-  await t.test("الأدمن يفعّله من الإعدادات رغم تعطيله (featureExempt)", async () => {
-    const i = await slash(admin, "settings", { enabled: true, cooldown: 60, "min-xp": 10, "max-xp": 10 }, "admin");
+  await t.test("الأدمن يفعّله ويضبطه من /لوحة رغم تعطيله", async () => {
+    await H.panelClick(app, admin, channel, "panel:syst:lvl");
+    const i = await H.panelClick(app, admin, channel, "panel:sysns:lvl:0", { kind: "modal", fields: { n0: "10", n1: "10", n2: "60" } });
     assert.equal(app.levels.enabled(guild.id), true);
-    assert.match(H.textOf(i.replies), /10-10/);
+    assert.equal(app.levels.config(guild.id).messageXpMin, 10);
+    assert.equal(app.levels.config(guild.id).messageXpMax, 10);
+    assert.equal(app.levels.config(guild.id).cooldownMs, 60_000);
+    assert.match(H.textOf(i.replies), /حُفظت/);
   });
 
   await t.test("XP الرسالة: منح، تبريد، تكرار، طول أدنى، بوت", async () => {
