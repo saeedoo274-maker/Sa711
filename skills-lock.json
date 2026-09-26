@@ -1,6 +1,12 @@
 {
   "version": 1,
   "skills": {
+    "api-design-principles": {
+      "source": "wshobson/agents",
+      "sourceType": "github",
+      "skillPath": "plugins/backend-development/skills/api-design-principles/SKILL.md",
+      "computedHash": "19715a3a3ff7bf7b1e2ab1cb631ebe810d5b050ed6b3ab0c358e39e5e2e6d33a"
+    },
     "brainstorming": {
       "source": "obra/superpowers",
       "sourceType": "github",
@@ -12,6 +18,30 @@
       "sourceType": "github",
       "skillPath": "skills/canvas-design/SKILL.md",
       "computedHash": "3fa7ea60170023ad8268bf9fd734ea75dd404279a2ef8ddf5abaa1102ad8e5f4"
+    },
+    "caveman": {
+      "source": "juliusbrussee/caveman",
+      "sourceType": "github",
+      "skillPath": "skills/caveman/SKILL.md",
+      "computedHash": "e9192d111aa44ea90bd214d5aa2b4f640195b0717faedd881e4b3927da9d88e2"
+    },
+    "caveman-commit": {
+      "source": "juliusbrussee/caveman",
+      "sourceType": "github",
+      "skillPath": "skills/caveman-commit/SKILL.md",
+      "computedHash": "b416cf134b0f33ddadeca7977aebdbb2d3db79a166d0fce2e1aabeec98132766"
+    },
+    "caveman-compress": {
+      "source": "juliusbrussee/caveman",
+      "sourceType": "github",
+      "skillPath": "skills/caveman-compress/SKILL.md",
+      "computedHash": "a4034fd0765c04493691b4d85656f31cf22f46e807980f8d6be4b47a4df0b050"
+    },
+    "clean-code": {
+      "source": "sickn33/agentic-awesome-skills",
+      "sourceType": "github",
+      "skillPath": "skills/clean-code/SKILL.md",
+      "computedHash": "5dc34cc80c81f909fa69923bfdaa90b6579f3b9842e059be9c2378483605a00f"
     },
     "design-taste-frontend": {
       "source": "leonxlnx/taste-skill",
@@ -37,6 +67,12 @@
       "skillPath": "skills/emil-design-eng/SKILL.md",
       "computedHash": "51f2537e04d15911b41d78e2de24c36a0e26d41beae15e82a954fe5496a5eda9"
     },
+    "error-handling-patterns": {
+      "source": "wshobson/agents",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-essentials/skills/error-handling-patterns/SKILL.md",
+      "computedHash": "73f0570edd3ddc740ba5411932a67954df375530bbffbe7fa0cecd8e59b0711e"
+    },
     "executing-plans": {
       "source": "obra/superpowers",
       "sourceType": "github",
@@ -48,6 +84,12 @@
       "sourceType": "github",
       "skillPath": "skills/frontend-design/SKILL.md",
       "computedHash": "89496d5dd00f4810205f351759594fc2742bf8eea85a2f2b2d1de59f4bd91576"
+    },
+    "git-commit": {
+      "source": "github/awesome-copilot",
+      "sourceType": "github",
+      "skillPath": "skills/git-commit/SKILL.md",
+      "computedHash": "2607fc60629b82b257136dd2a7a373f0a4466c0b49df7746d845d59313c99b21"
     },
     "grill-me": {
       "source": "mattpocock/skills",
@@ -85,11 +127,41 @@
       "skillPath": "skills/engineering/improve-codebase-architecture/SKILL.md",
       "computedHash": "2449db6ab1ded9581f69fcc56c1f64818112d05e271fd4c5da23c6523f9d3d9d"
     },
+    "javascript-testing-patterns": {
+      "source": "wshobson/agents",
+      "sourceType": "github",
+      "skillPath": "plugins/javascript-typescript/skills/javascript-testing-patterns/SKILL.md",
+      "computedHash": "8d0a8d7615ff343770af0218720691d56c55ae258793565936c8b3a97e188f51"
+    },
+    "javascript-typescript-jest": {
+      "source": "github/awesome-copilot",
+      "sourceType": "github",
+      "skillPath": "skills/javascript-typescript-jest/SKILL.md",
+      "computedHash": "0073d19ab0275eb6a8200aced6789a53744667bd717b5d1f44ce708a1740e5d4"
+    },
     "mcp-builder": {
       "source": "anthropics/skills",
       "sourceType": "github",
       "skillPath": "skills/mcp-builder/SKILL.md",
       "computedHash": "826e46adf81e1372282e205c34e1a2ee876e72148007726e4a2512599d2fef7b"
+    },
+    "modern-javascript-patterns": {
+      "source": "wshobson/agents",
+      "sourceType": "github",
+      "skillPath": "plugins/javascript-typescript/skills/modern-javascript-patterns/SKILL.md",
+      "computedHash": "ef81ef5b5b70287b3962dd0fce50c90b27c636e940ec4e80f9a0b216587be549"
+    },
+    "nodejs-backend-patterns": {
+      "source": "wshobson/agents",
+      "sourceType": "github",
+      "skillPath": "plugins/javascript-typescript/skills/nodejs-backend-patterns/SKILL.md",
+      "computedHash": "b63b54d09c77cec0e84cdd42424c12909785f14bdb286c835c45420b885ff1f3"
+    },
+    "performance-optimization": {
+      "source": "addyosmani/agent-skills",
+      "sourceType": "github",
+      "skillPath": "skills/performance-optimization/SKILL.md",
+      "computedHash": "f0a8e3bdb9b7d199434c2a5dd7cbb7d3cf69d802029cde1ef5daa07bffa27efc"
     },
     "prototype": {
       "source": "mattpocock/skills",
@@ -108,6 +180,12 @@
       "sourceType": "github",
       "skillPath": "skills/redesign-skill/SKILL.md",
       "computedHash": "b405eee0e0e80fc243f731d9aa368bca307e356db7e6157d27101d369dac6726"
+    },
+    "refactor": {
+      "source": "github/awesome-copilot",
+      "sourceType": "github",
+      "skillPath": "skills/refactor/SKILL.md",
+      "computedHash": "87789a786b96f99ba0680e89345a975106e10e7db1071c7cdc2e76d507c449d6"
     },
     "requesting-code-review": {
       "source": "obra/superpowers",
@@ -156,6 +234,12 @@
       "sourceType": "github",
       "skillPath": "skills/engineering/to-spec/SKILL.md",
       "computedHash": "3fa1a0695d4ea242fae9e569e4d22aa1788623197abb33bfadafae7315789bbf"
+    },
+    "typescript-advanced-types": {
+      "source": "wshobson/agents",
+      "sourceType": "github",
+      "skillPath": "plugins/javascript-typescript/skills/typescript-advanced-types/SKILL.md",
+      "computedHash": "8cbf2bf600f392d7260e476e3202932a876e2281cda3b15a8b6a5a43f383252d"
     },
     "ui-ux-pro-max": {
       "source": "nextlevelbuilder/ui-ux-pro-max-skill",
@@ -210,6 +294,12 @@
       "sourceType": "github",
       "skillPath": "skills/writing-plans/SKILL.md",
       "computedHash": "cc8517a6bc569a0633b585649291688217b8a65d547c2ac5fa0923e56ecffa8c"
+    },
+    "zod": {
+      "source": "pproenca/dot-skills",
+      "sourceType": "github",
+      "skillPath": "skills/.curated/zod/SKILL.md",
+      "computedHash": "c69b5133b65643317236707f2cd3e521b4fc6e5ee5fd6c6c00cf62a37dfd0144"
     }
   }
 }
