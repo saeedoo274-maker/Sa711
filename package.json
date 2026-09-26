@@ -1,6 +1,6 @@
 {
   "name": "arabic-admin-bot",
-  "version": "36.0.0",
+  "version": "37.0.0",
   "description": "بوت Discord إداري عربي احترافي - Modular, Multi-Guild, Production Ready",
   "main": "index.js",
   "type": "commonjs",
@@ -15,7 +15,8 @@
     "check": "node scripts/check.js",
     "lint": "eslint src tests scripts index.js",
     "migrate": "node scripts/migrate.js",
-    "build": "npm run check && npm run lint && npm test"
+    "build": "npm run check && npm run lint && npm test",
+    "docs": "node scripts/docs.js"
   },
   "dependencies": {
     "discord.js": "^14.16.3",

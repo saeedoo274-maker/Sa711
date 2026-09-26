@@ -1,6 +1,5 @@
 const { ActionRowBuilder, ModalBuilder, TextInputBuilder, TextInputStyle } = require("discord.js");
 const I18n = require("../../core/i18n/I18n");
-const LogService = require("../../core/logger/LogService");
 const ThemeService = require("../../core/theme/ThemeService");
 const { safeModal } = require("../../core/interactions/interactionSafe");
 

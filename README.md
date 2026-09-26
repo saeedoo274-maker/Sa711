@@ -6,6 +6,22 @@
 
 ---
 
+## 🆕 الإصدار 37 — المنصة الموسّعة
+
+أُضيفت 30 إضافة وأنظمة أساسية جديدة (المستويات، الاقتصاد الموسّع، الألعاب، التذاكر المتقدمة، القضايا والاستئنافات، إدارة الطاقم، الأتمتة، التكاملات، نسخ السيرفر، لوحة تحكم ويب، REST API v1، 5 لغات…) **دون** إعادة كتابة أو حذف أي نظام قائم، ودون أي نظام حماية جديد.
+
+| الوثيقة | المحتوى |
+|---|---|
+| [docs/SYSTEMS.md](docs/SYSTEMS.md) | دليل كل الأنظمة وأين تُدار |
+| [docs/COMMANDS.md](docs/COMMANDS.md) | مرجع الأوامر (مولَّد: `npm run docs`) |
+| [docs/CONFIGURATION.md](docs/CONFIGURATION.md) | متغيرات البيئة وإعدادات السيرفر والمتغيرات |
+| [docs/DATABASE.md](docs/DATABASE.md) | الهجرات، `npm run migrate`، التنظيف، النسخ الاحتياطي |
+| [docs/PLUGINS.md](docs/PLUGINS.md) | بنية الإضافات وكتابة إضافة جديدة |
+| [docs/DASHBOARD.md](docs/DASHBOARD.md) | إعداد لوحة التحكم وأمانها |
+| [docs/API.md](docs/API.md) | REST API v1 |
+
+أوامر التطوير: `npm test` • `npm run lint` • `npm run check` • `npm run build` (الثلاثة معًا) • `npm run migrate` • `npm run docs`.
+
 ## 1) المتطلبات
 
 | المتطلب | الإصدار |

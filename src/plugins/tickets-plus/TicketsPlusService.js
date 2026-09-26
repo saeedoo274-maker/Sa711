@@ -1,4 +1,4 @@
-const { ActionRowBuilder, ButtonBuilder, ButtonStyle, PermissionFlagsBits } = require("discord.js");
+const { ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
 const { Level } = require("../../core/permissions/PermissionService");
 const { formatDuration, truncate } = require("../../core/utils/common");
 
