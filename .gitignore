@@ -4,7 +4,7 @@
 .env.*.local
 
 # البيانات والنسخ الاحتياطية
-data/
+/data/
 *.db
 *.db-wal
 *.db-shm
