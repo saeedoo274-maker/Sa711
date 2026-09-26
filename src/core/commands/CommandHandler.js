@@ -213,7 +213,13 @@ class CommandHandler {
       }
 
       // 5) الصلاحيات — تُفحص من الخادم دائمًا
-      const permission = this.app.permissions.check(ctx.member, command.permissions || {});
+      // قواعد منشئ الصلاحيات (إن وُجدت) تُقيَّم أولًا: منع صريح يوقف، وسماح صريح يتجاوز شرط المستوى فقط
+      const rule = this.app.permissionRules
+        ? this.app.permissionRules.evaluate({ guild: ctx.guild, member: ctx.member, channel: ctx.channel, command, subcommand: ctx.subcommand?.() || null, feature })
+        : { decision: null };
+      if (rule.decision === "deny") return ctx.fail(rule.reason === "channel" ? "errors.channelNotAllowed" : "errors.noPermission");
+      const requirement = rule.decision === "allow" ? { developerOnly: command.permissions?.developerOnly } : command.permissions || {};
+      const permission = this.app.permissions.check(ctx.member, requirement);
       if (!permission.ok) return ctx.fail(`errors.${permission.reason}`);
 
       // 6) صلاحيات البوت نفسه

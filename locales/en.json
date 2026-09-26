@@ -41,7 +41,8 @@
     "cooldown": "{emoji} Wait `{seconds}` seconds before using this again.",
     "commandDisabled": "{emoji} This command is disabled in this server.",
     "systemDisabled": "{emoji} The `{system}` system is disabled in this server.",
-    "actionFailed": "{emoji} Action failed: {details}"
+    "actionFailed": "{emoji} Action failed: {details}",
+    "channelNotAllowed": "{emoji} This command isn't allowed in this channel."
   },
   "moderation": {
     "ban": {

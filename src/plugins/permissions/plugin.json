@@ -1,0 +1,10 @@
+{
+  "name": "permissions",
+  "version": "1.0.0",
+  "label": "منشئ الصلاحيات",
+  "description": "قواعد سماح/منع لكل رتبة أو قناة على مستوى النظام أو الأمر أو الأمر الفرعي، تُطبَّق في بوابة الأوامر قبل فحص المستوى الافتراضي. المالك والمطور لا يتأثران، والأدمن لا يُقفل عليه.",
+  "feature": "permissions",
+  "defaultEnabled": true,
+  "dependencies": [],
+  "permissions": { "manage": 3 }
+}

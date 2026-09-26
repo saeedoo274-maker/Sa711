@@ -82,13 +82,27 @@ module.exports = [
         .addIntegerOption((o) => o.setName("cooldown-days").setDescription("أيام الانتظار بعد الرفض").setMinValue(0).setMaxValue(365))
         .addIntegerOption((o) => o.setName("max").setDescription("أقصى استئنافات لكل قضية").setMinValue(1).setMaxValue(10))
         .addStringOption((o) => o.setName("types").setDescription("الأنواع المسموحة").addChoices(
-          { name: "الكل", value: "ban,timeout,warn" }, { name: "الحظر فقط", value: "ban" }, { name: "الحظر والإسكات", value: "ban,timeout" }, { name: "التحذير والإسكات", value: "timeout,warn" }))),
+          { name: "الكل", value: "ban,timeout,warn" }, { name: "الحظر فقط", value: "ban" }, { name: "الحظر والإسكات", value: "ban,timeout" }, { name: "التحذير والإسكات", value: "timeout,warn" })))
+      .addSubcommand((s) => s.setName("permissions").setDescription("منشئ الصلاحيات (رتبة/قناة ← نظام/أمر/أمر فرعي)")
+        .addStringOption((o) => o.setName("action").setDescription("الإجراء").setRequired(true).addChoices(
+          { name: "سماح", value: "allow" }, { name: "منع", value: "deny" }, { name: "حذف قاعدة", value: "remove" },
+          { name: "عرض", value: "list" }, { name: "مسح", value: "clear" }, { name: "اختبار عضو", value: "test" }))
+        .addStringOption((o) => o.setName("target").setDescription("system:نظام أو أمر أو أمر:فرعي").setAutocomplete(true).setMaxLength(80))
+        .addRoleOption((o) => o.setName("role").setDescription("الرتبة"))
+        .addChannelOption((o) => o.setName("channel").setDescription("القناة"))
+        .addUserOption((o) => o.setName("user").setDescription("العضو (للاختبار)"))),
 
     async autocomplete(interaction, app) {
       const focused = interaction.options.getFocused(true);
       const typed = String(focused.value || "").toLowerCase();
       let list = [];
       if (focused.name === "name") list = app.features.list().map((f) => ({ name: `${f.name} — ${f.label}`.slice(0, 100), value: f.name }));
+      if (focused.name === "target") {
+        list = [
+          ...app.features.list().map((f) => ({ name: `system:${f.name} — ${f.label}`.slice(0, 100), value: `system:${f.name}` })),
+          ...app.registry.all().map((c) => ({ name: `${c.name} — ${String(c.description || "").slice(0, 60)}`.slice(0, 100), value: c.name }))
+        ];
+      }
       if (focused.name === "event") list = [{ name: "all — الكل", value: "all" }, ...Object.entries(LogService.EVENTS).map(([k, e]) => ({ name: `${k} — ${e.label}`.slice(0, 100), value: k }))];
       return interaction.respond(list.filter((x) => x.name.toLowerCase().includes(typed)).slice(0, 25));
     },
@@ -221,6 +235,47 @@ module.exports = [
             ]
           })]
         }, { ephemeral: true });
+      }
+
+      if (sub === "permissions") {
+        if (!app.permissionRules) return ctx.fail("errors.systemDisabled", { system: "permissions" });
+        const pr = app.permissionRules;
+        const action = o.getString("action");
+        const target = o.getString("target");
+        const role = o.getRole("role");
+        const channel = o.getChannel("channel");
+        const reasons = { invalid: t("perm.err.invalid"), unknownTarget: t("perm.err.unknownTarget"), protectedCommand: t("perm.err.protected"), maxRules: t("perm.err.max"), notFound: t("perm.err.notFound") };
+        if (action === "list") {
+          const rows = pr.list(guild.id);
+          return ctx.reply({
+            embeds: [ctx.embed({
+              title: `🛡️ ${t("perm.title")}`,
+              color: "info",
+              description: rows.map((r) => `${r.effect === "allow" ? "✅" : "⛔"} \`${r.target}\` ← ${r.subject_type === "role" ? `<@&${r.subject_id}>` : `<#${r.subject_id}>`}`).join("\n").slice(0, 4000) || t("ui.empty")
+            })],
+            allowedMentions: { parse: [] }
+          }, { ephemeral: true });
+        }
+        if (action === "clear") return ctx.success(t("perm.cleared", { count: pr.clear(guild.id, target) }));
+        if (action === "test") {
+          const user = o.getUser("user");
+          const member = user ? await guild.members.fetch(user.id).catch(() => null) : ctx.member;
+          const key = pr.normalizeTarget(target);
+          if (!member || !key || key.startsWith("system:")) return ctx.fail("errors.actionFailed", { details: reasons.unknownTarget });
+          const [name, subName] = key.split(":");
+          const command = app.registry.get(name);
+          const res = pr.evaluate({ guild, member, channel: channel || ctx.channel, command, subcommand: subName || null, feature: command.feature || command.module });
+          const base = app.permissions.check(member, command.permissions || {});
+          const final = res.decision === "deny" ? false : res.decision === "allow" ? true : base.ok;
+          return ctx.reply({ content: `${final ? "✅" : "⛔"} <@${member.id}> → \`${key}\` — ${res.decision ? `${t("perm.byRule")} \`${res.target}\` (${res.decision}${res.reason ? `/${res.reason}` : ""})` : t("perm.byDefault")}`, allowedMentions: { parse: [] } }, { ephemeral: true });
+        }
+        if (!target || (!role && !channel)) return ctx.fail("errors.actionFailed", { details: t("perm.err.needSubject") });
+        const subjects = [role ? ["role", role.id] : null, channel ? ["channel", channel.id] : null].filter(Boolean);
+        const results = subjects.map(([type, id]) => (action === "remove" ? pr.remove(guild.id, target, type, id) : pr.add(guild.id, { target, subjectType: type, subjectId: id, effect: action, userId: ctx.user.id })));
+        const failed = results.find((r) => !r.ok);
+        if (failed) return ctx.fail("errors.actionFailed", { details: reasons[failed.reason] || failed.reason });
+        app.bus.emitSafe("permissions:changed", { guild, actorId: ctx.user.id, action, target });
+        return ctx.success(t("perm.saved"));
       }
 
       if (sub === "appeals") {

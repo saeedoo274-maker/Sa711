@@ -1,0 +1,17 @@
+{
+  "perm": {
+    "title": "İzin kuralları",
+    "saved": "Kural kaydedildi.",
+    "cleared": "{count} kural silindi.",
+    "byRule": "kural ile",
+    "byDefault": "varsayılan izinlerle",
+    "err": {
+      "invalid": "Geçersiz değer.",
+      "unknownTarget": "Bilinmeyen hedef.",
+      "protected": "Sahip/geliştirici komutları verilemez.",
+      "max": "Kural sınırına ulaşıldı.",
+      "notFound": "Kural bulunamadı.",
+      "needSubject": "Hedef ve rol ya da kanal seç."
+    }
+  }
+}

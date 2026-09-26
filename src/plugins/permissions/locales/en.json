@@ -1,0 +1,17 @@
+{
+  "perm": {
+    "title": "Permission rules",
+    "saved": "Rule saved.",
+    "cleared": "Removed {count} rules.",
+    "byRule": "by rule",
+    "byDefault": "by default permissions",
+    "err": {
+      "invalid": "Invalid value.",
+      "unknownTarget": "Unknown target (use system:<name>, a command, or command:sub).",
+      "protected": "Owner/developer commands can't be granted to a role.",
+      "max": "Rule limit reached.",
+      "notFound": "Rule not found.",
+      "needSubject": "Choose a target and a role or channel."
+    }
+  }
+}

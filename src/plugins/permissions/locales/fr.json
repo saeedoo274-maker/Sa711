@@ -1,0 +1,17 @@
+{
+  "perm": {
+    "title": "Règles de permission",
+    "saved": "Règle enregistrée.",
+    "cleared": "{count} règles supprimées.",
+    "byRule": "par la règle",
+    "byDefault": "par les permissions par défaut",
+    "err": {
+      "invalid": "Valeur invalide.",
+      "unknownTarget": "Cible inconnue.",
+      "protected": "Les commandes propriétaire/dev ne peuvent pas être accordées.",
+      "max": "Limite de règles atteinte.",
+      "notFound": "Règle introuvable.",
+      "needSubject": "Choisissez une cible et un rôle ou salon."
+    }
+  }
+}

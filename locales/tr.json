@@ -41,7 +41,8 @@
     "cooldown": "{emoji} Tekrar kullanmadan önce `{seconds}` saniye bekleyin.",
     "commandDisabled": "{emoji} Bu komut bu sunucuda devre dışı.",
     "systemDisabled": "{emoji} `{system}` sistemi bu sunucuda devre dışı.",
-    "actionFailed": "{emoji} İşlem başarısız: {details}"
+    "actionFailed": "{emoji} İşlem başarısız: {details}",
+    "channelNotAllowed": "{emoji} Bu komut bu kanalda kullanılamaz."
   },
   "moderation": {
     "ban": {

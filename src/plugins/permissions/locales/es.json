@@ -1,0 +1,17 @@
+{
+  "perm": {
+    "title": "Reglas de permisos",
+    "saved": "Regla guardada.",
+    "cleared": "Se eliminaron {count} reglas.",
+    "byRule": "por la regla",
+    "byDefault": "por permisos por defecto",
+    "err": {
+      "invalid": "Valor inválido.",
+      "unknownTarget": "Objetivo desconocido.",
+      "protected": "No se pueden conceder comandos de dueño/desarrollador.",
+      "max": "Límite de reglas alcanzado.",
+      "notFound": "Regla no encontrada.",
+      "needSubject": "Elige objetivo y rol o canal."
+    }
+  }
+}

@@ -41,7 +41,8 @@
     "cooldown": "{emoji} انتظر `{seconds}` ثانية قبل استخدام هذا الأمر مرة أخرى.",
     "commandDisabled": "{emoji} هذا الأمر معطّل في هذا السيرفر.",
     "systemDisabled": "{emoji} نظام `{system}` معطّل في هذا السيرفر.",
-    "actionFailed": "{emoji} فشل تنفيذ الإجراء: {details}"
+    "actionFailed": "{emoji} فشل تنفيذ الإجراء: {details}",
+    "channelNotAllowed": "{emoji} هذا الأمر غير مسموح في هذه القناة."
   },
   "moderation": {
     "ban": {

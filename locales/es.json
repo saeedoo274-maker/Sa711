@@ -41,7 +41,8 @@
     "cooldown": "{emoji} Espera `{seconds}` segundos antes de volver a usarlo.",
     "commandDisabled": "{emoji} Este comando está desactivado en este servidor.",
     "systemDisabled": "{emoji} El sistema `{system}` está desactivado en este servidor.",
-    "actionFailed": "{emoji} La acción falló: {details}"
+    "actionFailed": "{emoji} La acción falló: {details}",
+    "channelNotAllowed": "{emoji} Este comando no está permitido en este canal."
   },
   "moderation": {
     "ban": {
