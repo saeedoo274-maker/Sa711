@@ -103,7 +103,7 @@ class TicketsPlusRepository {
 
   /** إحصاءات الطاقم: الاستلام، الإغلاق، متوسط الاستجابة الأولى والإغلاق، خرق SLA، التقييمات. */
   staffStats(guildId, sinceMs, userId = null) {
-    const where = userId ? "AND u = ?" : "";
+    const where = userId ? "AND users.u = ?" : "";
     const params = userId ? [guildId, sinceMs, guildId, sinceMs, guildId, sinceMs, guildId, sinceMs, userId] : [guildId, sinceMs, guildId, sinceMs, guildId, sinceMs, guildId, sinceMs];
     return this.db
       .prepare(

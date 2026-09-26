@@ -22,17 +22,21 @@ module.exports = [
   {
     name: "سلم_اداري",
     aliases: ["staff-rank"],
-    description: "إدارة رتب السلم الإداري: إضافة، حذف، وعرض.",
+    description: "إدارة رتب السلم الإداري، والأقسام، والمناوبات، والتقييمات، وملف الأداء (KPI).",
     usage: "/staff-rank add role:<رتبة> name:<الاسم> level:<1-3>",
     arguments: [
       { name: "add", required: false, description: "إضافة رتبة إلى نهاية السلم" },
       { name: "remove", required: false, description: "حذف رتبة من السلم" },
-      { name: "list", required: false, description: "عرض السلم الحالي" }
+      { name: "list", required: false, description: "عرض السلم الحالي" },
+      { name: "shift start/end/break/list", required: false, description: "المناوبات (للطاقم)" },
+      { name: "department create/delete/assign/list", required: false, description: "الأقسام (الأدمن)" },
+      { name: "evaluate / profile", required: false, description: "تقييم إداري وملف الأداء" }
     ],
-    examples: ["/staff-rank add role:@Moderator name:مشرف level:2", "/staff-rank list"],
+    examples: ["/staff-rank add role:@Moderator name:مشرف level:2", "/staff-rank list", "/سلم_اداري shift start", "/سلم_اداري profile user:@أحمد"],
     category: "staff",
     slashOnly: true,
-    permissions: { level: Level.ADMIN, discordPermissions: [PermissionFlagsBits.ManageGuild] },
+    // الأمر مفتوح للطاقم لأجل المناوبات؛ إدارة السلم والأقسام تُفحص لكل أمر فرعي (أدمن + Manage Guild)
+    permissions: { level: Level.STAFF },
     slash: new SlashCommandBuilder()
       .setName("سلم_اداري")
       .setDescription("إدارة السلم الإداري")
@@ -51,10 +55,45 @@ module.exports = [
           .addRoleOption((o) => o.setName("role").setDescription("الرتبة").setRequired(true))
       )
       .addSubcommand((s) => s.setName("list").setDescription("عرض السلم الإداري"))
-      .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild),
+      .addSubcommand((s) => s.setName("evaluate").setDescription("تقييم إداري (مشرف فأعلى)")
+        .addUserOption((o) => o.setName("user").setDescription("الإداري").setRequired(true))
+        .addIntegerOption((o) => o.setName("score").setDescription("الدرجة 1-10").setRequired(true).setMinValue(1).setMaxValue(10))
+        .addStringOption((o) => o.setName("notes").setDescription("ملاحظات").setMaxLength(500)))
+      .addSubcommand((s) => s.setName("profile").setDescription("ملف الأداء (KPI)")
+        .addUserOption((o) => o.setName("user").setDescription("الإداري"))
+        .addIntegerOption((o) => o.setName("days").setDescription("الفترة بالأيام").setMinValue(1).setMaxValue(365)))
+      .addSubcommandGroup((g) => g.setName("shift").setDescription("المناوبات")
+        .addSubcommand((s) => s.setName("start").setDescription("بدء مناوبة"))
+        .addSubcommand((s) => s.setName("end").setDescription("إنهاء مناوبة (أو إنهاء مناوبة إداري آخر — مشرف)")
+          .addUserOption((o) => o.setName("user").setDescription("إداري آخر")))
+        .addSubcommand((s) => s.setName("break").setDescription("بدء/إنهاء استراحة"))
+        .addSubcommand((s) => s.setName("list").setDescription("من في المناوبة الآن")))
+      .addSubcommandGroup((g) => g.setName("department").setDescription("الأقسام")
+        .addSubcommand((s) => s.setName("create").setDescription("إنشاء قسم")
+          .addStringOption((o) => o.setName("name").setDescription("الاسم").setRequired(true).setMaxLength(32))
+          .addRoleOption((o) => o.setName("role").setDescription("رتبة القسم"))
+          .addUserOption((o) => o.setName("lead").setDescription("رئيس القسم")))
+        .addSubcommand((s) => s.setName("delete").setDescription("حذف قسم")
+          .addStringOption((o) => o.setName("name").setDescription("الاسم").setRequired(true).setAutocomplete(true)))
+        .addSubcommand((s) => s.setName("assign").setDescription("نقل إداري لقسم (فارغ = إخراج)")
+          .addUserOption((o) => o.setName("user").setDescription("الإداري").setRequired(true))
+          .addStringOption((o) => o.setName("name").setDescription("القسم").setAutocomplete(true)))
+        .addSubcommand((s) => s.setName("list").setDescription("عرض الأقسام"))),
+
+    async autocomplete(interaction, app) {
+      const typed = String(interaction.options.getFocused() || "").toLowerCase();
+      const rows = app.staffPlusRepo ? app.staffPlusRepo.departments(interaction.guild.id) : [];
+      return interaction.respond(rows.filter((d) => d.name.toLowerCase().includes(typed)).slice(0, 25).map((d) => ({ name: d.name, value: d.name })));
+    },
 
     async execute(ctx) {
       const sub = ctx.interaction.options.getSubcommand();
+      const group = ctx.interaction.options.getSubcommandGroup(false);
+      const level = ctx.app.permissions.resolveLevel(ctx.member);
+      const isAdmin = level >= Level.ADMIN && (level >= Level.GUILD_OWNER || ctx.member.permissions.has(PermissionFlagsBits.ManageGuild));
+
+      if (group || sub === "evaluate" || sub === "profile") return staffPlus(ctx, group, sub, level, isAdmin);
+      if (sub !== "list" && !isAdmin) return ctx.fail("errors.noPermission");
 
       if (sub === "add") {
         const role = ctx.interaction.options.getRole("role");
@@ -356,3 +395,52 @@ module.exports = [
     }
   }
 ];
+
+async function staffPlus(ctx, group, sub, level, isAdmin) {
+  const app = ctx.app;
+  const svc = app.staffPlus;
+  if (!svc || !app.features.isEnabled(ctx.guild.id, "staff")) return ctx.fail("errors.systemDisabled", { system: "staff-plus" });
+  const o = ctx.interaction.options;
+  const t = (k, v) => ctx.t(k, v);
+  const done = (res, okText) => (res.ok ? ctx.success(okText) : ctx.fail("errors.actionFailed", { details: t(`stf.err.${res.reason}`) }));
+
+  if (group === "shift") {
+    if (sub === "list") return ctx.reply(svc.onShiftPayload(ctx.guild), { ephemeral: true });
+    if (sub === "start") return done(svc.startShift(ctx.guild, ctx.member), t("stf.shiftStarted"));
+    if (sub === "break") {
+      const res = svc.toggleBreak(ctx.guild, ctx.member);
+      return done(res, t(res.onBreak ? "stf.breakOn" : "stf.breakOff"));
+    }
+    // end
+    const other = o.getUser("user");
+    if (other && other.id !== ctx.user.id && level < Level.MODERATOR) return ctx.fail("errors.noPermission");
+    const target = other ? await ctx.guild.members.fetch(other.id).catch(() => null) : ctx.member;
+    if (!target) return ctx.fail("errors.memberNotFound");
+    const res = svc.endShift(ctx.guild, target, ctx.user.id);
+    return done(res, t("stf.shiftEnded", { time: res.ok ? formatDuration(res.workedMs) : "" }));
+  }
+
+  if (group === "department") {
+    if (sub === "list") return ctx.reply(svc.departmentsPayload(ctx.guild), { ephemeral: true });
+    if (!isAdmin) return ctx.fail("errors.noPermission");
+    if (sub === "create") return done(await svc.createDepartment(ctx.guild, ctx.member, { name: o.getString("name"), role: o.getRole("role"), lead: o.getUser("lead") }), t("stf.saved"));
+    if (sub === "delete") return done(svc.repo.deleteDepartment(ctx.guild.id, o.getString("name")) ? { ok: true } : { ok: false, reason: "notFound" }, t("stf.saved"));
+    const member = await ctx.guild.members.fetch(o.getUser("user").id).catch(() => null);
+    if (!member) return ctx.fail("errors.memberNotFound");
+    return done(await svc.assignDepartment(ctx.guild, ctx.member, member, o.getString("name")), t("stf.saved"));
+  }
+
+  if (sub === "evaluate") {
+    if (level < Level.MODERATOR) return ctx.fail("errors.noPermission");
+    const member = await ctx.guild.members.fetch(o.getUser("user").id).catch(() => null);
+    if (!member) return ctx.fail("errors.memberNotFound");
+    return done(svc.evaluate(ctx.guild, ctx.member, member, o.getInteger("score"), o.getString("notes")), t("stf.saved"));
+  }
+
+  // profile: الإداري يرى ملفه، والمشرف فأعلى يرى ملفات غيره
+  const user = o.getUser("user");
+  if (user && user.id !== ctx.user.id && level < Level.MODERATOR) return ctx.fail("errors.noPermission");
+  const member = user ? await ctx.guild.members.fetch(user.id).catch(() => null) : ctx.member;
+  if (!member) return ctx.fail("errors.memberNotFound");
+  return ctx.reply(svc.profilePayload(ctx.guild, member, o.getInteger("days") || 30), { ephemeral: true });
+}

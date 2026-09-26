@@ -1,0 +1,36 @@
+{
+  "stf": {
+    "profileTitle": "Perfil de staff de {user}",
+    "rank": "Rango",
+    "department": "Departamento",
+    "shiftNow": "Turno",
+    "points": "Puntos",
+    "attendance": "Asistencia",
+    "worked": "Trabajado",
+    "shifts": "turnos",
+    "evaluations": "Evaluaciones",
+    "history": "Historial de rangos",
+    "recentEvals": "Evaluaciones recientes",
+    "departmentsTitle": "Departamentos",
+    "onShiftTitle": "En turno ({count})",
+    "shiftStarted": "Tu turno comenzó.",
+    "shiftEnded": "Turno terminado: {time}.",
+    "breakOn": "Descanso iniciado ☕",
+    "breakOff": "Descanso terminado.",
+    "saved": "Guardado.",
+    "err": {
+      "badName": "Nombre inválido (2-32).",
+      "maxDepartments": "Límite de departamentos alcanzado.",
+      "roleHierarchy": "No puedo gestionar ese rol.",
+      "exists": "El departamento ya existe.",
+      "notFound": "Departamento no encontrado.",
+      "notStaff": "El miembro no es staff.",
+      "alreadyOnShift": "Ya estás en turno.",
+      "noShift": "No hay turno abierto.",
+      "changed": "El estado cambió, reintenta.",
+      "self": "No puedes evaluarte.",
+      "badScore": "Puntuación de 1 a 10.",
+      "tooSoon": "Ya lo evaluaste en 24h."
+    }
+  }
+}

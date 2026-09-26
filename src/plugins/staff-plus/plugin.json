@@ -1,0 +1,15 @@
+{
+  "name": "staff-plus",
+  "version": "1.0.0",
+  "label": "إدارة الطاقم المتقدمة",
+  "description": "أقسام الطاقم، مناوبات مع استراحات وإنهاء تلقائي، سجل الترقيات والتنزيلات، تقييمات دورية، ومؤشرات أداء (KPI) تجمع النشاط والحضور والمناوبات والتذاكر والتقييمات.",
+  "feature": "staff",
+  "defaultEnabled": true,
+  "dependencies": [],
+  "configKey": "staffPlus",
+  "config": {
+    "maxShiftHours": 12,
+    "maxDepartments": 20
+  },
+  "permissions": { "manage": 3 }
+}

@@ -1,0 +1,36 @@
+{
+  "stf": {
+    "profileTitle": "{user} yetkili profili",
+    "rank": "Rütbe",
+    "department": "Departman",
+    "shiftNow": "Vardiya",
+    "points": "Puan",
+    "attendance": "Katılım",
+    "worked": "Çalışılan",
+    "shifts": "vardiya",
+    "evaluations": "Değerlendirmeler",
+    "history": "Rütbe geçmişi",
+    "recentEvals": "Son değerlendirmeler",
+    "departmentsTitle": "Departmanlar",
+    "onShiftTitle": "Şu an vardiyada ({count})",
+    "shiftStarted": "Vardiyan başladı.",
+    "shiftEnded": "Vardiya bitti: {time}.",
+    "breakOn": "Mola başladı ☕",
+    "breakOff": "Mola bitti.",
+    "saved": "Kaydedildi.",
+    "err": {
+      "badName": "Geçersiz ad (2-32).",
+      "maxDepartments": "Departman sınırına ulaşıldı.",
+      "roleHierarchy": "Bu rolü yönetemiyorum.",
+      "exists": "Departman zaten var.",
+      "notFound": "Departman bulunamadı.",
+      "notStaff": "Üye yetkili değil.",
+      "alreadyOnShift": "Zaten vardiyadasın.",
+      "noShift": "Açık vardiya yok.",
+      "changed": "Durum değişti, tekrar dene.",
+      "self": "Kendini değerlendiremezsin.",
+      "badScore": "Puan 1-10 olmalı.",
+      "tooSoon": "Son 24 saatte değerlendirdin."
+    }
+  }
+}

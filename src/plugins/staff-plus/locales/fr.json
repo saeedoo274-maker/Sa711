@@ -1,0 +1,36 @@
+{
+  "stf": {
+    "profileTitle": "Profil staff de {user}",
+    "rank": "Rang",
+    "department": "Département",
+    "shiftNow": "Service",
+    "points": "Points",
+    "attendance": "Présence",
+    "worked": "Travaillé",
+    "shifts": "services",
+    "evaluations": "Évaluations",
+    "history": "Historique des rangs",
+    "recentEvals": "Évaluations récentes",
+    "departmentsTitle": "Départements",
+    "onShiftTitle": "En service ({count})",
+    "shiftStarted": "Votre service a commencé.",
+    "shiftEnded": "Service terminé : {time}.",
+    "breakOn": "Pause commencée ☕",
+    "breakOff": "Pause terminée.",
+    "saved": "Enregistré.",
+    "err": {
+      "badName": "Nom invalide (2-32).",
+      "maxDepartments": "Limite de départements atteinte.",
+      "roleHierarchy": "Je ne peux pas gérer ce rôle.",
+      "exists": "Le département existe déjà.",
+      "notFound": "Département introuvable.",
+      "notStaff": "Le membre n'est pas staff.",
+      "alreadyOnShift": "Vous êtes déjà en service.",
+      "noShift": "Aucun service ouvert.",
+      "changed": "L'état a changé, réessayez.",
+      "self": "Vous ne pouvez pas vous évaluer.",
+      "badScore": "Note de 1 à 10.",
+      "tooSoon": "Déjà évalué ces dernières 24h."
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "stf": {
+    "profileTitle": "{user}'s staff profile",
+    "rank": "Rank",
+    "department": "Department",
+    "shiftNow": "Shift",
+    "points": "Points",
+    "attendance": "Attendance",
+    "worked": "Worked",
+    "shifts": "shifts",
+    "evaluations": "Evaluations",
+    "history": "Rank history",
+    "recentEvals": "Recent evaluations",
+    "departmentsTitle": "Staff departments",
+    "onShiftTitle": "On shift now ({count})",
+    "shiftStarted": "Your shift started.",
+    "shiftEnded": "Shift ended: {time}.",
+    "breakOn": "Break started ☕",
+    "breakOff": "Break ended.",
+    "saved": "Saved.",
+    "err": {
+      "badName": "Invalid name (2-32 chars).",
+      "maxDepartments": "Department limit reached.",
+      "roleHierarchy": "I can't manage that role.",
+      "exists": "Department already exists.",
+      "notFound": "Department not found.",
+      "notStaff": "Member is not staff.",
+      "alreadyOnShift": "You're already on shift.",
+      "noShift": "No open shift.",
+      "changed": "State changed, try again.",
+      "self": "You can't evaluate yourself.",
+      "badScore": "Score must be 1-10.",
+      "tooSoon": "You evaluated this member in the last 24h."
+    }
+  }
+}
