@@ -1,0 +1,17 @@
+{
+  "name": "guild-backup",
+  "version": "1.0.0",
+  "label": "نسخ السيرفر الاحتياطي",
+  "description": "لقطات لهيكل السيرفر (الرتب والقنوات وصلاحياتها) وإعدادات البوت، مقارنة مع الحالة الحالية، تصدير/استيراد JSON، نسخ مجدول، واستعادة انتقائية غير هدّامة عبر الطابور (تُنشئ الناقص فقط ولا تحذف شيئًا).",
+  "feature": "backups",
+  "defaultEnabled": true,
+  "dependencies": [],
+  "configKey": "guildBackup",
+  "config": {
+    "keep": 10,
+    "schedule": null,
+    "maxBytes": 2000000,
+    "restoreDelayMs": 1500
+  },
+  "permissions": { "manage": 4 }
+}

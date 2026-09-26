@@ -1,0 +1,25 @@
+{
+  "bkp": {
+    "title": "Copias del servidor",
+    "schedule": "Programación",
+    "created": "Copia #{id} creada ({kb}KB).",
+    "scheduled": "Programación: {freq}",
+    "imported": "Importada como #{id}.",
+    "deleted": "Copia #{id} eliminada.",
+    "compareTitle": "Copia #{id} vs actual",
+    "roles": "Roles",
+    "channels": "Canales",
+    "config": "Ajustes del bot",
+    "compareHint": "➖ solo en la copia • ➕ añadido • ✏️ cambiado",
+    "restoreQueued": "Restauración iniciada (tarea #{job}) — {parts}. No se borra nada.",
+    "err": {
+      "notFound": "Copia no encontrada.",
+      "tooBig": "La copia supera el límite.",
+      "tooLarge": "Demasiados elementos.",
+      "badFormat": "Formato inválido.",
+      "file": "Adjunta un JSON válido.",
+      "confirm": "Añade confirm:true.",
+      "noParts": "Elige qué restaurar."
+    }
+  }
+}

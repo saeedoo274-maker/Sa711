@@ -1,0 +1,25 @@
+{
+  "bkp": {
+    "title": "Sunucu yedekleri",
+    "schedule": "Zamanlama",
+    "created": "#{id} yedeği oluşturuldu ({kb}KB).",
+    "scheduled": "Yedek zamanlaması: {freq}",
+    "imported": "#{id} olarak içe aktarıldı.",
+    "deleted": "#{id} yedeği silindi.",
+    "compareTitle": "#{id} yedeği ve mevcut durum",
+    "roles": "Roller",
+    "channels": "Kanallar",
+    "config": "Bot ayarları",
+    "compareHint": "➖ sadece yedekte • ➕ sonradan eklenen • ✏️ değişen",
+    "restoreQueued": "Geri yükleme başladı (iş #{job}) — {parts}. Mevcut hiçbir şey silinmez.",
+    "err": {
+      "notFound": "Yedek bulunamadı.",
+      "tooBig": "Yedek boyut sınırını aşıyor.",
+      "tooLarge": "Çok fazla öğe var.",
+      "badFormat": "Geçersiz dosya biçimi.",
+      "file": "Geçerli bir JSON dosyası ekle.",
+      "confirm": "Onay için confirm:true ekle.",
+      "noParts": "Neyin geri yükleneceğini seç."
+    }
+  }
+}

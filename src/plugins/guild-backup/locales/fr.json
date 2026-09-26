@@ -1,0 +1,25 @@
+{
+  "bkp": {
+    "title": "Sauvegardes du serveur",
+    "schedule": "Planification",
+    "created": "Sauvegarde #{id} créée ({kb} Ko).",
+    "scheduled": "Planification : {freq}",
+    "imported": "Importée sous #{id}.",
+    "deleted": "Sauvegarde #{id} supprimée.",
+    "compareTitle": "Sauvegarde #{id} vs actuel",
+    "roles": "Rôles",
+    "channels": "Salons",
+    "config": "Paramètres du bot",
+    "compareHint": "➖ seulement dans la sauvegarde • ➕ ajouté • ✏️ modifié",
+    "restoreQueued": "Restauration lancée (tâche #{job}) — {parts}. Rien n'est supprimé.",
+    "err": {
+      "notFound": "Sauvegarde introuvable.",
+      "tooBig": "Sauvegarde trop grande.",
+      "tooLarge": "Trop d'éléments.",
+      "badFormat": "Format invalide.",
+      "file": "Joignez un fichier JSON valide.",
+      "confirm": "Ajoutez confirm:true.",
+      "noParts": "Choisissez quoi restaurer."
+    }
+  }
+}

@@ -90,7 +90,20 @@ module.exports = [
         .addStringOption((o) => o.setName("target").setDescription("system:نظام أو أمر أو أمر:فرعي").setAutocomplete(true).setMaxLength(80))
         .addRoleOption((o) => o.setName("role").setDescription("الرتبة"))
         .addChannelOption((o) => o.setName("channel").setDescription("القناة"))
-        .addUserOption((o) => o.setName("user").setDescription("العضو (للاختبار)"))),
+        .addUserOption((o) => o.setName("user").setDescription("العضو (للاختبار)")))
+      .addSubcommand((s) => s.setName("backup").setDescription("نسخ السيرفر الاحتياطي")
+        .addStringOption((o) => o.setName("action").setDescription("الإجراء").setRequired(true).addChoices(
+          { name: "إنشاء", value: "create" }, { name: "عرض", value: "list" }, { name: "مقارنة", value: "compare" },
+          { name: "استعادة", value: "restore" }, { name: "تصدير", value: "export" }, { name: "استيراد", value: "import" },
+          { name: "حذف", value: "delete" }, { name: "جدولة", value: "schedule" }))
+        .addIntegerOption((o) => o.setName("id").setDescription("رقم النسخة").setMinValue(1))
+        .addStringOption((o) => o.setName("name").setDescription("اسم النسخة").setMaxLength(64))
+        .addStringOption((o) => o.setName("parts").setDescription("ما يُستعاد").addChoices(
+          { name: "الكل", value: "config,roles,channels" }, { name: "إعدادات البوت", value: "config" }, { name: "الرتب", value: "roles" },
+          { name: "القنوات", value: "channels" }, { name: "الرتب والقنوات", value: "roles,channels" }))
+        .addAttachmentOption((o) => o.setName("file").setDescription("ملف نسخة JSON (للاستيراد)"))
+        .addStringOption((o) => o.setName("frequency").setDescription("الجدولة").addChoices({ name: "إيقاف", value: "off" }, { name: "يومي", value: "daily" }, { name: "أسبوعي", value: "weekly" }))
+        .addBooleanOption((o) => o.setName("confirm").setDescription("تأكيد الاستعادة"))),
 
     async autocomplete(interaction, app) {
       const focused = interaction.options.getFocused(true);
@@ -278,6 +291,8 @@ module.exports = [
         return ctx.success(t("perm.saved"));
       }
 
+      if (sub === "backup") return backupCommand(ctx);
+
       if (sub === "appeals") {
         if (!app.appeals) return ctx.fail("errors.systemDisabled", { system: "appeals" });
         const updates = {};
@@ -298,3 +313,80 @@ module.exports = [
     }
   }
 ];
+
+async function backupCommand(ctx) {
+  const app = ctx.app;
+  const svc = app.guildBackups;
+  if (!svc || !app.features.isEnabled(ctx.guild.id, "backups")) return ctx.fail("errors.systemDisabled", { system: "guild-backup" });
+  const o = ctx.interaction.options;
+  const t = (k, v) => ctx.t(k, v);
+  const guild = ctx.guild;
+  const action = o.getString("action");
+  const owner = app.permissions.resolveLevel(ctx.member) >= Level.GUILD_OWNER;
+  const fail = (reason) => ctx.fail("errors.actionFailed", { details: t(`bkp.err.${reason}`) });
+  // العمليات التي تكتب على السيرفر أو تُخرج إعداداته كاملة: للمالك فقط
+  if (["restore", "import", "export", "delete"].includes(action) && !owner) return ctx.fail("errors.noPermission");
+
+  if (action === "create") {
+    const res = svc.create(guild, { name: o.getString("name"), userId: ctx.user.id });
+    return res.ok ? ctx.success(t("bkp.created", { id: res.id, kb: Math.ceil(res.size / 1024) })) : fail(res.reason);
+  }
+  if (action === "list") {
+    const rows = svc.list(guild.id);
+    return ctx.reply({
+      embeds: [ctx.embed({
+        title: `💾 ${t("bkp.title")}`,
+        color: "info",
+        description: rows.map((r) => {
+          const s = JSON.parse(r.summary || "{}");
+          return `\`#${r.id}\` **${r.name}** (${r.kind}) — <t:${Math.floor(r.created_at / 1000)}:R> • 🎭 ${s.roles} • # ${s.channels} • ${Math.ceil(r.size_bytes / 1024)}KB`;
+        }).join("\n") || t("ui.empty"),
+        footer: `${t("bkp.schedule")}: ${svc.config(guild.id).schedule || "—"}`
+      })]
+    }, { ephemeral: true });
+  }
+  if (action === "schedule") {
+    const freq = o.getString("frequency") || "off";
+    svc.setSchedule(guild.id, freq === "off" ? null : freq);
+    return ctx.success(t("bkp.scheduled", { freq }));
+  }
+  if (action === "import") {
+    const att = o.getAttachment("file");
+    if (!att || att.size > svc.config(guild.id).maxBytes || !/\.json$/i.test(att.name || "")) return fail("file");
+    const res = await require("../../../core/utils/safeFetch").safeFetch(att.url, { json: true, maxBytes: svc.config(guild.id).maxBytes, timeoutMs: 10_000 });
+    if (!res.ok) return fail("file");
+    const stored = svc.import(guild, res.json, ctx.user.id);
+    return stored.ok ? ctx.success(t("bkp.imported", { id: stored.id })) : fail(stored.reason);
+  }
+
+  const id = o.getInteger("id");
+  const backup = id ? svc.get(guild.id, id) : null;
+  if (!backup) return fail("notFound");
+
+  if (action === "delete") return svc.delete(guild.id, id) ? ctx.success(t("bkp.deleted", { id })) : fail("notFound");
+  if (action === "export") {
+    const { AttachmentBuilder } = require("discord.js");
+    return ctx.reply({ files: [new AttachmentBuilder(Buffer.from(JSON.stringify(backup.data, null, 2), "utf8"), { name: `guild-backup-${id}.json` })] }, { ephemeral: true });
+  }
+  if (action === "compare") {
+    const d = svc.compare(guild, backup.data);
+    const line = (x) => `➖ ${x.missing.length} • ➕ ${x.extra.length} • ✏️ ${x.changed.length}${x.missing.length ? `\n-# ${x.missing.slice(0, 10).join("، ")}` : ""}`;
+    return ctx.reply({
+      embeds: [ctx.embed({
+        title: `🔍 ${t("bkp.compareTitle", { id })}`,
+        color: "info",
+        fields: [
+          { name: t("bkp.roles"), value: line(d.roles) },
+          { name: t("bkp.channels"), value: line(d.channels) },
+          { name: t("bkp.config"), value: d.config.length ? `✏️ ${d.config.length}\n-# ${d.config.slice(0, 10).join("، ")}` : "✅" }
+        ],
+        footer: t("bkp.compareHint")
+      })]
+    }, { ephemeral: true });
+  }
+  // restore
+  if (!o.getBoolean("confirm")) return fail("confirm");
+  const parts = (o.getString("parts") || "config").split(",");
+  const res = svc.startRestore(guild, id, parts, ctx.user.id);
+  return res.ok ? ctx.success(t("bkp.restoreQueued", { job: res.jobId, parts: parts.join(", ") })) : fail(res.reason);
+}

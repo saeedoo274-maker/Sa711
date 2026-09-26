@@ -1,0 +1,25 @@
+{
+  "bkp": {
+    "title": "Server backups",
+    "schedule": "Schedule",
+    "created": "Backup #{id} created ({kb}KB).",
+    "scheduled": "Backup schedule: {freq}",
+    "imported": "Imported as backup #{id}.",
+    "deleted": "Backup #{id} deleted.",
+    "compareTitle": "Backup #{id} vs current",
+    "roles": "Roles",
+    "channels": "Channels",
+    "config": "Bot settings",
+    "compareHint": "➖ only in backup (restorable) • ➕ added since • ✏️ changed",
+    "restoreQueued": "Restore started in background (job #{job}) — parts: {parts}. Nothing existing is deleted.",
+    "err": {
+      "notFound": "Backup not found.",
+      "tooBig": "Backup exceeds size limit.",
+      "tooLarge": "File contains too many items.",
+      "badFormat": "Invalid file format.",
+      "file": "Attach a valid JSON file.",
+      "confirm": "Add confirm:true to confirm the restore.",
+      "noParts": "Choose what to restore."
+    }
+  }
+}
