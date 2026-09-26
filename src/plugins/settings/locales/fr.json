@@ -1,1 +1,31 @@
-{}
+{
+  "setup": {
+    "title": "Assistant de configuration",
+    "back": "Retour",
+    "next": "Suivant",
+    "cancel": "Annuler",
+    "apply": "Appliquer",
+    "pickLanguage": "Choisissez la langue",
+    "pickChannel": "Choisissez un salon",
+    "pickRole": "Choisissez un rôle",
+    "pickCategory": "Choisissez une catégorie",
+    "pickFeatures": "Systèmes activés",
+    "stepLanguage": "**1. Langue** du bot sur ce serveur.",
+    "stepLogs": "**2. Journaux** — salon pour les catégories non définies.",
+    "stepWelcome": "**3. Bienvenue** — salon de bienvenue.",
+    "stepStaff": "**4. Staff** — rôle de base.",
+    "stepTickets": "**5. Tickets** — catégorie.",
+    "stepFeatures": "**6. Systèmes** actifs.",
+    "previewTitle": "Aperçu (rien n'est enregistré)",
+    "noChanges": "Aucun changement.",
+    "lblLanguage": "Langue",
+    "lblLogs": "Journaux",
+    "lblWelcome": "Bienvenue",
+    "lblStaff": "Rôle staff",
+    "lblTickets": "Catégorie tickets",
+    "lblFeature": "Système",
+    "unset": "non définies",
+    "cancelled": "Assistant annulé.",
+    "applied": "{count} paramètres appliqués."
+  }
+}

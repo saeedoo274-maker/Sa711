@@ -1,1 +1,31 @@
-{}
+{
+  "setup": {
+    "title": "Setup wizard",
+    "back": "Back",
+    "next": "Next",
+    "cancel": "Cancel",
+    "apply": "Apply",
+    "pickLanguage": "Choose a language",
+    "pickChannel": "Choose a channel",
+    "pickRole": "Choose a role",
+    "pickCategory": "Choose a category",
+    "pickFeatures": "Enabled systems",
+    "stepLanguage": "**1. Language** — the bot's language in this server.",
+    "stepLogs": "**2. Logs** — a channel for every log category not set yet.",
+    "stepWelcome": "**3. Welcome** — the welcome channel.",
+    "stepStaff": "**4. Staff** — the base staff role.",
+    "stepTickets": "**5. Tickets** — the tickets category.",
+    "stepFeatures": "**6. Systems** — choose which systems are enabled.",
+    "previewTitle": "Preview (nothing saved yet)",
+    "noChanges": "No changes.",
+    "lblLanguage": "Language",
+    "lblLogs": "Logs",
+    "lblWelcome": "Welcome",
+    "lblStaff": "Staff role",
+    "lblTickets": "Tickets category",
+    "lblFeature": "System",
+    "unset": "unset",
+    "cancelled": "Wizard cancelled, nothing saved.",
+    "applied": "Applied {count} settings."
+  }
+}

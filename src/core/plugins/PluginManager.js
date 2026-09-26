@@ -127,9 +127,13 @@ class PluginManager {
 
   /** مصادر معالجات التفاعل للموجّه. */
   interactionSources() {
-    return this.order.map((name) => {
+    // interactions.js، وأي ملفات إضافية داخل interactions/ (لكل ملف بادئة مستقلة)
+    return this.order.flatMap((name) => {
       const p = this.plugins.get(name);
-      return { name, file: path.join(p.dir, "interactions.js"), feature: p.manifest.feature || name, plugin: name };
+      const base = { name, feature: p.manifest.feature || name, plugin: name };
+      const extraDir = path.join(p.dir, "interactions");
+      const extra = fs.existsSync(extraDir) ? fs.readdirSync(extraDir).filter((f) => f.endsWith(".js")).sort().map((f) => ({ ...base, file: path.join(extraDir, f) })) : [];
+      return [{ ...base, file: path.join(p.dir, "interactions.js") }, ...extra];
     });
   }
 

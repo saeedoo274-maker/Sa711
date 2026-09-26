@@ -1,1 +1,31 @@
-{}
+{
+  "setup": {
+    "title": "Asistente de configuración",
+    "back": "Atrás",
+    "next": "Siguiente",
+    "cancel": "Cancelar",
+    "apply": "Aplicar",
+    "pickLanguage": "Elige idioma",
+    "pickChannel": "Elige un canal",
+    "pickRole": "Elige un rol",
+    "pickCategory": "Elige una categoría",
+    "pickFeatures": "Sistemas activos",
+    "stepLanguage": "**1. Idioma** del bot en este servidor.",
+    "stepLogs": "**2. Registros** — canal para categorías sin definir.",
+    "stepWelcome": "**3. Bienvenida** — canal.",
+    "stepStaff": "**4. Staff** — rol base.",
+    "stepTickets": "**5. Tickets** — categoría.",
+    "stepFeatures": "**6. Sistemas** activos.",
+    "previewTitle": "Vista previa (sin guardar)",
+    "noChanges": "Sin cambios.",
+    "lblLanguage": "Idioma",
+    "lblLogs": "Registros",
+    "lblWelcome": "Bienvenida",
+    "lblStaff": "Rol de staff",
+    "lblTickets": "Categoría de tickets",
+    "lblFeature": "Sistema",
+    "unset": "sin definir",
+    "cancelled": "Asistente cancelado.",
+    "applied": "{count} ajustes aplicados."
+  }
+}

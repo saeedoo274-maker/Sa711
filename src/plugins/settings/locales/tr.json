@@ -1,1 +1,31 @@
-{}
+{
+  "setup": {
+    "title": "Kurulum sihirbazı",
+    "back": "Geri",
+    "next": "İleri",
+    "cancel": "İptal",
+    "apply": "Uygula",
+    "pickLanguage": "Dil seç",
+    "pickChannel": "Kanal seç",
+    "pickRole": "Rol seç",
+    "pickCategory": "Kategori seç",
+    "pickFeatures": "Etkin sistemler",
+    "stepLanguage": "**1. Dil** — bu sunucudaki bot dili.",
+    "stepLogs": "**2. Kayıtlar** — ayarlanmamış kategoriler için kanal.",
+    "stepWelcome": "**3. Karşılama** kanalı.",
+    "stepStaff": "**4. Yetkili** — temel rol.",
+    "stepTickets": "**5. Talepler** — kategori.",
+    "stepFeatures": "**6. Sistemler** — etkin olanları seç.",
+    "previewTitle": "Önizleme (henüz kaydedilmedi)",
+    "noChanges": "Değişiklik yok.",
+    "lblLanguage": "Dil",
+    "lblLogs": "Kayıtlar",
+    "lblWelcome": "Karşılama",
+    "lblStaff": "Yetkili rolü",
+    "lblTickets": "Talep kategorisi",
+    "lblFeature": "Sistem",
+    "unset": "ayarsız",
+    "cancelled": "Sihirbaz iptal edildi.",
+    "applied": "{count} ayar uygulandı."
+  }
+}

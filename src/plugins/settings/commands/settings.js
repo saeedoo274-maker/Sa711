@@ -42,6 +42,7 @@ module.exports = [
       .setName("اعداد")
       .setDescription("إعدادات السيرفر")
       .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
+      .addSubcommand((s) => s.setName("setup").setDescription("معالج الإعداد خطوة بخطوة مع معاينة"))
       .addSubcommand((s) => s.setName("language").setDescription("لغة البوت")
         .addStringOption((o) => o.setName("lang").setDescription("اللغة").addChoices(...langChoices)))
       .addSubcommand((s) => s.setName("features").setDescription("تشغيل/إيقاف الأنظمة")
@@ -161,6 +162,8 @@ module.exports = [
       const o = ctx.interaction.options;
       const sub = ctx.subcommand();
       const t = (k, v) => ctx.t(k, v);
+
+      if (sub === "setup") return ctx.reply(app.setupWizard.start(ctx.member), { ephemeral: true });
 
       if (sub === "language") {
         const lang = o.getString("lang");
