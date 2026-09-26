@@ -58,7 +58,8 @@ class DatabaseService {
     this.db = null;
   }
 
-  connect() {
+  /** @param {{migrate?: boolean}} opts migrate=false يفتح القاعدة بلا تطبيق هجرات (لأداة الحالة). */
+  connect({ migrate = true } = {}) {
     const dir = path.dirname(this.dbPath);
     if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
 
@@ -71,7 +72,11 @@ class DatabaseService {
     this.db.pragma("busy_timeout = 5000");
 
     this._instrumentTransactions();
-    this.runMigrations(this.extraMigrationSources || []);
+    if (migrate) this.runMigrations(this.extraMigrationSources || []);
+    else {
+      this.db.exec("CREATE TABLE IF NOT EXISTS _migrations (name TEXT PRIMARY KEY, applied_at INTEGER NOT NULL)");
+      this._migrationSources = this._collectSources(this.extraMigrationSources || []);
+    }
     this.logger.info(`قاعدة البيانات جاهزة: ${this.dbPath}`);
     return this.db;
   }
@@ -90,19 +95,7 @@ class DatabaseService {
     )`);
 
     const applied = new Set(this.db.prepare("SELECT name FROM _migrations").all().map((r) => r.name));
-    const sources = [];
-    if (fs.existsSync(dir)) {
-      for (const file of fs.readdirSync(dir).filter((f) => f.endsWith(".sql")).sort()) {
-        sources.push({ name: file, file: path.join(dir, file) });
-      }
-    }
-    // هجرات الإضافات تُسجَّل باسم مميّز حتى لا تتصادم مع الأساسية
-    for (const src of extraSources) {
-      if (!fs.existsSync(src.dir)) continue;
-      for (const file of fs.readdirSync(src.dir).filter((f) => f.endsWith(".sql")).sort()) {
-        sources.push({ name: `plugin/${src.plugin}/${file}`, file: path.join(src.dir, file) });
-      }
-    }
+    const sources = this._collectSources(extraSources, dir);
 
     let count = 0;
     for (const { name, file } of sources) {
@@ -119,6 +112,24 @@ class DatabaseService {
     }
     this._migrationSources = sources;
     return count;
+  }
+
+  /** قائمة ملفات الهجرة الأساسية ثم هجرات الإضافات بترتيب ثابت. */
+  _collectSources(extraSources = [], dir = path.join(__dirname, "migrations")) {
+    const sources = [];
+    if (fs.existsSync(dir)) {
+      for (const file of fs.readdirSync(dir).filter((f) => f.endsWith(".sql")).sort()) {
+        sources.push({ name: file, file: path.join(dir, file) });
+      }
+    }
+    // هجرات الإضافات تُسجَّل باسم مميّز حتى لا تتصادم مع الأساسية
+    for (const src of extraSources) {
+      if (!fs.existsSync(src.dir)) continue;
+      for (const file of fs.readdirSync(src.dir).filter((f) => f.endsWith(".sql")).sort()) {
+        sources.push({ name: `plugin/${src.plugin}/${file}`, file: path.join(src.dir, file) });
+      }
+    }
+    return sources;
   }
 
   /** يفصل قسم التطبيق عن قسم التراجع في ملف الهجرة. */

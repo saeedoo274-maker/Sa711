@@ -89,6 +89,7 @@ const ReportService = require("../../modules/reports/ReportService");
 const ReactionReplyService = require("../../modules/reactionreply/ReactionReplyService");
 const ChangelogService = require("../../modules/devtools/ChangelogService");
 const BackupService = require("../database/BackupService");
+const TestCenter = require("../diagnostics/TestCenter");
 const HealthServer = require("../server/HealthServer");
 
 /**
@@ -270,6 +271,7 @@ class Application {
     this.reactionReplies.onChange = (guildId) => this.reactionReplyService.invalidate(guildId);
     this.changelogService = new ChangelogService(this);
     this.backups = new BackupService(this);
+    this.testCenter = new TestCenter(this);
     this.health = new HealthServer(this);
     // أي تعديل على الأوامر المخصصة يُبطل كاش الخدمة فورًا
     this.customCommands.onChange = (guildId) => this.customCommandService.invalidate(guildId);
