@@ -43,7 +43,7 @@ class SessionStore {
     const row = this.app.db.prepare("SELECT * FROM web_sessions WHERE id_hash = ?").get(sha256(id));
     if (!row || row.expires_at < Date.now()) return null;
     if (!row.last_seen || Date.now() - row.last_seen > 60_000) this.app.db.prepare("UPDATE web_sessions SET last_seen = ? WHERE id_hash = ?").run(Date.now(), row.id_hash);
-    let guilds = [];
+    let guilds;
     try {
       guilds = JSON.parse(row.guilds);
     } catch {

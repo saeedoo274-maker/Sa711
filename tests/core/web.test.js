@@ -149,7 +149,7 @@ test("لوحة التحكم و REST API v1", async (t) => {
     assert.match(setCookie, /SameSite=Lax/);
     assert.equal((await call(`/auth/callback?code=abc&state=${state}`)).status, 400, "state لا يُعاد استخدامه");
     const sid = decodeURIComponent(setCookie.match(/sid=([^;]+)/)[1]);
-    r = await call("/auth/logout", { method: "POST", headers: { cookie: `sid=${encodeURIComponent(sid)}`, "content-type": "application/x-www-form-urlencoded" }, body: "csrf=wrong" });
+    await call("/auth/logout", { method: "POST", headers: { cookie: `sid=${encodeURIComponent(sid)}`, "content-type": "application/x-www-form-urlencoded" }, body: "csrf=wrong" });
     assert.ok(app.web.sessions.read(sid), "بلا CSRF صحيح لا تُحذف الجلسة");
   });
 });
