@@ -131,7 +131,11 @@ async function start(interaction, app, typeId) {
     const messages = {
       disabled: `${app.config.emoji("error")} التقديم على **${type.label}** مغلق حاليًا.`,
       pending: `${app.config.emoji("warning")} عندك طلب قيد المراجعة على **${type.label}** برقم \`#${check.record?.number}\`.`,
-      cooldown: `${app.config.emoji("warning")} تقدر تقدّم مرة ثانية بعد **${formatDuration(check.remaining)}**.`
+      cooldown: `${app.config.emoji("warning")} تقدر تقدّم مرة ثانية بعد **${formatDuration(check.remaining)}**.`,
+      notOpen: `${app.config.emoji("warning")} التقديم على **${type.label}** يفتح <t:${Math.floor((check.at || 0) / 1000)}:R>.`,
+      closed: `${app.config.emoji("error")} انتهت فترة التقديم على **${type.label}**.`,
+      full: `${app.config.emoji("error")} اكتمل العدد المطلوب في **${type.label}**.`,
+      userLimit: `${app.config.emoji("error")} وصلت للحد الأقصى من التقديمات على **${type.label}**.`
     };
     return safeReply(interaction, { content: messages[check.reason] || messages.disabled, flags: 64 });
   }
@@ -202,7 +206,9 @@ async function submitModal(interaction, app, typeId) {
   // إعادة الفحص عند الإرسال: قد يكون العضو قدّم من نافذة أخرى بين الفتح والإرسال
   const check = app.applicationService.eligibility(interaction.guild.id, type, interaction.user.id);
   if (!check.ok) {
-    return safeReply(interaction, { content: `${app.config.emoji("warning")} عندك طلب قيد المراجعة على هذا التقديم.`, flags: 64 });
+    // النافذة قد تكون فُتحت قبل انتهاء المهلة، فيُعاد الفحص عند الإرسال
+    const text = check.reason === "pending" ? "عندك طلب قيد المراجعة على هذا التقديم." : "التقديم لم يعد متاحًا (مغلق أو اكتمل العدد).";
+    return safeReply(interaction, { content: `${app.config.emoji("warning")} ${text}`, flags: 64 });
   }
 
   const answers = {};

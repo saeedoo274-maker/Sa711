@@ -104,6 +104,40 @@ class ApplicationRepository {
     );
   }
 
+  /** نافذة الفتح والحدود (منشئ النماذج). */
+  setLimits(id, { opensAt, closesAt, maxSubmissions, perUserLimit }) {
+    this.db
+      .prepare("UPDATE application_types SET opens_at = ?, closes_at = ?, max_submissions = ?, per_user_limit = ? WHERE id = ?")
+      .run(opensAt ?? null, closesAt ?? null, maxSubmissions ?? 0, perUserLimit ?? 0, id);
+    return this.getType(id);
+  }
+
+  countForType(typeId) {
+    return this.db.prepare("SELECT COUNT(*) AS c FROM applications WHERE type_id = ?").get(typeId).c;
+  }
+
+  countForUser(guildId, typeId, userId) {
+    return this.db.prepare("SELECT COUNT(*) AS c FROM applications WHERE guild_id = ? AND type_id = ? AND user_id = ?").get(guildId, typeId, userId).c;
+  }
+
+  typeStats(typeId) {
+    return this.db.prepare(
+      `SELECT COUNT(*) AS total,
+         COALESCE(SUM(CASE WHEN status='pending' THEN 1 ELSE 0 END),0) AS pending,
+         COALESCE(SUM(CASE WHEN status='accepted' THEN 1 ELSE 0 END),0) AS accepted,
+         COALESCE(SUM(CASE WHEN status='rejected' THEN 1 ELSE 0 END),0) AS rejected,
+         COUNT(DISTINCT user_id) AS users,
+         AVG(CASE WHEN reviewed_at IS NOT NULL THEN reviewed_at - created_at END) AS avgReviewMs,
+         MAX(created_at) AS lastAt
+       FROM applications WHERE type_id = ?`
+    ).get(typeId);
+  }
+
+  /** كل طلبات نوع للتصدير (محدودة لحماية الذاكرة). */
+  exportRows(typeId, limit = 5000) {
+    return this.db.prepare("SELECT * FROM applications WHERE type_id = ? ORDER BY number ASC LIMIT ?").all(typeId, limit);
+  }
+
   listTypes(guildId) {
     return this.db
       .prepare("SELECT * FROM application_types WHERE guild_id = ? ORDER BY rowid ASC")

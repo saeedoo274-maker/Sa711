@@ -25,6 +25,13 @@ class ApplicationService {
   eligibility(guildId, type, userId) {
     if (!type.enabled) return { ok: false, reason: "disabled" };
 
+    // نافذة الفتح والحدود (كلها اختيارية)
+    const now = Date.now();
+    if (type.opens_at && now < type.opens_at) return { ok: false, reason: "notOpen", at: type.opens_at };
+    if (type.closes_at && now >= type.closes_at) return { ok: false, reason: "closed" };
+    if (type.max_submissions && this.app.applications.countForType(type.id) >= type.max_submissions) return { ok: false, reason: "full" };
+    if (type.per_user_limit && this.app.applications.countForUser(guildId, type.id, userId) >= type.per_user_limit) return { ok: false, reason: "userLimit" };
+
     const pending = this.app.applications.pendingForUser(guildId, type.id, userId);
     if (pending) return { ok: false, reason: "pending", record: pending };
 

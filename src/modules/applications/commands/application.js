@@ -1,7 +1,9 @@
 const { SlashCommandBuilder, PermissionFlagsBits, ChannelType } = require("discord.js");
 const crypto = require("crypto");
 const { Level } = require("../../../core/permissions/PermissionService");
+const { AttachmentBuilder } = require("discord.js");
 const { buildEmbed, parseDuration, formatDuration, truncate, timestamp } = require("../../../core/utils/helpers");
+const { parseDateTime } = require("../../../core/utils/time");
 const editor = require("../editor");
 const interactions = require("../interactions");
 
@@ -22,7 +24,9 @@ module.exports = [
       { name: "panel", required: false, description: "نشر لوحة تصفّح فئات ثم أنواع" },
       { name: "pending", required: false, description: "الطلبات المعلّقة" },
       { name: "show", required: false, description: "عرض طلب برقمه" },
-      { name: "delete", required: false, description: "حذف نوع تقديم" }
+      { name: "delete", required: false, description: "حذف نوع تقديم" },
+      { name: "schedule", required: false, description: "نافذة الفتح/الإغلاق وحدود العدد (منشئ النماذج)" },
+      { name: "stats / export", required: false, description: "إحصاءات النموذج وتصدير الإجابات CSV/JSON" }
     ],
     examples: [
       "/application create name:العصابات label:تقديم - العصابات review:#مراجعة role:@عصابة category:وزارة الداخلية",
@@ -105,6 +109,24 @@ module.exports = [
       .addSubcommand((s) =>
         s.setName("delete").setDescription("حذف نوع تقديم")
           .addStringOption((o) => o.setName("name").setDescription("اسم النوع").setRequired(true))
+      )
+      .addSubcommand((s) =>
+        s.setName("schedule").setDescription("فتح/إغلاق مجدول وحدود العدد")
+          .addStringOption((o) => o.setName("name").setDescription("اسم النوع").setRequired(true))
+          .addStringOption((o) => o.setName("opens").setDescription("يفتح في (2026-10-01 18:00 بتوقيت UTC)").setMaxLength(20))
+          .addStringOption((o) => o.setName("closes").setDescription("يغلق في، أو مدة مثل 7d").setMaxLength(20))
+          .addIntegerOption((o) => o.setName("max").setDescription("أقصى عدد طلبات إجمالي (0 = بلا)").setMinValue(0).setMaxValue(100000))
+          .addIntegerOption((o) => o.setName("per-user").setDescription("أقصى طلبات لكل عضو (0 = بلا)").setMinValue(0).setMaxValue(100))
+          .addBooleanOption((o) => o.setName("clear").setDescription("إزالة كل القيود"))
+      )
+      .addSubcommand((s) =>
+        s.setName("stats").setDescription("إحصاءات نموذج")
+          .addStringOption((o) => o.setName("name").setDescription("اسم النوع").setRequired(true))
+      )
+      .addSubcommand((s) =>
+        s.setName("export").setDescription("تصدير الإجابات")
+          .addStringOption((o) => o.setName("name").setDescription("اسم النوع").setRequired(true))
+          .addStringOption((o) => o.setName("format").setDescription("الصيغة").addChoices({ name: "CSV", value: "csv" }, { name: "JSON", value: "json" }))
       ),
 
     async execute(ctx) {
@@ -224,6 +246,10 @@ module.exports = [
       const type = ctx.app.applications.getTypeByName(guildId, name);
       if (!type) return ctx.fail("errors.actionFailed", { details: `ما لقيت نوعًا اسمه \`${name}\`.` });
 
+      if (sub === "schedule") return formSchedule(ctx, type);
+      if (sub === "stats") return formStats(ctx, type);
+      if (sub === "export") return formExport(ctx, type);
+
       if (sub === "delete") {
         ctx.app.applications.deleteType(guildId, name);
         return ctx.success(`تم حذف نوع التقديم \`${name}\`.`);
@@ -297,3 +323,96 @@ module.exports = [
     }
   }
 ];
+
+function formSchedule(ctx, type) {
+  const o = ctx.interaction.options;
+  if (o.getBoolean("clear")) {
+    ctx.app.applications.setLimits(type.id, {});
+    return ctx.success(`تمت إزالة قيود **${type.label}**.`);
+  }
+  const INVALID = Symbol("invalid");
+  const parseWhen = (raw, base = Date.now()) => {
+    // التاريخ الصريح أولًا، لأن محلل المدد متساهل مع الأرقام
+    const at = parseDateTime(raw, "UTC");
+    if (at) return at;
+    const dur = parseDuration(raw);
+    return dur ? base + dur : INVALID;
+  };
+  const opensAt = o.getString("opens") ? parseWhen(o.getString("opens")) : type.opens_at ?? null;
+  const closesAt = o.getString("closes") ? parseWhen(o.getString("closes"), opensAt && opensAt !== INVALID ? opensAt : Date.now()) : type.closes_at ?? null;
+  if (opensAt === INVALID || closesAt === INVALID) return ctx.fail("errors.invalidDuration");
+  if (opensAt && closesAt && closesAt <= opensAt) return ctx.fail("errors.actionFailed", { details: "وقت الإغلاق يجب أن يكون بعد الفتح." });
+  const updated = ctx.app.applications.setLimits(type.id, {
+    opensAt, closesAt,
+    maxSubmissions: o.getInteger("max") ?? type.max_submissions,
+    perUserLimit: o.getInteger("per-user") ?? type.per_user_limit
+  });
+  return ctx.reply({
+    embeds: [buildEmbed({
+      title: `🗓️ ${updated.label}`,
+      color: ctx.color("info"),
+      fields: [
+        { name: "يفتح", value: updated.opens_at ? timestamp(updated.opens_at, "F") : "الآن", inline: true },
+        { name: "يغلق", value: updated.closes_at ? timestamp(updated.closes_at, "F") : "بلا", inline: true },
+        { name: "الحد الإجمالي", value: updated.max_submissions ? `\`${updated.max_submissions}\`` : "بلا", inline: true },
+        { name: "لكل عضو", value: updated.per_user_limit ? `\`${updated.per_user_limit}\`` : "بلا", inline: true }
+      ]
+    })]
+  }, { ephemeral: true });
+}
+
+function formStats(ctx, type) {
+  const st = ctx.app.applications.typeStats(type.id);
+  return ctx.reply({
+    embeds: [buildEmbed({
+      title: `📊 ${type.label}`,
+      color: ctx.color("info"),
+      fields: [
+        { name: "الإجمالي", value: `\`${st.total}\`${type.max_submissions ? ` / ${type.max_submissions}` : ""}`, inline: true },
+        { name: "معلّق", value: `\`${st.pending}\``, inline: true },
+        { name: "مقبول", value: `\`${st.accepted}\``, inline: true },
+        { name: "مرفوض", value: `\`${st.rejected}\``, inline: true },
+        { name: "أعضاء مختلفون", value: `\`${st.users}\``, inline: true },
+        { name: "متوسط المراجعة", value: st.avgReviewMs ? formatDuration(st.avgReviewMs) : "—", inline: true },
+        { name: "نسبة القبول", value: st.accepted + st.rejected ? `${Math.round((st.accepted / (st.accepted + st.rejected)) * 100)}%` : "—", inline: true },
+        { name: "آخر طلب", value: st.lastAt ? timestamp(st.lastAt, "R") : "—", inline: true }
+      ]
+    })]
+  }, { ephemeral: true });
+}
+
+/** يحمي من حقن الصيغ في برامج الجداول (CSV injection). */
+function csvCell(value) {
+  let v = String(value ?? "");
+  if (/^[=+\-@\t\r]/.test(v)) v = `'${v}`;
+  return `"${v.replace(/"/g, '""')}"`;
+}
+
+function formExport(ctx, type) {
+  const rows = ctx.app.applications.exportRows(type.id);
+  if (!rows.length) return ctx.fail("errors.actionFailed", { details: "لا توجد طلبات للتصدير." });
+  const format = ctx.interaction.options.getString("format") || "csv";
+  const parse = (a) => {
+    try {
+      return JSON.parse(a || "{}");
+    } catch {
+      return {};
+    }
+  };
+  let body;
+  if (format === "json") {
+    body = JSON.stringify({ form: type.name, exportedAt: new Date().toISOString(), rows: rows.map((r) => ({ ...r, answers: parse(r.answers) })) }, null, 2);
+  } else {
+    const questions = [...new Set([...type.questions.map((q) => q.label), ...rows.flatMap((r) => Object.keys(parse(r.answers)))])];
+    const header = ["number", "user_id", "status", "reviewer_id", "created_at", "reviewed_at", ...questions];
+    const lines = rows.map((r) => {
+      const ans = parse(r.answers);
+      return [r.number, r.user_id, r.status, r.reviewer_id, new Date(r.created_at).toISOString(), r.reviewed_at ? new Date(r.reviewed_at).toISOString() : "", ...questions.map((q) => ans[q])].map(csvCell).join(",");
+    });
+    body = "\uFEFF" + [header.map(csvCell).join(","), ...lines].join("\n");
+  }
+  const file = new AttachmentBuilder(Buffer.from(body, "utf8"), { name: `${type.name}-${Date.now()}.${format}` });
+  return ctx.reply({ content: `📦 \`${rows.length}\` طلب`, files: [file] }, { ephemeral: true });
+}
+
+module.exports.csvCell = csvCell;
