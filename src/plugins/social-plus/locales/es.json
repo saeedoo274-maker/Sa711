@@ -1,0 +1,43 @@
+{
+  "soc": {
+    "reputation": "Reputación",
+    "followers": "Seguidores / Siguiendo",
+    "friends": "Amigos",
+    "comments": "Comentarios",
+    "accept": "Aceptar",
+    "decline": "Rechazar",
+    "friendRequestDm": "{user} te envió una solicitud de amistad en {server}.",
+    "friendAccepted": "Ahora eres amigo de {user}.",
+    "friendDeclined": "Solicitud rechazada.",
+    "repGiven": "Reputación dada a {user} ({total}).",
+    "followOn": "Ahora sigues a {user}.",
+    "followOff": "Dejaste de seguir a {user}.",
+    "friendSent": "Solicitud enviada.",
+    "friendRemoved": "Amigo eliminado.",
+    "blockOn": "{user} bloqueado.",
+    "blockOff": "{user} desbloqueado.",
+    "muteOn": "{user} silenciado.",
+    "muteOff": "{user} ya no está silenciado.",
+    "commented": "Comentario añadido (#{id}).",
+    "commentDeleted": "Comentario eliminado.",
+    "privacySaved": "Privacidad guardada.",
+    "requests": "Solicitudes recibidas",
+    "hidden": "Este perfil es privado.",
+    "err": {
+      "invalidTarget": "Miembro inválido.",
+      "self": "No puedes hacerlo contigo.",
+      "blocked": "No es posible — hay un bloqueo.",
+      "privacy": "La privacidad del miembro lo impide.",
+      "dailyLimit": "Límite diario alcanzado ({max}).",
+      "cooldown": "Podrás hacerlo en {time}.",
+      "alreadyFriends": "Ya son amigos.",
+      "alreadyRequested": "Ya hay una solicitud pendiente.",
+      "maxFriends": "Límite de amigos alcanzado.",
+      "noRequest": "No hay solicitud.",
+      "notFriends": "No son amigos.",
+      "empty": "Escribe un comentario.",
+      "notFound": "No encontrado.",
+      "noPermission": "No puedes hacerlo."
+    }
+  }
+}

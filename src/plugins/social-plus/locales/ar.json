@@ -1,0 +1,43 @@
+{
+  "soc": {
+    "reputation": "السمعة",
+    "followers": "المتابِعون / يتابع",
+    "friends": "الأصدقاء",
+    "comments": "تعليقات الملف",
+    "accept": "قبول",
+    "decline": "رفض",
+    "friendRequestDm": "{user} أرسل لك طلب صداقة في {server}.",
+    "friendAccepted": "أصبحت صديقًا لـ {user}.",
+    "friendDeclined": "تم رفض الطلب.",
+    "repGiven": "تم منح سمعة لـ {user} (المجموع {total}).",
+    "followOn": "تتابع {user} الآن.",
+    "followOff": "ألغيت متابعة {user}.",
+    "friendSent": "تم إرسال طلب الصداقة.",
+    "friendRemoved": "تمت إزالة الصداقة.",
+    "blockOn": "تم حظر {user} اجتماعيًا.",
+    "blockOff": "تم فك حظر {user}.",
+    "muteOn": "تم كتم {user}.",
+    "muteOff": "تم إلغاء كتم {user}.",
+    "commented": "تمت إضافة تعليقك (#{id}).",
+    "commentDeleted": "تم حذف التعليق.",
+    "privacySaved": "تم حفظ إعدادات الخصوصية.",
+    "requests": "طلبات الصداقة الواردة",
+    "hidden": "هذا الملف خاص.",
+    "err": {
+      "invalidTarget": "عضو غير صالح.",
+      "self": "لا يمكنك فعل ذلك مع نفسك.",
+      "blocked": "لا يمكن — يوجد حظر بينكما.",
+      "privacy": "إعدادات خصوصية العضو تمنع ذلك.",
+      "dailyLimit": "وصلت للحد اليومي ({max}).",
+      "cooldown": "يمكنك منحه سمعة مجددًا بعد {time}.",
+      "alreadyFriends": "أنتما صديقان بالفعل.",
+      "alreadyRequested": "يوجد طلب صداقة معلّق.",
+      "maxFriends": "وصلت للحد الأقصى من الأصدقاء.",
+      "noRequest": "لا يوجد طلب صداقة.",
+      "notFriends": "لستما صديقين.",
+      "empty": "اكتب نص التعليق.",
+      "notFound": "غير موجود.",
+      "noPermission": "لا تملك صلاحية ذلك."
+    }
+  }
+}

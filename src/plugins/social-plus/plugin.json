@@ -1,0 +1,17 @@
+{
+  "name": "social-plus",
+  "version": "1.0.0",
+  "label": "التواصل الاجتماعي المتقدم",
+  "description": "توسعة الملف الاجتماعي: سمعة (+rep) بحد يومي، متابعة، صداقات بطلب وقبول، حظر وكتم، تعليقات على الملف، وإعدادات خصوصية لكل عضو.",
+  "feature": "social",
+  "defaultEnabled": true,
+  "dependencies": [],
+  "configKey": "socialPlus",
+  "config": {
+    "repDailyLimit": 3,
+    "repCooldownMs": 86400000,
+    "maxFriends": 200,
+    "maxCommentsPerDay": 10
+  },
+  "permissions": { "manage": 3 }
+}

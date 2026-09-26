@@ -1,0 +1,43 @@
+{
+  "soc": {
+    "reputation": "Réputation",
+    "followers": "Abonnés / Abonnements",
+    "friends": "Amis",
+    "comments": "Commentaires",
+    "accept": "Accepter",
+    "decline": "Refuser",
+    "friendRequestDm": "{user} vous a envoyé une demande d'ami sur {server}.",
+    "friendAccepted": "Vous êtes ami avec {user}.",
+    "friendDeclined": "Demande refusée.",
+    "repGiven": "Réputation donnée à {user} ({total}).",
+    "followOn": "Vous suivez {user}.",
+    "followOff": "Vous ne suivez plus {user}.",
+    "friendSent": "Demande d'ami envoyée.",
+    "friendRemoved": "Ami retiré.",
+    "blockOn": "{user} bloqué.",
+    "blockOff": "{user} débloqué.",
+    "muteOn": "{user} masqué.",
+    "muteOff": "{user} n'est plus masqué.",
+    "commented": "Commentaire ajouté (#{id}).",
+    "commentDeleted": "Commentaire supprimé.",
+    "privacySaved": "Confidentialité enregistrée.",
+    "requests": "Demandes reçues",
+    "hidden": "Ce profil est privé.",
+    "err": {
+      "invalidTarget": "Membre invalide.",
+      "self": "Impossible sur vous-même.",
+      "blocked": "Impossible — blocage entre vous.",
+      "privacy": "La confidentialité du membre l'empêche.",
+      "dailyLimit": "Limite quotidienne atteinte ({max}).",
+      "cooldown": "Réessayez dans {time}.",
+      "alreadyFriends": "Déjà amis.",
+      "alreadyRequested": "Une demande est déjà en attente.",
+      "maxFriends": "Limite d'amis atteinte.",
+      "noRequest": "Aucune demande.",
+      "notFriends": "Vous n'êtes pas amis.",
+      "empty": "Écrivez un commentaire.",
+      "notFound": "Introuvable.",
+      "noPermission": "Vous ne pouvez pas."
+    }
+  }
+}

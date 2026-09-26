@@ -1,0 +1,43 @@
+{
+  "soc": {
+    "reputation": "İtibar",
+    "followers": "Takipçi / Takip",
+    "friends": "Arkadaşlar",
+    "comments": "Profil yorumları",
+    "accept": "Kabul",
+    "decline": "Reddet",
+    "friendRequestDm": "{user} {server} sunucusunda arkadaşlık isteği gönderdi.",
+    "friendAccepted": "{user} ile artık arkadaşsın.",
+    "friendDeclined": "İstek reddedildi.",
+    "repGiven": "{user} kullanıcısına itibar verildi ({total}).",
+    "followOn": "{user} takip ediliyor.",
+    "followOff": "{user} takipten çıkarıldı.",
+    "friendSent": "Arkadaşlık isteği gönderildi.",
+    "friendRemoved": "Arkadaş kaldırıldı.",
+    "blockOn": "{user} engellendi.",
+    "blockOff": "{user} engeli kaldırıldı.",
+    "muteOn": "{user} susturuldu.",
+    "muteOff": "{user} susturması kaldırıldı.",
+    "commented": "Yorum eklendi (#{id}).",
+    "commentDeleted": "Yorum silindi.",
+    "privacySaved": "Gizlilik kaydedildi.",
+    "requests": "Gelen istekler",
+    "hidden": "Bu profil gizli.",
+    "err": {
+      "invalidTarget": "Geçersiz üye.",
+      "self": "Bunu kendine yapamazsın.",
+      "blocked": "Mümkün değil — engel var.",
+      "privacy": "Üyenin gizlilik ayarları engelliyor.",
+      "dailyLimit": "Günlük sınıra ulaşıldı ({max}).",
+      "cooldown": "{time} sonra tekrar verebilirsin.",
+      "alreadyFriends": "Zaten arkadaşsınız.",
+      "alreadyRequested": "Bekleyen istek var.",
+      "maxFriends": "Arkadaş sınırına ulaşıldı.",
+      "noRequest": "İstek yok.",
+      "notFriends": "Arkadaş değilsiniz.",
+      "empty": "Yorum yaz.",
+      "notFound": "Bulunamadı.",
+      "noPermission": "Bunu yapamazsın."
+    }
+  }
+}

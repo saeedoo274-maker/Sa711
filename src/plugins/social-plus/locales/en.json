@@ -1,0 +1,43 @@
+{
+  "soc": {
+    "reputation": "Reputation",
+    "followers": "Followers / Following",
+    "friends": "Friends",
+    "comments": "Profile comments",
+    "accept": "Accept",
+    "decline": "Decline",
+    "friendRequestDm": "{user} sent you a friend request in {server}.",
+    "friendAccepted": "You're now friends with {user}.",
+    "friendDeclined": "Request declined.",
+    "repGiven": "Gave reputation to {user} (total {total}).",
+    "followOn": "You now follow {user}.",
+    "followOff": "Unfollowed {user}.",
+    "friendSent": "Friend request sent.",
+    "friendRemoved": "Friend removed.",
+    "blockOn": "Blocked {user}.",
+    "blockOff": "Unblocked {user}.",
+    "muteOn": "Muted {user}.",
+    "muteOff": "Unmuted {user}.",
+    "commented": "Comment added (#{id}).",
+    "commentDeleted": "Comment deleted.",
+    "privacySaved": "Privacy saved.",
+    "requests": "Incoming friend requests",
+    "hidden": "This profile is private.",
+    "err": {
+      "invalidTarget": "Invalid member.",
+      "self": "You can't do that to yourself.",
+      "blocked": "Not possible — there's a block between you.",
+      "privacy": "The member's privacy settings prevent this.",
+      "dailyLimit": "Daily limit reached ({max}).",
+      "cooldown": "You can rep this member again in {time}.",
+      "alreadyFriends": "Already friends.",
+      "alreadyRequested": "A friend request is already pending.",
+      "maxFriends": "Friends limit reached.",
+      "noRequest": "No friend request.",
+      "notFriends": "You're not friends.",
+      "empty": "Write a comment.",
+      "notFound": "Not found.",
+      "noPermission": "You can't do that."
+    }
+  }
+}

@@ -120,7 +120,9 @@ class SocialService {
       thumbnail: user?.displayAvatarURL?.() || undefined,
       fields: [
         { name: "المنشورات", value: `\`${posts}\``, inline: true },
-        { name: "عضو منذ", value: timestamp(profile.created_at, "R"), inline: true }
+        { name: "عضو منذ", value: timestamp(profile.created_at, "R"), inline: true },
+        // السمعة والمتابعون والأصدقاء والتعليقات من إضافة social-plus (إن كانت مفعّلة)
+        ...(this.app.socialPlus && this.app.features.isEnabled(guild.id, "social") ? this.app.socialPlus.profileFields(guild.id, profile.user_id) : [])
       ]
     });
   }
