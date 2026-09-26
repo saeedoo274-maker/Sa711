@@ -45,7 +45,7 @@ test("منشئ النماذج (توسعة التقديمات)", async (t) => {
     let i = await run("schedule", { name: "event", opens: "2h" });
     assert.match(H.textOf(i.replies), /يفتح/);
     assert.equal((await submit(bob, {})).reason, "notOpen");
-    i = await run("schedule", { name: "event", opens: "2020-01-01 10:00", closes: "2020-01-02 10:00" });
+    await run("schedule", { name: "event", opens: "2020-01-01 10:00", closes: "2020-01-02 10:00" });
     assert.equal((await submit(bob, {})).reason, "closed");
     i = await run("schedule", { name: "event", opens: "2026-01-02 10:00", closes: "2026-01-01 10:00" });
     assert.match(H.textOf(i.replies), /بعد الفتح/);
