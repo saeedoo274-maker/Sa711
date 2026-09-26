@@ -7,6 +7,7 @@ const { Level } = require("../../core/permissions/PermissionService");
 const { buildEmbed, extractId, parseDuration, formatDuration, truncate, timestamp } = require("../../core/utils/helpers");
 const { containerPayload } = require("../../core/utils/componentsV2");
 const { safeUpdate, safeReply, safeModal, ackComponent } = require("../../core/interactions/interactionSafe");
+const systems = require("./systems");
 
 const LOG_TYPES = [
   { key: "moderation", label: "الإجراءات الإدارية" },
@@ -56,7 +57,10 @@ function btn(id, label, emoji, style = ButtonStyle.Secondary) {
 }
 
 function backRow(app) {
-  return new ActionRowBuilder().addComponents(btn("panel:home", "القائمة الرئيسية", app.config.emoji("back")));
+  return new ActionRowBuilder().addComponents(
+    btn("panel:home", "القائمة الرئيسية", app.config.emoji("back")),
+    btn("panel:close", "إغلاق", "✖️")
+  );
 }
 
 /**
@@ -164,6 +168,8 @@ function home(app, member) {
   if (row4.components.length) rows.push(row4);
 
   const row5 = new ActionRowBuilder().addComponents(btn("panel:help", app.i18n.t("panel.sections.help"), e("help"), ButtonStyle.Primary));
+  // الأنظمة والإعدادات الموسّعة (الترحيب، التحقق، المستويات، الاقتراحات، الثيم، السجلات...)
+  if (level >= Level.MODERATOR) row5.addComponents(btn("panel:sys", "الأنظمة والإعدادات", "🧩", ButtonStyle.Primary));
   rows.push(row5);
 
   // كل شاشات اللوحة تمر عبر panelView فتُعرض بنمط Components v2 موحّد:
@@ -229,7 +235,13 @@ module.exports = {
       security: Level.ADMIN, securitytoggle: Level.ADMIN, securitypick: Level.ADMIN, securityset: Level.ADMIN,
       oversight: Level.DEVELOPER, oversightpick: Level.DEVELOPER, oversightset: Level.DEVELOPER,
       oversightaction: Level.DEVELOPER,
-      checkup: Level.STAFF
+      checkup: Level.STAFF,
+
+      // محرّر الإمبيد من داخل اللوحة
+      ebopen: Level.ADMIN, ebvars: Level.ADMIN, ebtpls: Level.ADMIN,
+
+      // الأنظمة والإعدادات (systems.js) — وكل نظام يفحص مستواه الخاص أيضًا
+      ...Object.fromEntries(systems.ACTIONS.map((a) => [a, a === "close" ? Level.EVERYONE : Level.MODERATOR]))
     }[action];
 
     if (needed !== undefined && level < needed) {
@@ -364,7 +376,14 @@ module.exports = {
       case "rpimages": return rpImagesModal(interaction, app);
       case "rpimagessave": return rpImagesSave(interaction, app);
 
-      default: return null;
+      // محرّر الإمبيد: فتح إمبيد، المتغيرات، القوالب
+      case "ebopen": return builderOpen(interaction, app);
+      case "ebvars": return builderVariables(interaction, app);
+      case "ebtpls": return builderTemplates(interaction, app);
+
+      default:
+        if (systems.ACTIONS.includes(action)) return systems.handle(interaction, app, { panelView, btn });
+        return null;
     }
   }
 };
@@ -871,7 +890,68 @@ async function builderPanel(interaction, app) {
       }
     ]
   });
-  return safeUpdate(interaction, panelView({ embeds: [embed], components: [backRow(app)] }));
+  const rows = [];
+  if (embeds.length) {
+    rows.push(new ActionRowBuilder().addComponents(
+      new StringSelectMenuBuilder()
+        .setCustomId("panel:ebopen")
+        .setPlaceholder("افتح إمبيدًا في المحرّر")
+        .addOptions(embeds.slice(0, 25).map((x) => ({ label: truncate(x.name, 100), value: String(x.id) })))
+    ));
+  }
+  rows.push(new ActionRowBuilder().addComponents(
+    btn("panel:ebvars", "المتغيرات", "🔣"),
+    btn("panel:ebtpls", "القوالب", "📂")
+  ));
+  rows.push(backRow(app));
+  return safeUpdate(interaction, panelView({ embeds: [embed], components: rows }));
+}
+
+/**
+ * يفتح محرّر الإمبيد الموجود (eb:) في رسالة مخفية جديدة.
+ * المحرّر يعمل بالإمبيد التقليدي، ورسالة اللوحة تحمل علم v2 لا يُزال —
+ * فلا نحوّل رسالة اللوحة إليه، بل نفتحه بجانبها.
+ */
+async function builderOpen(interaction, app) {
+  const record = app.embeds.get(String(interaction.values?.[0] || ""));
+  if (!record || record.guild_id !== interaction.guild.id) {
+    return safeReply(interaction, { content: `${app.config.emoji("error")} هذا الإمبيد لم يعد موجودًا.`, flags: 64 });
+  }
+  const { editorView } = require("../builder/interactions");
+  return safeReply(interaction, { ...editorView(app, record), flags: 64 });
+}
+
+async function builderVariables(interaction, app) {
+  const variables = require("../../core/utils/variables");
+  const embed = buildEmbed({
+    title: "🔣 المتغيرات المتاحة",
+    description: "تعمل في الإمبيدات والردود والأوامر المخصصة والترحيب والإعلانات.",
+    color: app.config.color("primary"),
+    fields: Object.entries(variables.VARIABLE_GROUPS).map(([group, names]) => ({
+      name: group,
+      value: truncate(names.map((n) => `\`{${n}}\``).join(" • "), 1024)
+    }))
+  });
+  return safeUpdate(interaction, panelView({
+    embeds: [embed],
+    components: [new ActionRowBuilder().addComponents(btn("panel:builder", "رجوع", "⬅️"), btn("panel:home", "الرئيسية", "🏠"), btn("panel:close", "إغلاق", "✖️"))]
+  }));
+}
+
+async function builderTemplates(interaction, app) {
+  const templates = app.embeds.listTemplates(interaction.guild.id);
+  const embed = buildEmbed({
+    title: `📂 قوالب الإمبيد (${templates.length})`,
+    description: templates.length
+      ? templates.slice(0, 30).map((t) => `• \`${t.name}\``).join("\n")
+      : "ما فيه قوالب بعد. احفظ أي إمبيد كقالب من زر **💾 حفظ كقالب** داخل المحرّر.",
+    color: app.config.color("primary"),
+    footer: "لتطبيق قالب: افتح الإمبيد في المحرّر ← 📂 القوالب"
+  });
+  return safeUpdate(interaction, panelView({
+    embeds: [embed],
+    components: [new ActionRowBuilder().addComponents(btn("panel:builder", "رجوع", "⬅️"), btn("panel:home", "الرئيسية", "🏠"), btn("panel:close", "إغلاق", "✖️"))]
+  }));
 }
 
 // ---------------- الاقتصاد ----------------
