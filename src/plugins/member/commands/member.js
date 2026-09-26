@@ -13,7 +13,7 @@ module.exports = [
       whois: { sub: "history" }, "سجل_عضو": { sub: "history" }, achievements: { sub: "achievements" }, ach: { sub: "achievements" },
       "انجازات": { sub: "achievements" }, badges: { sub: "badges" }, "شارات": { sub: "badges" }, leaderboards: { sub: "leaderboard" }, "متصدرين": { sub: "leaderboard" }
     },
-    subAliases: { سجل: "history", بحث: "lookup", انجازات: "achievements", شارات: "badges", ترتيب: "leaderboard", دعوات: "invites" },
+    subAliases: { سجل: "history", بحث: "lookup", انجازات: "achievements", شارات: "badges", ترتيب: "leaderboard", دعوات: "invites", استئناف: "appeal" },
     defaultSubcommand: "history",
     description: "ملف العضو: السجل الكامل (أسماء، رتب، دخول/خروج، إدارة، تذاكر، تقديمات، نشاط، XP، اقتصاد) والبحث.",
     usage: "/عضو history user:@عضو | /عضو lookup query:الاسم",
@@ -23,7 +23,8 @@ module.exports = [
       { name: "achievements", required: false, description: "إنجازاتك وتقدمك" },
       { name: "badges", required: false, description: "شاراتك" },
       { name: "leaderboard", required: false, description: "لوحات المتصدرين (14 نوعًا)" },
-      { name: "invites", required: false, description: "دعوات عضو ومن دعاه" }
+      { name: "invites", required: false, description: "دعوات عضو ومن دعاه" },
+      { name: "appeal", required: false, description: "استئناف تحذير أو إسكات (سلاش)" }
     ],
     examples: ["/عضو history user:@عضو", "!whois 123456789012345678", "/عضو lookup query:ahmed"],
     category: "member",
@@ -41,7 +42,9 @@ module.exports = [
       .addSubcommand((s) => s.setName("leaderboard").setDescription("لوحات المتصدرين")
         .addStringOption((o) => o.setName("type").setDescription("النوع").addChoices(...lbTypes.map((v) => ({ name: v, value: v }))))
         .addStringOption((o) => o.setName("period").setDescription("الفترة").addChoices(...lbPeriods)))
-      .addSubcommand((s) => s.setName("invites").setDescription("الدعوات").addUserOption((o) => o.setName("user").setDescription("العضو"))),
+      .addSubcommand((s) => s.setName("invites").setDescription("الدعوات").addUserOption((o) => o.setName("user").setDescription("العضو")))
+      .addSubcommand((s) => s.setName("appeal").setDescription("استئناف عقوبة")
+        .addIntegerOption((o) => o.setName("case").setDescription("رقم القضية").setRequired(true).setMinValue(1))),
 
     async execute(ctx) {
       const app = ctx.app;
@@ -111,6 +114,15 @@ module.exports = [
         if (!app.invites || !app.features.isEnabled(ctx.guild.id, "invites")) return ctx.fail("errors.systemDisabled", { system: "invites" });
         const user = (await ctx.getUser("user", 0)) || ctx.user;
         return ctx.reply(app.invites.payload(ctx.guild, user));
+      }
+
+      if (sub === "appeal") {
+        if (!app.appeals || !app.features.isEnabled(ctx.guild.id, "appeals")) return ctx.fail("errors.systemDisabled", { system: "appeals" });
+        if (!ctx.isSlash) return ctx.fail("errors.actionFailed", { details: t("apl.err.slashOnly") });
+        const record = app.cases.getByNumber(ctx.guild.id, ctx.interaction.options.getInteger("case"));
+        const check = app.appeals.eligibility(ctx.guild.id, ctx.user.id, record);
+        if (!check.ok) return ctx.fail("errors.actionFailed", { details: t(`apl.err.${check.reason}`, { time: check.wait ? Math.ceil(check.wait / 3_600_000) + "h" : "" }) });
+        return ctx.interaction.showModal(app.appeals.modal(ctx.guild.id, record.case_number));
       }
 
       return ctx.fail("errors.actionFailed", { details: sub });

@@ -95,8 +95,11 @@ class ModerationService {
     if (reason) fields.push({ name: this.app.i18n.t("common.reason"), value: reason });
     if (durationMs) fields.push({ name: this.app.i18n.t("common.duration"), value: formatDuration(durationMs) });
 
+    // زر الاستئناف (إن كانت إضافة الاستئنافات مفعّلة ومضبوطة لهذا النوع)
+    const components = this.app.appeals ? this.app.appeals.dmComponents(guild, type) : [];
     await user.send({
-      embeds: [buildEmbed({ description: text, color: this.app.config.color("danger"), fields })]
+      embeds: [buildEmbed({ description: text, color: this.app.config.color("danger"), fields })],
+      components
     });
   }
 }

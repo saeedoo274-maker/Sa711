@@ -1,0 +1,36 @@
+{
+  "apl": {
+    "button": "Appeal",
+    "modalTitle": "Appeal case #{number}",
+    "reasonLabel": "Why should this be reviewed?",
+    "reviewTitle": "Appeal #{id}",
+    "user": "Member",
+    "case": "Case",
+    "status": "Status",
+    "caseReason": "Punishment reason",
+    "duration": "Duration",
+    "appealReason": "Appeal reason",
+    "accept": "Accept",
+    "reject": "Reject",
+    "submitted": "Your appeal (#{id}) was submitted.",
+    "dmAccepted": "Your appeal for case #{number} in {server} was accepted.",
+    "dmRejected": "Your appeal for case #{number} in {server} was rejected.",
+    "pendingTitle": "Pending appeals",
+    "settingsSaved": "Appeal settings saved.",
+    "err": {
+      "disabled": "Appeals are not available in this server.",
+      "noCase": "No active punishment to appeal.",
+      "inactive": "This case is no longer active.",
+      "type": "This punishment type can't be appealed.",
+      "pending": "You already have a pending appeal for this case.",
+      "max": "Appeal limit reached for this case.",
+      "cooldown": "You can appeal again in {time}.",
+      "short": "Please write a longer reason.",
+      "notFound": "Appeal not found.",
+      "noPermission": "You can't review appeals.",
+      "self": "You can't review your own appeal.",
+      "decided": "This appeal was already reviewed.",
+      "slashOnly": "Use the slash command for this."
+    }
+  }
+}

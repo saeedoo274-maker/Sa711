@@ -1,0 +1,36 @@
+{
+  "apl": {
+    "button": "Apelar",
+    "modalTitle": "Apelar caso #{number}",
+    "reasonLabel": "¿Por qué revisarla?",
+    "reviewTitle": "Apelación #{id}",
+    "user": "Miembro",
+    "case": "Caso",
+    "status": "Estado",
+    "caseReason": "Motivo de la sanción",
+    "duration": "Duración",
+    "appealReason": "Motivo de la apelación",
+    "accept": "Aceptar",
+    "reject": "Rechazar",
+    "submitted": "Tu apelación (#{id}) fue enviada.",
+    "dmAccepted": "Tu apelación del caso #{number} en {server} fue aceptada.",
+    "dmRejected": "Tu apelación del caso #{number} en {server} fue rechazada.",
+    "pendingTitle": "Apelaciones pendientes",
+    "settingsSaved": "Ajustes de apelación guardados.",
+    "err": {
+      "disabled": "Las apelaciones no están disponibles.",
+      "noCase": "No hay sanción activa para apelar.",
+      "inactive": "Este caso ya no está activo.",
+      "type": "Este tipo de sanción no se puede apelar.",
+      "pending": "Ya tienes una apelación pendiente.",
+      "max": "Límite de apelaciones alcanzado.",
+      "cooldown": "Podrás apelar de nuevo en {time}.",
+      "short": "Escribe un motivo más largo.",
+      "notFound": "Apelación no encontrada.",
+      "noPermission": "No puedes revisar apelaciones.",
+      "self": "No puedes revisar tu propia apelación.",
+      "decided": "Esta apelación ya fue revisada.",
+      "slashOnly": "Usa el comando de barra."
+    }
+  }
+}

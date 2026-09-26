@@ -76,7 +76,13 @@ module.exports = [
         .addBooleanOption((o) => o.setName("edit").setDescription("تعديل نص اللوحة")))
       .addSubcommand((s) => s.setName("notifications").setDescription("قنوات الإشعارات")
         .addChannelOption((o) => o.setName("staff").setDescription("قناة الطاقم").addChannelTypes(ChannelType.GuildText))
-        .addChannelOption((o) => o.setName("admin").setDescription("قناة الإدارة").addChannelTypes(ChannelType.GuildText))),
+        .addChannelOption((o) => o.setName("admin").setDescription("قناة الإدارة").addChannelTypes(ChannelType.GuildText)))
+      .addSubcommand((s) => s.setName("appeals").setDescription("الاستئنافات")
+        .addChannelOption((o) => o.setName("channel").setDescription("قناة مراجعة الاستئنافات").addChannelTypes(ChannelType.GuildText))
+        .addIntegerOption((o) => o.setName("cooldown-days").setDescription("أيام الانتظار بعد الرفض").setMinValue(0).setMaxValue(365))
+        .addIntegerOption((o) => o.setName("max").setDescription("أقصى استئنافات لكل قضية").setMinValue(1).setMaxValue(10))
+        .addStringOption((o) => o.setName("types").setDescription("الأنواع المسموحة").addChoices(
+          { name: "الكل", value: "ban,timeout,warn" }, { name: "الحظر فقط", value: "ban" }, { name: "الحظر والإسكات", value: "ban,timeout" }, { name: "التحذير والإسكات", value: "timeout,warn" }))),
 
     async autocomplete(interaction, app) {
       const focused = interaction.options.getFocused(true);
@@ -215,6 +221,22 @@ module.exports = [
             ]
           })]
         }, { ephemeral: true });
+      }
+
+      if (sub === "appeals") {
+        if (!app.appeals) return ctx.fail("errors.systemDisabled", { system: "appeals" });
+        const updates = {};
+        if (o.getChannel("channel")) updates["appeals.channelId"] = o.getChannel("channel").id;
+        if (o.getInteger("cooldown-days") !== null) updates["appeals.cooldownMs"] = o.getInteger("cooldown-days") * 86_400_000;
+        if (o.getInteger("max") !== null) updates["appeals.maxPerCase"] = o.getInteger("max");
+        if (o.getString("types")) updates["appeals.types"] = o.getString("types").split(",");
+        if (Object.keys(updates).length) app.guildConfig.setMany(guild.id, updates);
+        const c = app.appeals.config(guild.id);
+        const pending = app.appeals.pendingPayload(guild);
+        pending.embeds[0].addFields(
+          { name: "⚙️", value: `${c.channelId ? `<#${c.channelId}>` : "—"} • ${c.types.join(", ")} • max ${c.maxPerCase} • ${Math.round(c.cooldownMs / 86_400_000)}d` }
+        );
+        return ctx.reply(pending, { ephemeral: true });
       }
 
       return ctx.fail("errors.actionFailed", { details: sub || "?" });

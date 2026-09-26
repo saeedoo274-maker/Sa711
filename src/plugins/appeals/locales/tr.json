@@ -1,0 +1,36 @@
+{
+  "apl": {
+    "button": "İtiraz et",
+    "modalTitle": "Dava #{number} itirazı",
+    "reasonLabel": "Neden incelenmeli?",
+    "reviewTitle": "İtiraz #{id}",
+    "user": "Üye",
+    "case": "Dava",
+    "status": "Durum",
+    "caseReason": "Ceza sebebi",
+    "duration": "Süre",
+    "appealReason": "İtiraz sebebi",
+    "accept": "Kabul",
+    "reject": "Reddet",
+    "submitted": "İtirazın (#{id}) gönderildi.",
+    "dmAccepted": "{server} içindeki #{number} itirazın kabul edildi.",
+    "dmRejected": "{server} içindeki #{number} itirazın reddedildi.",
+    "pendingTitle": "Bekleyen itirazlar",
+    "settingsSaved": "İtiraz ayarları kaydedildi.",
+    "err": {
+      "disabled": "İtirazlar bu sunucuda kullanılamıyor.",
+      "noCase": "İtiraz edilecek aktif ceza yok.",
+      "inactive": "Bu dava artık aktif değil.",
+      "type": "Bu ceza türüne itiraz edilemez.",
+      "pending": "Bu dava için bekleyen bir itirazın var.",
+      "max": "Bu dava için itiraz sınırına ulaşıldı.",
+      "cooldown": "{time} sonra tekrar itiraz edebilirsin.",
+      "short": "Daha uzun bir sebep yaz.",
+      "notFound": "İtiraz bulunamadı.",
+      "noPermission": "İtirazları inceleyemezsin.",
+      "self": "Kendi itirazını inceleyemezsin.",
+      "decided": "Bu itiraz zaten incelendi.",
+      "slashOnly": "Bunun için slash komutunu kullan."
+    }
+  }
+}

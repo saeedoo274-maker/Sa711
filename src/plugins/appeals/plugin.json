@@ -1,0 +1,18 @@
+{
+  "name": "appeals",
+  "version": "1.0.0",
+  "label": "الاستئنافات",
+  "description": "استئناف الحظر والإسكات والتحذير: زر في رسالة العقوبة الخاصة (أو /عضو appeal داخل السيرفر)، مراجعة بأزرار قبول/رفض في قناة الإدارة، تنفيذ القرار تلقائيًا، وتبريد وحد لكل قضية.",
+  "feature": "appeals",
+  "defaultEnabled": true,
+  "dependencies": [],
+  "configKey": "appeals",
+  "config": {
+    "channelId": null,
+    "types": ["ban", "timeout", "warn"],
+    "cooldownMs": 604800000,
+    "maxPerCase": 2,
+    "minReasonLength": 20
+  },
+  "permissions": { "manage": 3 }
+}

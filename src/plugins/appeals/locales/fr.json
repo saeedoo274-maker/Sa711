@@ -1,0 +1,36 @@
+{
+  "apl": {
+    "button": "Faire appel",
+    "modalTitle": "Appel du dossier #{number}",
+    "reasonLabel": "Pourquoi réviser cette sanction ?",
+    "reviewTitle": "Appel #{id}",
+    "user": "Membre",
+    "case": "Dossier",
+    "status": "Statut",
+    "caseReason": "Raison de la sanction",
+    "duration": "Durée",
+    "appealReason": "Raison de l'appel",
+    "accept": "Accepter",
+    "reject": "Refuser",
+    "submitted": "Votre appel (#{id}) a été envoyé.",
+    "dmAccepted": "Votre appel pour le dossier #{number} sur {server} a été accepté.",
+    "dmRejected": "Votre appel pour le dossier #{number} sur {server} a été refusé.",
+    "pendingTitle": "Appels en attente",
+    "settingsSaved": "Paramètres d'appel enregistrés.",
+    "err": {
+      "disabled": "Les appels ne sont pas disponibles.",
+      "noCase": "Aucune sanction active à contester.",
+      "inactive": "Ce dossier n'est plus actif.",
+      "type": "Ce type de sanction ne peut être contesté.",
+      "pending": "Vous avez déjà un appel en attente.",
+      "max": "Limite d'appels atteinte pour ce dossier.",
+      "cooldown": "Vous pourrez refaire appel dans {time}.",
+      "short": "Écrivez une raison plus détaillée.",
+      "notFound": "Appel introuvable.",
+      "noPermission": "Vous ne pouvez pas examiner les appels.",
+      "self": "Vous ne pouvez pas examiner votre appel.",
+      "decided": "Cet appel a déjà été traité.",
+      "slashOnly": "Utilisez la commande slash."
+    }
+  }
+}
