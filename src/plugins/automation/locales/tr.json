@@ -1,0 +1,65 @@
+{
+  "auto": {
+    "title": "Otomasyonlar",
+    "created": "#{id} otomasyonu oluşturuldu.",
+    "saved": "Kaydedildi.",
+    "enabled": "#{id} etkin.",
+    "disabled": "#{id} devre dışı.",
+    "deleted": "#{id} silindi.",
+    "whenLabel": "Ne zaman",
+    "ifLabel": "Eğer",
+    "thenLabel": "O zaman",
+    "trigger": {
+      "member_join": "Üye katıldı",
+      "member_leave": "Üye ayrıldı",
+      "message_keyword": "Mesaj içerir",
+      "role_added": "Rol eklendi",
+      "voice_join": "Sese katıldı",
+      "level_up": "Seviye atladı",
+      "ticket_created": "Talep açıldı",
+      "ticket_closed": "Talep kapandı",
+      "suggestion_created": "Yeni öneri",
+      "giveaway_ended": "Çekiliş bitti",
+      "schedule_daily": "Günlük",
+      "schedule_interval": "Her (dk)"
+    },
+    "cond": {
+      "has_role": "Role sahip",
+      "missing_role": "Role sahip değil",
+      "in_channel": "Kanalda",
+      "min_account_days": "Hesap yaşı ≥",
+      "min_level": "Seviye ≥",
+      "chance": "Şans %"
+    },
+    "act": {
+      "message": "Mesaj",
+      "dm": "DM",
+      "add_role": "Rol ver",
+      "remove_role": "Rol al",
+      "add_xp": "XP",
+      "add_money": "Para",
+      "react": "Tepki",
+      "wait": "Bekle"
+    },
+    "err": {
+      "badName": "Geçersiz ad.",
+      "badTrigger": "Geçersiz tetikleyici.",
+      "badKeyword": "Anahtar kelime 2-100.",
+      "badTime": "Saat SS:DD.",
+      "badInterval": "Dakika 10-10080.",
+      "needChannel": "Kanal seç.",
+      "max": "Sınıra ulaşıldı.",
+      "exists": "Ad kullanılıyor.",
+      "badCondition": "Geçersiz koşul.",
+      "badAction": "Geçersiz eylem.",
+      "maxSteps": "Adım sınırı.",
+      "needRole": "Rol seç.",
+      "badValue": "Geçersiz değer.",
+      "needText": "Metni yaz.",
+      "roleHierarchy": "Bu rolü yönetemem.",
+      "dangerousRole": "Yönetici izinli roller verilemez.",
+      "reactNeedsMessage": "Tepki sadece mesaj tetikleyicisiyle.",
+      "notFound": "Bulunamadı."
+    }
+  }
+}

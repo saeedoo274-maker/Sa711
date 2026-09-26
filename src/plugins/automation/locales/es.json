@@ -1,0 +1,65 @@
+{
+  "auto": {
+    "title": "Automatizaciones",
+    "created": "Automatización #{id} creada.",
+    "saved": "Guardado.",
+    "enabled": "#{id} activada.",
+    "disabled": "#{id} desactivada.",
+    "deleted": "#{id} eliminada.",
+    "whenLabel": "Cuando",
+    "ifLabel": "Si",
+    "thenLabel": "Entonces",
+    "trigger": {
+      "member_join": "Entra un miembro",
+      "member_leave": "Sale un miembro",
+      "message_keyword": "Mensaje contiene",
+      "role_added": "Rol añadido",
+      "voice_join": "Entra a voz",
+      "level_up": "Sube de nivel",
+      "ticket_created": "Ticket abierto",
+      "ticket_closed": "Ticket cerrado",
+      "suggestion_created": "Nueva sugerencia",
+      "giveaway_ended": "Sorteo terminado",
+      "schedule_daily": "Diario",
+      "schedule_interval": "Cada (min)"
+    },
+    "cond": {
+      "has_role": "Tiene rol",
+      "missing_role": "No tiene rol",
+      "in_channel": "En canal",
+      "min_account_days": "Antigüedad ≥",
+      "min_level": "Nivel ≥",
+      "chance": "Probabilidad %"
+    },
+    "act": {
+      "message": "Mensaje",
+      "dm": "MD",
+      "add_role": "Dar rol",
+      "remove_role": "Quitar rol",
+      "add_xp": "XP",
+      "add_money": "Dinero",
+      "react": "Reacción",
+      "wait": "Esperar"
+    },
+    "err": {
+      "badName": "Nombre inválido.",
+      "badTrigger": "Disparador inválido.",
+      "badKeyword": "Palabra 2-100.",
+      "badTime": "Hora HH:MM.",
+      "badInterval": "Minutos 10-10080.",
+      "needChannel": "Elige un canal.",
+      "max": "Límite alcanzado.",
+      "exists": "Nombre en uso.",
+      "badCondition": "Condición inválida.",
+      "badAction": "Acción inválida.",
+      "maxSteps": "Límite de pasos.",
+      "needRole": "Elige un rol.",
+      "badValue": "Valor inválido.",
+      "needText": "Escribe el texto.",
+      "roleHierarchy": "No puedo gestionar ese rol.",
+      "dangerousRole": "No se pueden dar roles con permisos administrativos.",
+      "reactNeedsMessage": "Reacción solo con mensajes.",
+      "notFound": "No encontrada."
+    }
+  }
+}

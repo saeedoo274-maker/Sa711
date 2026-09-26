@@ -5,7 +5,7 @@ const { truncate } = require("../../core/utils/common");
 
 const PUSH_EVENTS = [
   "ticket:created", "ticket:closed", "suggestion:created", "giveaway:ended", "appeal:created", "report:created",
-  "announcement:sent", "starboard:posted", "application:submitted", "member:banned", "member:kicked", "levels:levelUp"
+  "announcement:sent", "starboard:posted", "application:submitted", "member:banned", "member:kicked", "levels:up"
 ];
 const MAX_POSTS_PER_POLL = 5;
 const SEEN_KEEP = 100;

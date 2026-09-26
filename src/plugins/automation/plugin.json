@@ -1,0 +1,16 @@
+{
+  "name": "automation",
+  "version": "1.0.0",
+  "label": "منشئ الأتمتة",
+  "description": "سير عمل: مُشغِّل (دخول/خروج عضو، كلمة في رسالة، رتبة جديدة، دخول صوت، مستوى جديد، تذكرة، اقتراح، سحب، جدول زمني) ← شروط (رتب، قناة، عمر الحساب، مستوى، احتمال) ← إجراءات (رسالة، خاص، رتبة، XP، مال، تفاعل، انتظار). بلا إجراءات عقابية، مع حدود تشغيل تمنع الحلقات.",
+  "feature": "automation",
+  "defaultEnabled": true,
+  "dependencies": [],
+  "configKey": "automation",
+  "config": {
+    "maxAutomations": 25,
+    "maxSteps": 10,
+    "runsPerMinute": 60
+  },
+  "permissions": { "manage": 3 }
+}

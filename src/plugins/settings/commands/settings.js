@@ -7,6 +7,14 @@ const views = require("../views");
 const langChoices = Object.entries(I18n.SUPPORTED).map(([value, l]) => ({ name: `${l.native} (${value})`, value }));
 const colorChoices = ["primary", "success", "danger", "warning", "info", "neutral"].map((c) => ({ name: c, value: c }));
 const logCategories = [...new Set(Object.values(LogService.EVENTS).map((e) => e.category))];
+const AUTO = {
+  triggers: [["member_join", "دخول عضو"], ["member_leave", "خروج عضو"], ["message_keyword", "كلمة في رسالة"], ["role_added", "رتبة جديدة"], ["voice_join", "دخول صوت"],
+    ["level_up", "مستوى جديد"], ["ticket_created", "فتح تذكرة"], ["ticket_closed", "إغلاق تذكرة"], ["suggestion_created", "اقتراح جديد"], ["giveaway_ended", "انتهاء سحب"],
+    ["schedule_daily", "يوميًا (HH:MM UTC)"], ["schedule_interval", "كل N دقيقة"]],
+  conditions: [["has_role", "يملك رتبة"], ["missing_role", "لا يملك رتبة"], ["in_channel", "في قناة"], ["min_account_days", "عمر الحساب ≥ أيام"], ["min_level", "المستوى ≥"], ["chance", "احتمال %"]],
+  actions: [["message", "رسالة"], ["dm", "رسالة خاصة"], ["add_role", "إعطاء رتبة"], ["remove_role", "سحب رتبة"], ["add_xp", "XP"], ["add_money", "مال"], ["react", "تفاعل"], ["wait", "انتظار (دقائق)"]]
+};
+const autoChoices = (list) => list.map(([value, name]) => ({ name, value }));
 
 module.exports = [
   {
@@ -91,6 +99,33 @@ module.exports = [
         .addRoleOption((o) => o.setName("role").setDescription("الرتبة"))
         .addChannelOption((o) => o.setName("channel").setDescription("القناة"))
         .addUserOption((o) => o.setName("user").setDescription("العضو (للاختبار)")))
+      .addSubcommandGroup((g) => g.setName("automation").setDescription("منشئ الأتمتة")
+        .addSubcommand((s) => s.setName("create").setDescription("أتمتة جديدة")
+          .addStringOption((o) => o.setName("name").setDescription("الاسم").setRequired(true).setMaxLength(32))
+          .addStringOption((o) => o.setName("trigger").setDescription("المُشغِّل").setRequired(true).addChoices(...autoChoices(AUTO.triggers)))
+          .addStringOption((o) => o.setName("value").setDescription("كلمة / وقت / دقائق / آيدي").setMaxLength(100))
+          .addChannelOption((o) => o.setName("channel").setDescription("قناة المُشغِّل أو النشر"))
+          .addIntegerOption((o) => o.setName("cooldown").setDescription("تبريد بالثواني").setMinValue(0).setMaxValue(86400)))
+        .addSubcommand((s) => s.setName("condition").setDescription("إضافة شرط")
+          .addIntegerOption((o) => o.setName("id").setDescription("رقم الأتمتة").setRequired(true))
+          .addStringOption((o) => o.setName("type").setDescription("الشرط").setRequired(true).addChoices(...autoChoices(AUTO.conditions)))
+          .addStringOption((o) => o.setName("value").setDescription("القيمة").setMaxLength(10))
+          .addRoleOption((o) => o.setName("role").setDescription("الرتبة"))
+          .addChannelOption((o) => o.setName("channel").setDescription("القناة")))
+        .addSubcommand((s) => s.setName("action").setDescription("إضافة إجراء")
+          .addIntegerOption((o) => o.setName("id").setDescription("رقم الأتمتة").setRequired(true))
+          .addStringOption((o) => o.setName("type").setDescription("الإجراء").setRequired(true).addChoices(...autoChoices(AUTO.actions)))
+          .addStringOption((o) => o.setName("value").setDescription("نص / رقم / إيموجي").setMaxLength(1800))
+          .addRoleOption((o) => o.setName("role").setDescription("الرتبة"))
+          .addChannelOption((o) => o.setName("channel").setDescription("القناة")))
+        .addSubcommand((s) => s.setName("remove-step").setDescription("حذف خطوة")
+          .addIntegerOption((o) => o.setName("id").setDescription("رقم الأتمتة").setRequired(true))
+          .addStringOption((o) => o.setName("kind").setDescription("النوع").setRequired(true).addChoices({ name: "شرط", value: "condition" }, { name: "إجراء", value: "action" }))
+          .addIntegerOption((o) => o.setName("index").setDescription("الرقم").setRequired(true).setMinValue(1)))
+        .addSubcommand((s) => s.setName("list").setDescription("الأتمتات"))
+        .addSubcommand((s) => s.setName("info").setDescription("تفاصيل").addIntegerOption((o) => o.setName("id").setDescription("الرقم").setRequired(true)))
+        .addSubcommand((s) => s.setName("toggle").setDescription("تفعيل/إيقاف").addIntegerOption((o) => o.setName("id").setDescription("الرقم").setRequired(true)))
+        .addSubcommand((s) => s.setName("delete").setDescription("حذف").addIntegerOption((o) => o.setName("id").setDescription("الرقم").setRequired(true))))
       .addSubcommand((s) => s.setName("backup").setDescription("نسخ السيرفر الاحتياطي")
         .addStringOption((o) => o.setName("action").setDescription("الإجراء").setRequired(true).addChoices(
           { name: "إنشاء", value: "create" }, { name: "عرض", value: "list" }, { name: "مقارنة", value: "compare" },
@@ -291,6 +326,7 @@ module.exports = [
         return ctx.success(t("perm.saved"));
       }
 
+      if (ctx.subcommandGroup() === "automation") return automationCommand(ctx, sub);
       if (sub === "backup") return backupCommand(ctx);
 
       if (sub === "appeals") {
@@ -389,4 +425,59 @@ async function backupCommand(ctx) {
   const parts = (o.getString("parts") || "config").split(",");
   const res = svc.startRestore(guild, id, parts, ctx.user.id);
   return res.ok ? ctx.success(t("bkp.restoreQueued", { job: res.jobId, parts: parts.join(", ") })) : fail(res.reason);
+}
+
+async function automationCommand(ctx, sub) {
+  const app = ctx.app;
+  const svc = app.automation;
+  if (!svc || !app.features.isEnabled(ctx.guild.id, "automation")) return ctx.fail("errors.systemDisabled", { system: "automation" });
+  const o = ctx.interaction.options;
+  const t = (k, v) => ctx.t(k, v);
+  const guild = ctx.guild;
+  const fail = (reason) => ctx.fail("errors.actionFailed", { details: t(`auto.err.${reason}`) });
+
+  if (sub === "list") {
+    const rows = svc.list(guild.id);
+    return ctx.reply({
+      embeds: [ctx.embed({
+        title: `⚙️ ${t("auto.title")}`,
+        color: "info",
+        description: rows.map((a) => `${a.enabled ? "🟢" : "⚪"} \`#${a.id}\` **${a.name}** — ${t(`auto.trigger.${a.trigger.type}`)} • ${a.conditions.length}🔎 ${a.actions.length}⚡ • ▶️ ${a.runs}${a.last_error ? " ⚠️" : ""}`).join("\n") || t("ui.empty")
+      })]
+    }, { ephemeral: true });
+  }
+  if (sub === "create") {
+    const res = svc.create(guild, ctx.member, { name: o.getString("name"), trigger: o.getString("trigger"), value: o.getString("value"), channelId: o.getChannel("channel")?.id || null, cooldownMs: (o.getInteger("cooldown") || 0) * 1000 });
+    return res.ok ? ctx.success(t("auto.created", { id: res.id })) : fail(res.reason);
+  }
+  const auto = svc.get(guild.id, o.getInteger("id"));
+  if (!auto) return fail("notFound");
+  if (sub === "condition") {
+    const res = svc.addCondition(guild, auto, { type: o.getString("type"), value: o.getString("value"), roleId: o.getRole("role")?.id, channelId: o.getChannel("channel")?.id });
+    return res.ok ? ctx.success(t("auto.saved")) : fail(res.reason);
+  }
+  if (sub === "action") {
+    const res = svc.addAction(guild, auto, { type: o.getString("type"), value: o.getString("value"), role: o.getRole("role"), channelId: o.getChannel("channel")?.id });
+    return res.ok ? ctx.success(t("auto.saved")) : fail(res.reason);
+  }
+  if (sub === "remove-step") {
+    const res = svc.removeStep(auto, o.getString("kind"), o.getInteger("index"));
+    return res.ok ? ctx.success(t("auto.saved")) : fail(res.reason);
+  }
+  if (sub === "toggle") return ctx.success(t(svc.toggle(guild.id, auto.id) ? "auto.enabled" : "auto.disabled", { id: auto.id }));
+  if (sub === "delete") return svc.delete(guild.id, auto.id) ? ctx.success(t("auto.deleted", { id: auto.id })) : fail("notFound");
+  const d = svc.describe(auto, t);
+  return ctx.reply({
+    embeds: [ctx.embed({
+      title: `⚙️ #${auto.id} ${auto.name}`,
+      color: auto.enabled ? "primary" : "neutral",
+      fields: [
+        { name: t("auto.whenLabel"), value: d.trig },
+        { name: t("auto.ifLabel"), value: d.cond.join("\n") || "—" },
+        { name: t("auto.thenLabel"), value: d.acts.join("\n") || "—" },
+        { name: "▶️", value: `${auto.runs}${auto.last_run_at ? ` • <t:${Math.floor(auto.last_run_at / 1000)}:R>` : ""}${auto.last_error ? `\n⚠️ ${auto.last_error.slice(0, 200)}` : ""}` }
+      ]
+    })],
+    allowedMentions: { parse: [] }
+  }, { ephemeral: true });
 }

@@ -1,0 +1,65 @@
+{
+  "auto": {
+    "title": "الأتمتة",
+    "created": "تم إنشاء الأتمتة #{id}. أضف شروطًا وإجراءات.",
+    "saved": "تم الحفظ.",
+    "enabled": "تم تفعيل #{id}.",
+    "disabled": "تم إيقاف #{id}.",
+    "deleted": "تم حذف #{id}.",
+    "whenLabel": "عندما",
+    "ifLabel": "إذا",
+    "thenLabel": "نفّذ",
+    "trigger": {
+      "member_join": "دخول عضو",
+      "member_leave": "خروج عضو",
+      "message_keyword": "رسالة تحوي",
+      "role_added": "رتبة جديدة",
+      "voice_join": "دخول روم صوتي",
+      "level_up": "مستوى جديد",
+      "ticket_created": "فتح تذكرة",
+      "ticket_closed": "إغلاق تذكرة",
+      "suggestion_created": "اقتراح جديد",
+      "giveaway_ended": "انتهاء سحب",
+      "schedule_daily": "يوميًا",
+      "schedule_interval": "كل (دقائق)"
+    },
+    "cond": {
+      "has_role": "يملك",
+      "missing_role": "لا يملك",
+      "in_channel": "في",
+      "min_account_days": "عمر الحساب ≥",
+      "min_level": "المستوى ≥",
+      "chance": "احتمال %"
+    },
+    "act": {
+      "message": "رسالة",
+      "dm": "خاص",
+      "add_role": "إعطاء",
+      "remove_role": "سحب",
+      "add_xp": "XP",
+      "add_money": "مال",
+      "react": "تفاعل",
+      "wait": "انتظار"
+    },
+    "err": {
+      "badName": "اسم غير صالح (2-32 بلا مسافات).",
+      "badTrigger": "مُشغِّل غير صالح.",
+      "badKeyword": "الكلمة من 2 إلى 100 حرف.",
+      "badTime": "الوقت بصيغة HH:MM (UTC).",
+      "badInterval": "الدقائق من 10 إلى 10080.",
+      "needChannel": "حدد القناة.",
+      "max": "وصلت للحد الأقصى.",
+      "exists": "يوجد أتمتة بهذا الاسم.",
+      "badCondition": "شرط غير صالح.",
+      "badAction": "إجراء غير صالح.",
+      "maxSteps": "وصلت للحد الأقصى من الخطوات.",
+      "needRole": "حدد الرتبة.",
+      "badValue": "قيمة غير صالحة.",
+      "needText": "اكتب النص.",
+      "roleHierarchy": "لا أستطيع إدارة هذه الرتبة.",
+      "dangerousRole": "لا يمكن منح رتبة بصلاحيات إدارية تلقائيًا.",
+      "reactNeedsMessage": "التفاعل يعمل مع مُشغِّل الرسائل فقط.",
+      "notFound": "أتمتة غير موجودة."
+    }
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "auto": {
+    "title": "Automations",
+    "created": "Automation #{id} created. Add conditions and actions.",
+    "saved": "Saved.",
+    "enabled": "#{id} enabled.",
+    "disabled": "#{id} disabled.",
+    "deleted": "#{id} deleted.",
+    "whenLabel": "When",
+    "ifLabel": "If",
+    "thenLabel": "Then",
+    "trigger": {
+      "member_join": "Member joins",
+      "member_leave": "Member leaves",
+      "message_keyword": "Message contains",
+      "role_added": "Role added",
+      "voice_join": "Joins voice",
+      "level_up": "Level up",
+      "ticket_created": "Ticket opened",
+      "ticket_closed": "Ticket closed",
+      "suggestion_created": "New suggestion",
+      "giveaway_ended": "Giveaway ended",
+      "schedule_daily": "Daily",
+      "schedule_interval": "Every (minutes)"
+    },
+    "cond": {
+      "has_role": "Has role",
+      "missing_role": "Missing role",
+      "in_channel": "In channel",
+      "min_account_days": "Account age ≥",
+      "min_level": "Level ≥",
+      "chance": "Chance %"
+    },
+    "act": {
+      "message": "Message",
+      "dm": "DM",
+      "add_role": "Add role",
+      "remove_role": "Remove role",
+      "add_xp": "XP",
+      "add_money": "Money",
+      "react": "React",
+      "wait": "Wait"
+    },
+    "err": {
+      "badName": "Invalid name (2-32, no spaces).",
+      "badTrigger": "Invalid trigger.",
+      "badKeyword": "Keyword must be 2-100 chars.",
+      "badTime": "Time must be HH:MM (UTC).",
+      "badInterval": "Minutes must be 10-10080.",
+      "needChannel": "Choose a channel.",
+      "max": "Limit reached.",
+      "exists": "Name already used.",
+      "badCondition": "Invalid condition.",
+      "badAction": "Invalid action.",
+      "maxSteps": "Step limit reached.",
+      "needRole": "Choose a role.",
+      "badValue": "Invalid value.",
+      "needText": "Write the text.",
+      "roleHierarchy": "I can't manage that role.",
+      "dangerousRole": "Roles with admin/moderation permissions can't be auto-granted.",
+      "reactNeedsMessage": "React works only with the message trigger.",
+      "notFound": "Automation not found."
+    }
+  }
+}

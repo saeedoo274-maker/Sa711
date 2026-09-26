@@ -1,0 +1,65 @@
+{
+  "auto": {
+    "title": "Automatisations",
+    "created": "Automatisation #{id} créée.",
+    "saved": "Enregistré.",
+    "enabled": "#{id} activée.",
+    "disabled": "#{id} désactivée.",
+    "deleted": "#{id} supprimée.",
+    "whenLabel": "Quand",
+    "ifLabel": "Si",
+    "thenLabel": "Alors",
+    "trigger": {
+      "member_join": "Arrivée d'un membre",
+      "member_leave": "Départ d'un membre",
+      "message_keyword": "Message contenant",
+      "role_added": "Rôle ajouté",
+      "voice_join": "Rejoint le vocal",
+      "level_up": "Niveau supérieur",
+      "ticket_created": "Ticket ouvert",
+      "ticket_closed": "Ticket fermé",
+      "suggestion_created": "Nouvelle suggestion",
+      "giveaway_ended": "Concours terminé",
+      "schedule_daily": "Quotidien",
+      "schedule_interval": "Toutes les (min)"
+    },
+    "cond": {
+      "has_role": "A le rôle",
+      "missing_role": "N'a pas le rôle",
+      "in_channel": "Dans le salon",
+      "min_account_days": "Ancienneté ≥",
+      "min_level": "Niveau ≥",
+      "chance": "Chance %"
+    },
+    "act": {
+      "message": "Message",
+      "dm": "MP",
+      "add_role": "Ajouter rôle",
+      "remove_role": "Retirer rôle",
+      "add_xp": "XP",
+      "add_money": "Argent",
+      "react": "Réaction",
+      "wait": "Attendre"
+    },
+    "err": {
+      "badName": "Nom invalide.",
+      "badTrigger": "Déclencheur invalide.",
+      "badKeyword": "Mot-clé 2-100.",
+      "badTime": "Heure HH:MM.",
+      "badInterval": "Minutes 10-10080.",
+      "needChannel": "Choisissez un salon.",
+      "max": "Limite atteinte.",
+      "exists": "Nom déjà utilisé.",
+      "badCondition": "Condition invalide.",
+      "badAction": "Action invalide.",
+      "maxSteps": "Limite d'étapes.",
+      "needRole": "Choisissez un rôle.",
+      "badValue": "Valeur invalide.",
+      "needText": "Écrivez le texte.",
+      "roleHierarchy": "Je ne peux pas gérer ce rôle.",
+      "dangerousRole": "Rôles à permissions sensibles interdits.",
+      "reactNeedsMessage": "Réaction seulement avec message.",
+      "notFound": "Introuvable."
+    }
+  }
+}
