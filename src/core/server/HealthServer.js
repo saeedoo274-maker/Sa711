@@ -18,7 +18,8 @@ class HealthServer {
   }
 
   start() {
-    const port = parseInt(process.env.PORT || "", 10);
+    // PORT من منصة الاستضافة، أو DASHBOARD_PORT عند تشغيل لوحة التحكم محليًا
+    const port = parseInt(process.env.PORT || process.env.DASHBOARD_PORT || "", 10);
     // بلا PORT نفترض تشغيلًا محليًا لا يحتاج خادمًا
     if (!port) return null;
     this.port = port;
@@ -28,6 +29,8 @@ class HealthServer {
 
       if (url === "/health" || url === "/healthz") return this._json(res, 200, this.status());
       if (url.startsWith("/github/")) return this._github(req, res, url.slice("/github/".length));
+      // لوحة التحكم و REST API v1 على نفس الخادم
+      if (this.app.web?.handles(url)) return this.app.web.handle(req, res);
       if (url === "/") return this._json(res, 200, { name: this.app.config.bot.name, status: "ok" });
 
       this._json(res, 404, { error: "not found" });

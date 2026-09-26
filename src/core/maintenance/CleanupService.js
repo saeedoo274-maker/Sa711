@@ -36,6 +36,7 @@ class CleanupService {
     r("inviteLeft", "دعوات من غادروا", "invite_joins", "joined_at", "left_at IS NOT NULL", 365);
     r("ticketEvents", "خط زمني للتذاكر المغلقة", "ticket_events", "created_at", "ticket_id IN (SELECT id FROM tickets WHERE status = 'closed')", 0);
     r("transactions", "سجل المعاملات المالية", "transactions", "created_at", "1=1", 0);
+    r("webSessions", "جلسات لوحة التحكم المنتهية", "web_sessions", "expires_at", "1=1", 1);
   }
 
   policies() {

@@ -27,5 +27,14 @@
     "unset": "non définies",
     "cancelled": "Assistant annulé.",
     "applied": "{count} paramètres appliqués."
+  },
+  "api": {
+    "created": "Clé #{id} créée ({scopes}). Enregistrez-la maintenant :",
+    "revoked": "Clé révoquée.",
+    "err": {
+      "badScopes": "Portées invalides.",
+      "max": "10 clés maximum.",
+      "notFound": "Clé introuvable."
+    }
   }
 }

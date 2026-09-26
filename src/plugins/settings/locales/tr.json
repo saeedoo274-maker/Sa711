@@ -27,5 +27,14 @@
     "unset": "ayarsız",
     "cancelled": "Sihirbaz iptal edildi.",
     "applied": "{count} ayar uygulandı."
+  },
+  "api": {
+    "created": "#{id} anahtarı oluşturuldu ({scopes}). Şimdi kaydet:",
+    "revoked": "Anahtar iptal edildi.",
+    "err": {
+      "badScopes": "Geçersiz kapsamlar.",
+      "max": "En fazla 10 anahtar.",
+      "notFound": "Anahtar bulunamadı."
+    }
   }
 }

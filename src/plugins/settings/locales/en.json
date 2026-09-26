@@ -27,5 +27,14 @@
     "unset": "unset",
     "cancelled": "Wizard cancelled, nothing saved.",
     "applied": "Applied {count} settings."
+  },
+  "api": {
+    "created": "Key #{id} created ({scopes}). Save it now — it won't be shown again:",
+    "revoked": "Key revoked.",
+    "err": {
+      "badScopes": "Invalid scopes.",
+      "max": "Maximum 10 keys.",
+      "notFound": "Key not found."
+    }
   }
 }

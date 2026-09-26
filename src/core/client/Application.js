@@ -91,6 +91,7 @@ const ChangelogService = require("../../modules/devtools/ChangelogService");
 const BackupService = require("../database/BackupService");
 const TestCenter = require("../diagnostics/TestCenter");
 const CleanupService = require("../maintenance/CleanupService");
+const WebApp = require("../web/WebApp");
 const HealthServer = require("../server/HealthServer");
 
 /**
@@ -275,6 +276,7 @@ class Application {
     this.changelogService = new ChangelogService(this);
     this.backups = new BackupService(this);
     this.testCenter = new TestCenter(this);
+    this.web = new WebApp(this);
     this.health = new HealthServer(this);
     // أي تعديل على الأوامر المخصصة يُبطل كاش الخدمة فورًا
     this.customCommands.onChange = (guildId) => this.customCommandService.invalidate(guildId);

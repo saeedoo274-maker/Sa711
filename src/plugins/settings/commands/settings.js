@@ -127,6 +127,14 @@ module.exports = [
         .addSubcommand((s) => s.setName("info").setDescription("تفاصيل").addIntegerOption((o) => o.setName("id").setDescription("الرقم").setRequired(true)))
         .addSubcommand((s) => s.setName("toggle").setDescription("تفعيل/إيقاف").addIntegerOption((o) => o.setName("id").setDescription("الرقم").setRequired(true)))
         .addSubcommand((s) => s.setName("delete").setDescription("حذف").addIntegerOption((o) => o.setName("id").setDescription("الرقم").setRequired(true))))
+      .addSubcommand((s) => s.setName("api").setDescription("مفاتيح REST API (للمالك)")
+        .addStringOption((o) => o.setName("action").setDescription("الإجراء").setRequired(true).addChoices(
+          { name: "إنشاء", value: "create" }, { name: "عرض", value: "list" }, { name: "إلغاء", value: "revoke" }))
+        .addStringOption((o) => o.setName("name").setDescription("اسم المفتاح").setMaxLength(32))
+        .addStringOption((o) => o.setName("scopes").setDescription("الصلاحيات").addChoices(
+          { name: "قراءة فقط", value: "read" }, { name: "قراءة + الإشراف", value: "read,read:moderation" },
+          { name: "قراءة + تعديل الإعدادات", value: "read,write:config" }, { name: "كل الصلاحيات", value: "read,read:moderation,write:config,write:features" }))
+        .addIntegerOption((o) => o.setName("id").setDescription("رقم المفتاح (للإلغاء)").setMinValue(1)))
       .addSubcommand((s) => s.setName("backup").setDescription("نسخ السيرفر الاحتياطي")
         .addStringOption((o) => o.setName("action").setDescription("الإجراء").setRequired(true).addChoices(
           { name: "إنشاء", value: "create" }, { name: "عرض", value: "list" }, { name: "مقارنة", value: "compare" },
@@ -331,6 +339,22 @@ module.exports = [
 
       if (ctx.subcommandGroup() === "automation") return automationCommand(ctx, sub);
       if (sub === "backup") return backupCommand(ctx);
+      if (sub === "api") {
+        if (app.permissions.resolveLevel(ctx.member) < Level.GUILD_OWNER) return ctx.fail("errors.noPermission");
+        const keys = app.web.keys;
+        const action = o.getString("action");
+        if (action === "create") {
+          const res = keys.create(guild.id, { name: o.getString("name") || "key", scopes: (o.getString("scopes") || "read").split(","), userId: ctx.user.id });
+          if (!res.ok) return ctx.fail("errors.actionFailed", { details: t(`api.err.${res.reason}`) });
+          app.logger.info(`مفتاح API جديد #${res.id} للسيرفر ${guild.id} بواسطة ${ctx.user.id}`);
+          return ctx.reply({ content: `🔑 ${t("api.created", { id: res.id, scopes: res.scopes.join(", ") })}\n\`\`\`\n${res.key}\n\`\`\`` }, { ephemeral: true });
+        }
+        if (action === "revoke") return keys.revoke(guild.id, o.getInteger("id") || 0) ? ctx.success(t("api.revoked")) : ctx.fail("errors.actionFailed", { details: t("api.err.notFound") });
+        const rows = keys.list(guild.id);
+        return ctx.reply({
+          embeds: [ctx.embed({ title: "🔑 API", color: "info", description: `${rows.map((k) => `\`#${k.id}\` **${k.name}** \`${k.prefix}…\` — ${JSON.parse(k.scopes).join(", ")}${k.last_used_at ? ` • <t:${Math.floor(k.last_used_at / 1000)}:R>` : ""}`).join("\n") || t("ui.empty")}\n\n-# /api/v1/guilds/${guild.id}` })]
+        }, { ephemeral: true });
+      }
 
       if (sub === "appeals") {
         if (!app.appeals) return ctx.fail("errors.systemDisabled", { system: "appeals" });

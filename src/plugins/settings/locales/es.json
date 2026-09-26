@@ -27,5 +27,14 @@
     "unset": "sin definir",
     "cancelled": "Asistente cancelado.",
     "applied": "{count} ajustes aplicados."
+  },
+  "api": {
+    "created": "Clave #{id} creada ({scopes}). Guárdala ahora:",
+    "revoked": "Clave revocada.",
+    "err": {
+      "badScopes": "Ámbitos inválidos.",
+      "max": "Máximo 10 claves.",
+      "notFound": "Clave no encontrada."
+    }
   }
 }
