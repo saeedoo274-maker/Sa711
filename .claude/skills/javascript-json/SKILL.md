@@ -1,6 +1,6 @@
 ---
 name: javascript-json
-description: Correct, safe, and fast JSON handling in JavaScript/TypeScript. Use when parsing, validating, serializing, transforming, streaming, or diffing JSON; when writing config/package.json/tsconfig; when designing JSON APIs or payloads; or when debugging JSON errors (SyntaxError: Unexpected token, circular structure, BigInt, Date round-trips, precision loss).
+description: "Correct, safe, and fast JSON handling in JavaScript/TypeScript. Use when parsing, validating, serializing, transforming, streaming, or diffing JSON; when writing config/package.json/tsconfig; when designing JSON APIs or payloads; or when debugging JSON errors (SyntaxError: Unexpected token, circular structure, BigInt, Date round-trips, precision loss)."
 ---
 
 # JavaScript JSON
