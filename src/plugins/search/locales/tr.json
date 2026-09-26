@@ -1,0 +1,15 @@
+{
+  "srch": {
+    "title": "Arama sonuçları",
+    "none": "Sonuç yok.",
+    "needInput": "Metin, numara veya üye belirtin.",
+    "scope": {
+      "cases": "📁 Davalar",
+      "members": "👤 Üyeler",
+      "tickets": "🎫 Talepler",
+      "reports": "🚨 Raporlar",
+      "appeals": "📨 İtirazlar",
+      "commands": "⌨️ Özel komutlar"
+    }
+  }
+}

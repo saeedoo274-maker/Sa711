@@ -1,0 +1,15 @@
+{
+  "srch": {
+    "title": "Resultados de búsqueda",
+    "none": "Sin resultados.",
+    "needInput": "Indica texto, número o miembro.",
+    "scope": {
+      "cases": "📁 Casos",
+      "members": "👤 Miembros",
+      "tickets": "🎫 Tickets",
+      "reports": "🚨 Reportes",
+      "appeals": "📨 Apelaciones",
+      "commands": "⌨️ Comandos personalizados"
+    }
+  }
+}
