@@ -5,6 +5,7 @@ const {
 const { truncate } = require("../../core/utils/common");
 const { containerPayload } = require("../../core/utils/componentsV2");
 const variables = require("../../core/utils/variables");
+const variableData = require("../../core/utils/variableData");
 
 const STYLES = {
   primary: ButtonStyle.Primary,
@@ -86,7 +87,8 @@ class EmbedService {
       prefix: guild ? this.app.guildConfig.value(guild.id, "prefix") : null,
       ...rest
     });
-    return variables.apply(String(text), ctx);
+    // متغيرات الإحصاءات ({XP} {BALANCE} ...) تُملأ من قاعدة البيانات فقط إن استُخدمت في النص
+    return variables.apply(String(text), variableData.enrich(this.app, ctx, text));
   }
 
   /** يبني صفوف الأزرار والقوائم من البيانات المحفوظة. */

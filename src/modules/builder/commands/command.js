@@ -130,6 +130,8 @@ module.exports = [
       )
       .addSubcommand((s) => s.setName("info").setDescription("تفاصيل أمر").addStringOption((o) => o.setName("name").setDescription("اسم الأمر").setRequired(true).setAutocomplete(true)))
       .addSubcommand((s) => s.setName("export").setDescription("تصدير كل الأوامر كملف JSON"))
+      .addSubcommand((s) => s.setName("variables").setDescription("كل المتغيرات مع معاينة حية")
+        .addStringOption((o) => o.setName("text").setDescription("نص لمعاينته بالمتغيرات على حسابك").setMaxLength(1000).setAutocomplete(true)))
       .addSubcommand((s) =>
         s.setName("import").setDescription("استيراد أوامر من ملف JSON")
           .addAttachmentOption((o) => o.setName("file").setDescription("ملف التصدير").setRequired(true))
@@ -150,6 +152,22 @@ module.exports = [
     async execute(ctx) {
       const sub = ctx.interaction.options.getSubcommand();
       const guildId = ctx.guild.id;
+
+      if (sub === "variables") {
+        const text = ctx.interaction.options.getString("text");
+        if (text) {
+          const rendered = ctx.app.embedService.replaceVariables(text, { member: ctx.member, guild: ctx.guild, channel: ctx.channel });
+          return ctx.reply({ content: `🧪 ${truncate(rendered, 1900)}`, allowedMentions: { parse: [] } }, { ephemeral: true });
+        }
+        return ctx.reply({
+          embeds: [buildEmbed({
+            title: "🧩 المتغيرات",
+            color: ctx.color("info"),
+            description: "غير حساسة لحالة الأحرف. متغيرات الإحصاءات تُحسب فقط عند استخدامها.\nداخل الأوامر المخصصة أيضًا: `{ARG1}`..`{ARG9}` `{ARGS}` `{API}` `{API:مسار}`",
+            fields: Object.entries(variables.VARIABLE_GROUPS).map(([group, names]) => ({ name: group, value: names.map((n) => `\`{${n}}\``).join(" ").slice(0, 1024) }))
+          })]
+        }, { ephemeral: true });
+      }
 
       if (sub === "export") {
         const data = ctx.app.customCommandService.exportAll(guildId);

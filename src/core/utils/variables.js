@@ -133,7 +133,11 @@ const RESOLVERS = {
   RANK: (c) => (c.rank != null ? String(c.rank) : ""),
   BALANCE: (c) => (c.balance != null ? String(c.balance) : ""),
   BANK: (c) => (c.bank != null ? String(c.bank) : ""),
-  REPUTATION: (c) => (c.reputation != null ? String(c.reputation) : "")
+  REPUTATION: (c) => (c.reputation != null ? String(c.reputation) : ""),
+  MESSAGES: (c) => (c.messages != null ? String(c.messages) : ""),
+  INVITES: (c) => (c.invites != null ? String(c.invites) : ""),
+  WARNINGS: (c) => (c.warnings != null ? String(c.warnings) : ""),
+  ACHIEVEMENTS: (c) => (c.achievements != null ? String(c.achievements) : "")
 };
 
 /** المتغيرات التي لا معنى لها بلا سياق خاص — تُستبدل بفراغ لا بنصها. */
@@ -142,7 +146,7 @@ const CONTEXTUAL = new Set([
   "REASON", "DURATION", "CASE_ID", "AMOUNT", "POINTS",
   "ROLE", "ROLE_NAME", "ROLE_ID", "TICKET", "ROLE_COLOR", "CATEGORY_NAME", "USER_BANNER",
   "TICKET_ID", "TICKET_TYPE", "TICKET_OWNER", "TICKET_STAFF", "CASE_TYPE",
-  "XP", "LEVEL", "RANK", "BALANCE", "BANK", "REPUTATION"
+  "XP", "LEVEL", "RANK", "BALANCE", "BANK", "REPUTATION", "MESSAGES", "INVITES", "WARNINGS", "ACHIEVEMENTS"
 ]);
 
 const PLACEHOLDER_RE = /\{([A-Za-z_]+)\}/g;
@@ -161,7 +165,7 @@ const VARIABLE_GROUPS = {
   "⚖️ الإجراءات": ["MODERATOR", "MODERATOR_NAME", "MODERATOR_ID", "REASON", "DURATION", "CASE_ID", "CASE_TYPE", "AMOUNT", "POINTS"],
   "🧾 موسّعة": ["USER_MENTION", "USER_NAME", "USER_BANNER", "ACCOUNT_AGE", "JOIN_DATE", "CATEGORY_NAME", "ROLE_COLOR", "SERVER_NAME", "SERVER_OWNER", "SERVER_MEMBER_COUNT", "SERVER_BOOSTS", "SERVER_LEVEL"],
   "🎫 التذاكر": ["TICKET", "TICKET_ID", "TICKET_TYPE", "TICKET_OWNER", "TICKET_STAFF"],
-  "📈 الإحصاءات": ["XP", "LEVEL", "RANK", "BALANCE", "BANK", "REPUTATION"]
+  "📈 الإحصاءات": ["XP", "LEVEL", "RANK", "BALANCE", "BANK", "REPUTATION", "MESSAGES", "INVITES", "WARNINGS", "ACHIEVEMENTS"]
 };
 
 /**

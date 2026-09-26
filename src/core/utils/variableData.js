@@ -1,6 +1,6 @@
 const variables = require("./variables");
 
-const STAT_VARS = ["XP", "LEVEL", "RANK", "BALANCE", "BANK", "REPUTATION"];
+const STAT_VARS = ["XP", "LEVEL", "RANK", "BALANCE", "BANK", "REPUTATION", "MESSAGES", "INVITES", "WARNINGS", "ACHIEVEMENTS"];
 
 /**
  * يملأ متغيرات الإحصاءات ({XP} {LEVEL} {BALANCE}...) من قواعد البيانات،
@@ -30,6 +30,18 @@ function enrich(app, ctx, ...texts) {
     }
     if (used.has("REPUTATION") && app.socialPlus && out.reputation == null) {
       out.reputation = app.socialPlus.reputation(guildId, userId);
+    }
+    if (used.has("MESSAGES") && out.messages == null) {
+      out.messages = app.levels ? app.levels.repo.get(guildId, userId)?.messages || 0 : 0;
+    }
+    if (used.has("INVITES") && out.invites == null) {
+      out.invites = app.invites ? app.invites.count(guildId, userId) : 0;
+    }
+    if (used.has("WARNINGS") && out.warnings == null) {
+      out.warnings = app.cases.countByTarget(guildId, userId, "warn");
+    }
+    if (used.has("ACHIEVEMENTS") && out.achievements == null && app.achievementsRepo) {
+      out.achievements = app.db.prepare("SELECT COUNT(*) AS c FROM achievement_unlocks WHERE guild_id = ? AND user_id = ?").get(guildId, userId).c;
     }
   } catch (error) {
     app.logger.warn(`تعذّر ملء متغيرات الإحصاءات: ${error.message}`);
