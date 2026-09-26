@@ -2,9 +2,10 @@ const { EmbedBuilder } = require("discord.js");
 const common = require("./common");
 
 /** يبني إمبيد مع احترام كل حدود ديسكورد تلقائيًا. */
-function buildEmbed({ title, description, color, fields, footer, thumbnail, image, author, timestamp: ts = true }) {
+function buildEmbed({ title, description, color, fields, footer, thumbnail, image, author, url, timestamp: ts = true }) {
   const embed = new EmbedBuilder();
   if (title) embed.setTitle(String(title).slice(0, 256));
+  if (url && /^https?:\/\/\S+$/i.test(url)) embed.setURL(url);
   if (description) embed.setDescription(String(description).slice(0, 4000));
   if (color !== undefined) embed.setColor(color);
   if (fields?.length) {

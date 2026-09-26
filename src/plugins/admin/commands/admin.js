@@ -29,6 +29,11 @@ function composeOptions(s, { withTarget = true } = {}) {
   return s;
 }
 
+const providerChoices = [
+  ["rss", "RSS / Atom"], ["youtube", "YouTube"], ["github", "GitHub"], ["steam", "Steam"], ["x", "X (RSS bridge)"], ["tiktok", "TikTok (RSS bridge)"],
+  ["twitch", "Twitch"], ["minecraft", "Minecraft"], ["fivem", "FiveM"], ["roblox", "Roblox"], ["api", "API (JSON)"], ["webhook", "Webhook صادر"]
+].map(([value, name]) => ({ name, value }));
+
 const metricChoices = Object.keys(METRICS).map((m) => ({ name: m, value: m }));
 const periodChoices = [
   { name: "اليوم", value: "today" }, { name: "7 أيام", value: "7d" }, { name: "30 يومًا", value: "30d" },
@@ -103,7 +108,24 @@ module.exports = [
           .addIntegerOption((o) => o.setName("id").setDescription("رقم الإعلان").setRequired(true)))
         .addSubcommand((s) => composeOptions(s.setName("template").setDescription("حفظ/حذف قالب")
           .addStringOption((o) => o.setName("name").setDescription("اسم القالب").setRequired(true).setMaxLength(32)), { withTarget: false })
-          .addBooleanOption((o) => o.setName("delete").setDescription("حذف القالب")))),
+          .addBooleanOption((o) => o.setName("delete").setDescription("حذف القالب"))))
+      .addSubcommandGroup((g) => g.setName("integration").setDescription("التكاملات")
+        .addSubcommand((s) => s.setName("add").setDescription("اشتراك جديد")
+          .addStringOption((o) => o.setName("provider").setDescription("المزوّد").setRequired(true).addChoices(...providerChoices))
+          .addStringOption((o) => o.setName("source").setDescription("رابط/معرّف/عنوان المصدر").setRequired(true).setMaxLength(300))
+          .addChannelOption((o) => o.setName("channel").setDescription("قناة النشر"))
+          .addRoleOption((o) => o.setName("role").setDescription("رتبة للمنشن"))
+          .addIntegerOption((o) => o.setName("interval").setDescription("الفحص كل (دقائق)").setMinValue(5).setMaxValue(1440))
+          .addStringOption((o) => o.setName("template").setDescription("نص الرسالة: {title} {url} {author} {name} {players} {status}").setMaxLength(500))
+          .addStringOption((o) => o.setName("events").setDescription("للـ Webhook: أحداث مفصولة بفواصل (فارغ = الكل)").setMaxLength(400))
+          .addStringOption((o) => o.setName("secret").setDescription("للـ Webhook: سر التوقيع HMAC").setMaxLength(128))
+          .addStringOption((o) => o.setName("id-path").setDescription("للـ API: مسار المعرّف").setMaxLength(100))
+          .addStringOption((o) => o.setName("title-path").setDescription("للـ API: مسار العنوان").setMaxLength(100))
+          .addStringOption((o) => o.setName("url-path").setDescription("للـ API: مسار الرابط").setMaxLength(100)))
+        .addSubcommand((s) => s.setName("list").setDescription("الاشتراكات"))
+        .addSubcommand((s) => s.setName("remove").setDescription("حذف اشتراك").addIntegerOption((o) => o.setName("id").setDescription("الرقم").setRequired(true)))
+        .addSubcommand((s) => s.setName("toggle").setDescription("تفعيل/إيقاف").addIntegerOption((o) => o.setName("id").setDescription("الرقم").setRequired(true)))
+        .addSubcommand((s) => s.setName("test").setDescription("فحص الآن (معاينة)").addIntegerOption((o) => o.setName("id").setDescription("الرقم").setRequired(true)))),
 
     async autocomplete(interaction, app) {
       const typed = String(interaction.options.getFocused() || "").toLowerCase();
@@ -191,6 +213,12 @@ module.exports = [
         }
       }
 
+      if (ctx.subcommandGroup() === "integration") {
+        const blocked = need("integrations");
+        if (blocked) return blocked;
+        return integration(ctx, sub);
+      }
+
       if (ctx.subcommandGroup() === "announcement") {
         const blocked = need("announcements");
         if (blocked) return blocked;
@@ -267,4 +295,56 @@ async function announcement(ctx, sub) {
   const res = svc.draft(ctx.member, { spec, target, channel, dmRole: o.getRole("dm-role"), runAt, repeat });
   if (!res.ok) return fail(res.reason);
   return ctx.reply(res.preview, { ephemeral: true });
+}
+
+async function integration(ctx, sub) {
+  const app = ctx.app;
+  const svc = app.integrations;
+  const o = ctx.interaction.options;
+  const t = (k, v) => ctx.t(k, v);
+  const fail = (reason, extra = "") => ctx.fail("errors.actionFailed", { details: `${t(`intg.err.${reason}`)}${extra}` });
+
+  if (sub === "list") {
+    const rows = svc.list(ctx.guild.id);
+    return ctx.reply({
+      embeds: [ctx.embed({
+        title: `🔌 ${t("intg.title")}`,
+        color: "info",
+        description: rows.map((r) => {
+          const p = svc.providers.get(r.provider);
+          return `${r.enabled ? "🟢" : "⚪"} \`#${r.id}\` ${p?.emoji || ""} **${p?.label || r.provider}** — \`${r.source.slice(0, 80)}\`${r.channel_id ? ` → <#${r.channel_id}>` : ""} • ${Math.round(r.interval_ms / 60000)}m${r.fail_count ? ` • ⚠️ ${r.fail_count}` : ""}${r.last_error ? `\n-# ${r.last_error.slice(0, 100)}` : ""}`;
+        }).join("\n") || t("ui.empty")
+      })],
+      allowedMentions: { parse: [] }
+    }, { ephemeral: true });
+  }
+
+  if (sub === "add") {
+    const res = svc.add(ctx.guild, ctx.member, {
+      provider: o.getString("provider"),
+      source: o.getString("source"),
+      channel: o.getChannel("channel") || ctx.channel,
+      role: o.getRole("role"),
+      intervalMinutes: o.getInteger("interval"),
+      template: o.getString("template"),
+      options: { events: o.getString("events"), secret: o.getString("secret"), idPath: o.getString("id-path"), titlePath: o.getString("title-path"), urlPath: o.getString("url-path") }
+    });
+    return res.ok ? ctx.success(t("intg.added", { id: res.id })) : fail(res.reason);
+  }
+
+  const id = o.getInteger("id");
+  const record = svc.get(ctx.guild.id, id);
+  if (!record) return fail("notFound");
+  if (sub === "remove") return svc.remove(ctx.guild.id, id) ? ctx.success(t("intg.removed", { id })) : fail("notFound");
+  if (sub === "toggle") return ctx.success(t(svc.toggle(ctx.guild.id, id) ? "intg.enabled" : "intg.disabled", { id }));
+  // test
+  await ctx.defer({ ephemeral: true });
+  try {
+    const res = await svc.test(record);
+    if (res.delivered) return ctx.success(t("intg.delivered"));
+    if (!res.payload) return ctx.reply({ content: t("intg.noItems") }, { ephemeral: true });
+    return ctx.reply({ ...res.payload, content: `🧪 ${t("intg.preview")}\n${res.payload.content || ""}`.slice(0, 2000), allowedMentions: { parse: [] } }, { ephemeral: true });
+  } catch (error) {
+    return fail("fetch", `: ${String(error.message).slice(0, 200)}`);
+  }
 }

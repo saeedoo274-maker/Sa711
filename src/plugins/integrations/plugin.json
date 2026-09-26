@@ -1,0 +1,15 @@
+{
+  "name": "integrations",
+  "version": "1.0.0",
+  "label": "التكاملات",
+  "description": "بنية مزوّدين موحّدة: RSS/Atom، يوتيوب، GitHub، Steam، X/TikTok عبر RSS bridge، Twitch (بمفاتيح من البيئة)، حالة خوادم Minecraft و FiveM، تحديثات ألعاب Roblox، API خارجي عام، وWebhook صادر موقّع لأحداث البوت. كل الطلبات عبر جلب آمن من SSRF.",
+  "feature": "integrations",
+  "defaultEnabled": true,
+  "dependencies": [],
+  "configKey": "integrations",
+  "config": {
+    "maxSubscriptions": 25,
+    "minIntervalMinutes": 5
+  },
+  "permissions": { "manage": 3 }
+}

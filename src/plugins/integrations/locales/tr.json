@@ -1,0 +1,36 @@
+{
+  "intg": {
+    "title": "Entegrasyonlar",
+    "added": "#{id} aboneliği eklendi.",
+    "removed": "#{id} silindi.",
+    "enabled": "#{id} etkin.",
+    "disabled": "#{id} devre dışı.",
+    "preview": "Önizleme (paylaşılmadı):",
+    "noItems": "Kaynakta öğe yok.",
+    "delivered": "Test olayı gönderildi.",
+    "newItem": "Yeni:",
+    "autoDisabled": "Entegrasyon #{id} ({provider}) devre dışı: {error}",
+    "change": {
+      "online": "{name} şimdi çevrimiçi 🟢",
+      "offline": "{name} çevrimdışı 🔴",
+      "updated": "{name} güncellendi 🆕"
+    },
+    "err": {
+      "unknownProvider": "Bilinmeyen sağlayıcı.",
+      "unavailable": "Bu sağlayıcı kimlik bilgisi gerektirir.",
+      "max": "Sınıra ulaşıldı.",
+      "channel": "Kanal seç.",
+      "noSend": "O kanala yazamıyorum.",
+      "badUrl": "Herkese açık https gerekli.",
+      "badYoutube": "UC ile başlayan kanal kimliği gir.",
+      "badGithub": "Biçim: owner/repo.",
+      "badNumber": "Geçerli sayı gir.",
+      "badHost": "Geçersiz adres.",
+      "badCode": "Geçersiz cfx.re kodu.",
+      "badName": "Geçersiz ad.",
+      "badEvents": "Geçerli olay yok.",
+      "notFound": "Bulunamadı.",
+      "fetch": "Alınamadı"
+    }
+  }
+}

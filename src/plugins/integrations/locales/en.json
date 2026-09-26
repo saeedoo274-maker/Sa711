@@ -1,0 +1,36 @@
+{
+  "intg": {
+    "title": "Integrations",
+    "added": "Subscription #{id} added. The first check records existing items without posting.",
+    "removed": "Subscription #{id} removed.",
+    "enabled": "#{id} enabled.",
+    "disabled": "#{id} disabled.",
+    "preview": "Preview (nothing posted):",
+    "noItems": "The source has no items right now.",
+    "delivered": "Test event delivered to the webhook.",
+    "newItem": "New:",
+    "autoDisabled": "Integration #{id} ({provider}) auto-disabled after repeated failures: {error}",
+    "change": {
+      "online": "{name} is now online 🟢",
+      "offline": "{name} went offline 🔴",
+      "updated": "{name} was updated 🆕"
+    },
+    "err": {
+      "unknownProvider": "Unknown provider.",
+      "unavailable": "This provider needs host credentials (e.g. TWITCH_CLIENT_ID).",
+      "max": "Subscription limit reached.",
+      "channel": "Choose a text channel.",
+      "noSend": "I can't send in that channel.",
+      "badUrl": "URL must be public https (internal addresses are blocked).",
+      "badYoutube": "Enter a channel ID starting with UC.",
+      "badGithub": "Format: owner/repo or owner/repo@branch.",
+      "badNumber": "Enter a valid number.",
+      "badHost": "Invalid server address.",
+      "badCode": "Invalid cfx.re code.",
+      "badName": "Invalid channel name.",
+      "badEvents": "No valid events.",
+      "notFound": "Subscription not found.",
+      "fetch": "Fetch failed"
+    }
+  }
+}

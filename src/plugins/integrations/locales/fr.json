@@ -1,0 +1,36 @@
+{
+  "intg": {
+    "title": "Intégrations",
+    "added": "Abonnement #{id} ajouté.",
+    "removed": "Abonnement #{id} supprimé.",
+    "enabled": "#{id} activé.",
+    "disabled": "#{id} désactivé.",
+    "preview": "Aperçu (rien publié) :",
+    "noItems": "Aucun élément pour l'instant.",
+    "delivered": "Événement test envoyé.",
+    "newItem": "Nouveau :",
+    "autoDisabled": "Intégration #{id} ({provider}) désactivée : {error}",
+    "change": {
+      "online": "{name} est en ligne 🟢",
+      "offline": "{name} est hors ligne 🔴",
+      "updated": "{name} a été mis à jour 🆕"
+    },
+    "err": {
+      "unknownProvider": "Fournisseur inconnu.",
+      "unavailable": "Ce fournisseur nécessite des identifiants.",
+      "max": "Limite atteinte.",
+      "channel": "Choisissez un salon.",
+      "noSend": "Je ne peux pas écrire là.",
+      "badUrl": "URL https publique requise.",
+      "badYoutube": "ID de chaîne commençant par UC.",
+      "badGithub": "Format : owner/repo.",
+      "badNumber": "Nombre invalide.",
+      "badHost": "Adresse invalide.",
+      "badCode": "Code cfx.re invalide.",
+      "badName": "Nom invalide.",
+      "badEvents": "Aucun événement valide.",
+      "notFound": "Introuvable.",
+      "fetch": "Échec"
+    }
+  }
+}
